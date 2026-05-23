@@ -3,6 +3,11 @@ from api.routes.auth import router as auth_router
 from db.database import engine, Base
 from models.user import User
 from dependencies.auth import get_current_user
+from models.project import Project
+from api.routes import projects
+
+
+
 
 app = FastAPI(
     title="Nexus PM",
@@ -14,6 +19,14 @@ app.include_router(
     prefix="/api/auth",
     tags=["Authentication"]
 )
+
+app.include_router(
+    projects.router,
+    prefix="/api/projects",
+    tags=["Projects"]
+)
+
+
 
 @app.on_event("startup")
 async def startup():
