@@ -16,4 +16,8 @@ async def signup(user: UserSignup, db: AsyncSession = Depends(get_db)):
 
 @router.post("/login",response_model = AuthResponse)
 async def login(user: UserLogin, db: AsyncSession = Depends(get_db)):
-    return await login_service(user.email, db)
+   return await login_service(
+    user.email,
+    user.password,
+    db
+)

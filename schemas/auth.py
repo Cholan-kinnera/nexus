@@ -14,3 +14,4 @@ class UserLogin(BaseModel):
 class AuthResponse(BaseModel):
     message: str
     email: EmailStr
+    access_token: str | None = None
