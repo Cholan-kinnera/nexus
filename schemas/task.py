@@ -30,6 +30,12 @@ class TaskCreate(BaseModel):
 
     project_id: int
 
+class TaskUpdate(BaseModel):
+    title: Optional[str] = Field(default=None, max_length=255)
+    description: Optional[str] = Field(default=None)
+    status: Optional[str] = Field(default=None)
+    priority: Optional[str] = Field(default=None)
+
 
 class TaskResponse(BaseModel):
 

@@ -9,12 +9,15 @@ from dependencies.auth import get_current_user
 from models.user import User
 from schemas.task import (
     TaskCreate,
-    TaskResponse
+    TaskResponse,
+    TaskUpdate
 )
 from services.task_service import (
     create_task_service,
-    get_tasks_service
+    get_tasks_service,
+    update_task_service
 )
+
 
 router = APIRouter()
 
@@ -48,4 +51,20 @@ async def get_tasks(
     return await get_tasks_service(
         db,
         current_user.id
+    )
+
+
+
+@router.put("/{task_id}", response_model=TaskResponse)
+async def update_task(
+    task_id: int,
+    task_data: TaskUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return await update_task_service(
+        task_id,
+        task_data,
+        current_user,
+        db
     )

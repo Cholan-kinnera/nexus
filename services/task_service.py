@@ -64,3 +64,45 @@ async def get_tasks_service(
     tasks = result.scalars().all()
 
     return tasks
+
+
+async def update_task_service(
+    task_id: int,
+    task_data,
+    current_user,
+    db: AsyncSession
+):
+    result = await db.execute(
+        select(Task).where(Task.id == task_id)
+    )
+
+    task = result.scalar_one_or_none()
+
+    if not task:
+        raise HTTPException(
+            status_code=404,
+            detail="Task not found"
+        )
+
+    # Check project ownership
+    project_result = await db.execute(
+        select(Project).where(Project.id == task.project_id)
+    )
+
+    project = project_result.scalar_one()
+
+    if project.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Not authorized to update this task"
+        )
+
+    update_data = task_data.dict(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(task, key, value)
+
+    await db.commit()
+    await db.refresh(task)
+
+    return task
