@@ -1,4 +1,5 @@
 from pydantic import (BaseModel,Field)
+from typing import List, Optional
 
 class ProjectCreate(BaseModel):
     title: str = Field(
@@ -7,7 +8,7 @@ class ProjectCreate(BaseModel):
         max_length=100,
         description="Project title"
     )
-    description: str | None = Field(
+    description: Optional[str] = Field(
         default=None,
         max_length=500,
         description="Project description"
@@ -17,7 +18,10 @@ class ProjectCreate(BaseModel):
 class ProjectResponse(BaseModel):
     id: int
     title: str
-    description: str | None = None
+    description: Optional[str] = None
     owner_id: int
+
+
+    
     class Config:
         from_attributes = True
