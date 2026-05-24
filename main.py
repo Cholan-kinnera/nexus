@@ -14,6 +14,12 @@ from dependencies.auth import get_current_user
 from models.user import User
 from core.config import settings
 from models.task import Task
+from api.routes import tasks
+
+
+
+
+
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 logging.basicConfig(
@@ -140,6 +146,14 @@ app.include_router(
     projects.router,
     prefix="/api/projects",
     tags=["Projects"],
+    dependencies=[Depends(get_current_user)],
+)
+
+
+app.include_router(
+    tasks.router,
+    prefix="/api/tasks",
+    tags=["Tasks"],
     dependencies=[Depends(get_current_user)],
 )
 
