@@ -13,7 +13,7 @@ from db.database import Base, engine
 from dependencies.auth import get_current_user
 from models.user import User
 from core.config import settings
-
+from models.task import Task
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 logging.basicConfig(
