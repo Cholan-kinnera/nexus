@@ -15,7 +15,8 @@ from schemas.task import (
 from services.task_service import (
     create_task_service,
     get_tasks_service,
-    update_task_service
+    update_task_service,
+    delete_task_service
 )
 
 
@@ -65,6 +66,18 @@ async def update_task(
     return await update_task_service(
         task_id,
         task_data,
+        current_user,
+        db
+    )
+
+@router.delete("/{task_id}")
+async def delete_task(
+    task_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    return await delete_task_service(
+        task_id,
         current_user,
         db
     )

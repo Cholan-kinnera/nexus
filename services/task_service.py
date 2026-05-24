@@ -106,3 +106,40 @@ async def update_task_service(
     await db.refresh(task)
 
     return task
+
+async def delete_task_service(
+    task_id: int,
+    current_user,
+    db: AsyncSession
+):
+    result = await db.execute(
+        select(Task).where(Task.id == task_id)
+    )
+
+    task = result.scalar_one_or_none()
+
+    if not task:
+        raise HTTPException(
+            status_code=404,
+            detail="Task not found"
+        )
+
+    # Check project ownership
+    project_result = await db.execute(
+        select(Project).where(Project.id == task.project_id)
+    )
+
+    project = project_result.scalar_one()
+
+    if project.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Not authorized to delete this task"
+        )
+
+    await db.delete(task)
+    await db.commit()
+
+    return {
+        "message": "Task deleted successfully"
+    }
