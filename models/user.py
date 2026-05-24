@@ -1,13 +1,27 @@
-from sqlalchemy import Column, Integer, String
+from datetime import datetime
+
+from sqlalchemy import Column, DateTime, Integer, String, func
 from db.database import Base
 
 
 class User(Base):
+    """User model for storing user information."""
+
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-
-    email = Column(String, unique=True, index=True, nullable=False)
-
+    email = Column(String(255), unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
-    
+    created_at = Column(
+        DateTime, nullable=False, default=datetime.utcnow, server_default=func.now()
+    )
+    updated_at = Column(
+        DateTime,
+        nullable=False,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
+        server_default=func.now(),
+    )
+
+    def __repr__(self) -> str:
+        return f"<User(id={self.id}, email={self.email})>"
