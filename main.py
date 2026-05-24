@@ -3,20 +3,16 @@ import logging
 import os
 import sys
 from typing import Any, Dict
-
-from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
-
 from api.routes import projects
 from api.routes.auth import router as auth_router
 from db.database import Base, engine
 from dependencies.auth import get_current_user
 from models.user import User
-
-load_dotenv()
+from core.config import settings
 
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
@@ -151,15 +147,11 @@ app.include_router(
 if __name__ == "__main__":
     import uvicorn
 
-    HOST = os.getenv("API_HOST", "127.0.0.1")
-    PORT = int(os.getenv("API_PORT", "8000"))
-    RELOAD = os.getenv("RELOAD", "True").lower() == "true"
-
     uvicorn.run(
         "main:app",
-        host=HOST,
-        port=PORT,
-        reload=RELOAD,
+        host=settings.BACKEND_HOST,
+        port=settings.BACKEND_PORT,
+        reload=True,
         log_level=LOG_LEVEL.lower(),
         access_log=True,
     )

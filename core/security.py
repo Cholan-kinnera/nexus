@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict
-
 from jose import jwt
 from passlib.context import CryptContext
+from core.config import settings
 
-SECRET_KEY = "nexuspmsecretkey"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+
+
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

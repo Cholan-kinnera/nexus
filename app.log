@@ -1,0 +1,631 @@
+2026-05-24 13:07:38,303 - main - INFO - Starting up Nexus PM API...
+2026-05-24 13:07:38,545 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-05-24 13:07:38,546 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-24 13:07:38,599 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-05-24 13:07:38,600 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-24 13:07:38,607 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-05-24 13:07:38,607 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-24 13:07:38,610 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 13:07:38,617 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-24 13:07:38,618 - sqlalchemy.engine.Engine - INFO - [generated in 0.00147s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-24 13:07:38,704 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-24 13:07:38,705 - sqlalchemy.engine.Engine - INFO - [cached since 0.08827s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-24 13:07:38,707 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-24 13:07:38,709 - main - INFO - Database tables created successfully
+2026-05-24 13:08:53,728 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 13:08:53,734 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 13:08:53,735 - sqlalchemy.engine.Engine - INFO - [generated in 0.00067s] ('cholan0415@gmail.com',)
+2026-05-24 13:08:53,758 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 13:08:53,759 - main - ERROR - Unhandled exception: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.created_at does not exist
+[SQL: SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('cholan0415@gmail.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Traceback (most recent call last):
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 526, in _prepare_and_execute
+    prepared_stmt, attributes = await adapt_connection._prepare(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        operation, self._invalidate_schema_cache_asof
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 773, in _prepare
+    prepared_stmt = await self._connection.prepare(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        operation, name=self._prepared_statement_name_func()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\asyncpg\connection.py", line 638, in prepare
+    return await self._prepare(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\asyncpg\connection.py", line 657, in _prepare
+    stmt = await self._get_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\asyncpg\connection.py", line 443, in _get_statement
+    statement = await self._protocol.prepare(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "asyncpg/protocol/protocol.pyx", line 165, in prepare
+asyncpg.exceptions.UndefinedColumnError: column users.created_at does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ProgrammingError: <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.created_at does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\trustedhost.py", line 51, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\cors.py", line 87, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 130, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 116, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 670, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 324, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\NEXUS PM\api\routes\auth.py", line 26, in signup
+    return await signup_service(user.email, user.password, db)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\NEXUS PM\services\auth_service.py", line 19, in signup_service
+    result = await db.execute(
+             ^^^^^^^^^^^^^^^^^
+        select(User).where(User.email == email)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\ext\asyncio\session.py", line 449, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.created_at does not exist
+[SQL: SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('cholan0415@gmail.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-05-24 13:09:21,799 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 13:09:21,800 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 13:09:21,801 - sqlalchemy.engine.Engine - INFO - [cached since 28.07s ago] ('cholan0415@gmail.com',)
+2026-05-24 13:09:21,803 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 13:09:21,804 - main - ERROR - Unhandled exception: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.created_at does not exist
+[SQL: SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('cholan0415@gmail.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Traceback (most recent call last):
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 526, in _prepare_and_execute
+    prepared_stmt, attributes = await adapt_connection._prepare(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        operation, self._invalidate_schema_cache_asof
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 773, in _prepare
+    prepared_stmt = await self._connection.prepare(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        operation, name=self._prepared_statement_name_func()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\asyncpg\connection.py", line 638, in prepare
+    return await self._prepare(
+           ^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\asyncpg\connection.py", line 657, in _prepare
+    stmt = await self._get_statement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\asyncpg\connection.py", line 443, in _get_statement
+    statement = await self._protocol.prepare(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "asyncpg/protocol/protocol.pyx", line 165, in prepare
+asyncpg.exceptions.UndefinedColumnError: column users.created_at does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ProgrammingError: <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.created_at does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\trustedhost.py", line 51, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\cors.py", line 87, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 130, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 116, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 670, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 324, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\NEXUS PM\api\routes\auth.py", line 26, in signup
+    return await signup_service(user.email, user.password, db)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\NEXUS PM\services\auth_service.py", line 19, in signup_service
+    result = await db.execute(
+             ^^^^^^^^^^^^^^^^^
+        select(User).where(User.email == email)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\ext\asyncio\session.py", line 449, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 585, in execute
+    self._adapt_connection.await_(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self._prepare_and_execute(operation, parameters)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 563, in _prepare_and_execute
+    self._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 513, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Choolan Kinnera\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py", line 797, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.created_at does not exist
+[SQL: SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR]
+[parameters: ('cholan0415@gmail.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-05-24 13:53:08,919 - main - INFO - Shutting down Nexus PM API...
+2026-05-24 13:53:20,456 - main - INFO - Starting up Nexus PM API...
+2026-05-24 13:53:20,680 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-05-24 13:53:20,681 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-24 13:53:20,686 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-05-24 13:53:20,686 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-24 13:53:20,690 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-05-24 13:53:20,690 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-24 13:53:20,693 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 13:53:20,701 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-24 13:53:20,702 - sqlalchemy.engine.Engine - INFO - [generated in 0.00101s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-24 13:53:20,719 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-24 13:53:20,720 - sqlalchemy.engine.Engine - INFO - [cached since 0.01931s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-24 13:53:20,723 - sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE users (
+	id SERIAL NOT NULL, 
+	email VARCHAR(255) NOT NULL, 
+	password VARCHAR NOT NULL, 
+	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL, 
+	updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT now() NOT NULL, 
+	PRIMARY KEY (id)
+)
+
+
+2026-05-24 13:53:20,724 - sqlalchemy.engine.Engine - INFO - [no key 0.00063s] ()
+2026-05-24 13:53:20,932 - sqlalchemy.engine.Engine - INFO - CREATE INDEX ix_users_id ON users (id)
+2026-05-24 13:53:20,933 - sqlalchemy.engine.Engine - INFO - [no key 0.00076s] ()
+2026-05-24 13:53:20,941 - sqlalchemy.engine.Engine - INFO - CREATE UNIQUE INDEX ix_users_email ON users (email)
+2026-05-24 13:53:20,942 - sqlalchemy.engine.Engine - INFO - [no key 0.00080s] ()
+2026-05-24 13:53:20,948 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-24 13:53:20,952 - main - INFO - Database tables created successfully
+2026-05-24 13:53:21,842 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 13:53:21,857 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 13:53:21,864 - sqlalchemy.engine.Engine - INFO - [generated in 0.00715s] ('cholan0415@gmail.com',)
+2026-05-24 13:53:22,419 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (email, password, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::TIMESTAMP WITHOUT TIME ZONE, $4::TIMESTAMP WITHOUT TIME ZONE) RETURNING users.id
+2026-05-24 13:53:22,420 - sqlalchemy.engine.Engine - INFO - [generated in 0.00112s] ('cholan0415@gmail.com', '$2b$12$Ok1uCfdNGMyyCwVPEe85tO4VXhLxrKUOhI/ErU.ju0cIoTZLvpGee', datetime.datetime(2026, 5, 24, 8, 23, 22, 419240), datetime.datetime(2026, 5, 24, 8, 23, 22, 419251))
+2026-05-24 13:53:22,429 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-24 13:53:22,432 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 13:53:22,436 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-05-24 13:53:22,437 - sqlalchemy.engine.Engine - INFO - [generated in 0.00088s] (1,)
+2026-05-24 13:53:22,444 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 13:57:17,183 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 13:57:17,184 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 13:57:17,185 - sqlalchemy.engine.Engine - INFO - [cached since 235.3s ago] ('cholan0415@gmail.com',)
+2026-05-24 13:57:17,813 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 13:58:23,293 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 13:58:23,294 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 13:58:23,295 - sqlalchemy.engine.Engine - INFO - [cached since 301.4s ago] ('cholan0415@gmail.com',)
+2026-05-24 13:58:23,299 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:01:05,341 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:01:05,342 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:01:05,342 - sqlalchemy.engine.Engine - INFO - [cached since 463.5s ago] ('cholan0415@gmail.com',)
+2026-05-24 14:01:05,347 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:02:48,728 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:02:48,729 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:02:48,729 - sqlalchemy.engine.Engine - INFO - [cached since 566.9s ago] ('balaji@gmail.com',)
+2026-05-24 14:02:49,220 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (email, password, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::TIMESTAMP WITHOUT TIME ZONE, $4::TIMESTAMP WITHOUT TIME ZONE) RETURNING users.id
+2026-05-24 14:02:49,221 - sqlalchemy.engine.Engine - INFO - [cached since 566.8s ago] ('balaji@gmail.com', '$2b$12$z9MmTO1B8qkB4FT1BM1E9upQi59.jc/FMAVCOf2iStIrW3kaSG.sO', datetime.datetime(2026, 5, 24, 8, 32, 49, 220503), datetime.datetime(2026, 5, 24, 8, 32, 49, 220510))
+2026-05-24 14:02:49,224 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-24 14:02:49,280 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:02:49,281 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-05-24 14:02:49,282 - sqlalchemy.engine.Engine - INFO - [cached since 566.8s ago] (2,)
+2026-05-24 14:02:49,286 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:03:16,432 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:03:16,433 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:03:16,434 - sqlalchemy.engine.Engine - INFO - [cached since 594.6s ago] ('balaji@gmail.com',)
+2026-05-24 14:03:16,921 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:05:53,876 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:05:53,876 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:05:53,877 - sqlalchemy.engine.Engine - INFO - [cached since 752s ago] ('balaji@gmail.com',)
+2026-05-24 14:05:53,880 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:10:08,586 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:10:08,587 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:10:08,587 - sqlalchemy.engine.Engine - INFO - [cached since 1007s ago] ('balaji@gmail.com',)
+2026-05-24 14:10:08,591 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects
+2026-05-24 14:10:08,591 - sqlalchemy.engine.Engine - INFO - [generated in 0.00054s] ()
+2026-05-24 14:10:08,608 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:10:48,433 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:10:48,434 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:10:48,434 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('balaji@gmail.com',)
+2026-05-24 14:10:48,437 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects
+2026-05-24 14:10:48,437 - sqlalchemy.engine.Engine - INFO - [cached since 39.85s ago] ()
+2026-05-24 14:10:48,440 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:11:10,714 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:11:10,715 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:11:10,715 - sqlalchemy.engine.Engine - INFO - [cached since 1069s ago] ('balaji@gmail.com',)
+2026-05-24 14:11:10,719 - sqlalchemy.engine.Engine - INFO - INSERT INTO projects (title, description, owner_id) VALUES ($1::VARCHAR, $2::VARCHAR, $3::INTEGER) RETURNING projects.id
+2026-05-24 14:11:10,720 - sqlalchemy.engine.Engine - INFO - [generated in 0.00082s] ('Nexus PM Backend', 'Backend architecture', 2)
+2026-05-24 14:11:10,792 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-24 14:11:10,794 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:11:10,795 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-24 14:11:10,796 - sqlalchemy.engine.Engine - INFO - [generated in 0.00059s] (2,)
+2026-05-24 14:11:10,799 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:11:21,343 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:11:21,344 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:11:21,345 - sqlalchemy.engine.Engine - INFO - [cached since 1079s ago] ('balaji@gmail.com',)
+2026-05-24 14:11:21,347 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects
+2026-05-24 14:11:21,348 - sqlalchemy.engine.Engine - INFO - [cached since 72.76s ago] ()
+2026-05-24 14:11:21,352 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:16:22,104 - main - INFO - Shutting down Nexus PM API...

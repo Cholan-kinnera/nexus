@@ -5,9 +5,9 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from sqlalchemy.orm import declarative_base
+from core.config import settings
 
-
-DATABASE_URL = "postgresql+asyncpg://postgres:Cholan%2301@localhost:5432/nexus_pm"
+DATABASE_URL = settings.DATABASE_URL
 
 
 engine = create_async_engine(
