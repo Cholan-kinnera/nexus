@@ -26,7 +26,13 @@ async def create_project(
 
 @router.get("/", response_model=List[ProjectResponse])
 async def get_projects(
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(get_current_user)
 ):
+    
+    return await get_projects_service(
+    db,
+    current_user.id
+)
 
-    return await get_projects_service(db)
+     

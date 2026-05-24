@@ -15,8 +15,11 @@ async def create_project_service(project_data, owner_id: int, db: AsyncSession):
     return new_project
 
 
-async def get_projects_service(db: AsyncSession):
+async def get_projects_service(
+    db: AsyncSession,
+    owner_id: int
+):
 
-    result = await db.execute(select(Project))
+    result = await db.execute(select(Project).where(Project.owner_id == owner_id))
     projects = result.scalars().all()
     return projects

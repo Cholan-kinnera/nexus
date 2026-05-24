@@ -629,3 +629,96 @@ FROM projects
 2026-05-24 14:11:21,348 - sqlalchemy.engine.Engine - INFO - [cached since 72.76s ago] ()
 2026-05-24 14:11:21,352 - sqlalchemy.engine.Engine - INFO - ROLLBACK
 2026-05-24 14:16:22,104 - main - INFO - Shutting down Nexus PM API...
+2026-05-24 14:22:09,919 - main - INFO - Starting up Nexus PM API...
+2026-05-24 14:22:10,164 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-05-24 14:22:10,164 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-24 14:22:10,168 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-05-24 14:22:10,169 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-24 14:22:10,172 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-05-24 14:22:10,173 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-24 14:22:10,177 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:22:10,187 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-24 14:22:10,188 - sqlalchemy.engine.Engine - INFO - [generated in 0.00119s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-24 14:22:10,266 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-24 14:22:10,267 - sqlalchemy.engine.Engine - INFO - [cached since 0.07977s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-24 14:22:10,269 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-24 14:22:10,271 - main - INFO - Database tables created successfully
+2026-05-24 14:22:14,894 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:22:14,900 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:22:14,901 - sqlalchemy.engine.Engine - INFO - [generated in 0.00067s] ('balaji@gmail.com',)
+2026-05-24 14:22:14,913 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-24 14:22:14,913 - sqlalchemy.engine.Engine - INFO - [generated in 0.00061s] (2,)
+2026-05-24 14:22:14,929 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:23:53,686 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:23:53,686 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:23:53,687 - sqlalchemy.engine.Engine - INFO - [cached since 98.79s ago] ('cholan@gmail.com',)
+2026-05-24 14:23:54,212 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (email, password, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::TIMESTAMP WITHOUT TIME ZONE, $4::TIMESTAMP WITHOUT TIME ZONE) RETURNING users.id
+2026-05-24 14:23:54,213 - sqlalchemy.engine.Engine - INFO - [generated in 0.00101s] ('cholan@gmail.com', '$2b$12$IMQcedMafR/XE/ihN65/buSJvhLFGI7hvF7PoTeSS7hG.t1w89UFC', datetime.datetime(2026, 5, 24, 8, 53, 54, 212458), datetime.datetime(2026, 5, 24, 8, 53, 54, 212470))
+2026-05-24 14:23:54,217 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-24 14:23:54,287 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:23:54,289 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-05-24 14:23:54,290 - sqlalchemy.engine.Engine - INFO - [generated in 0.00057s] (3,)
+2026-05-24 14:23:54,294 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:24:10,295 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:24:10,296 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:24:10,296 - sqlalchemy.engine.Engine - INFO - [cached since 115.4s ago] ('cholan@gmail.com',)
+2026-05-24 14:24:10,773 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:24:58,156 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:24:58,156 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:24:58,157 - sqlalchemy.engine.Engine - INFO - [cached since 163.3s ago] ('bala@gmail.com',)
+2026-05-24 14:24:58,626 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (email, password, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::TIMESTAMP WITHOUT TIME ZONE, $4::TIMESTAMP WITHOUT TIME ZONE) RETURNING users.id
+2026-05-24 14:24:58,627 - sqlalchemy.engine.Engine - INFO - [cached since 64.42s ago] ('bala@gmail.com', '$2b$12$eOxfDu0is6ch.NQG8nJXA.VuCHhljV9vnfIhwU799DRMmmfokR15W', datetime.datetime(2026, 5, 24, 8, 54, 58, 626803), datetime.datetime(2026, 5, 24, 8, 54, 58, 626810))
+2026-05-24 14:24:58,696 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-24 14:24:58,698 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:24:58,698 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-05-24 14:24:58,699 - sqlalchemy.engine.Engine - INFO - [cached since 64.41s ago] (4,)
+2026-05-24 14:24:58,702 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:25:06,841 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:25:06,842 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:25:06,842 - sqlalchemy.engine.Engine - INFO - [cached since 171.9s ago] ('bala@gmail.com',)
+2026-05-24 14:25:07,310 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:26:47,833 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:26:47,834 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:26:47,834 - sqlalchemy.engine.Engine - INFO - [cached since 272.9s ago] ('bala@gmail.com',)
+2026-05-24 14:26:47,839 - sqlalchemy.engine.Engine - INFO - INSERT INTO projects (title, description, owner_id) VALUES ($1::VARCHAR, $2::VARCHAR, $3::INTEGER) RETURNING projects.id
+2026-05-24 14:26:47,840 - sqlalchemy.engine.Engine - INFO - [generated in 0.00174s] ('Nexus PM Backend', 'Back architecture', 4)
+2026-05-24 14:26:47,844 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-24 14:26:47,913 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:26:47,915 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-24 14:26:47,915 - sqlalchemy.engine.Engine - INFO - [generated in 0.00059s] (3,)
+2026-05-24 14:26:47,919 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:27:10,894 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-24 14:27:10,895 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-24 14:27:10,896 - sqlalchemy.engine.Engine - INFO - [cached since 296s ago] ('bala@gmail.com',)
+2026-05-24 14:27:10,898 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-24 14:27:10,899 - sqlalchemy.engine.Engine - INFO - [cached since 296s ago] (4,)
+2026-05-24 14:27:10,901 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-24 14:27:57,320 - main - INFO - Shutting down Nexus PM API...
