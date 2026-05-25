@@ -1,1 +1,34 @@
-".env" 
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual Environment
+venv/
+.env/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# Database
+*.db
+*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Alembic cache
+alembic/__pycache__/
+
+# pytest
+.pytest_cache/
+
+# mypy
+.mypy_cache/
