@@ -1,5 +1,5 @@
-from pydantic import (BaseModel,Field)
-from typing import List, Optional
+from pydantic import BaseModel, ConfigDict, Field
+from typing import  Optional
 
 class ProjectCreate(BaseModel):
     title: str = Field(
@@ -21,11 +21,9 @@ class ProjectUpdate(BaseModel):
 
 
 class ProjectResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     title: str
     description: Optional[str] = None
     owner_id: int
-
-    
-    class Config:
-        from_attributes = True

@@ -7,13 +7,11 @@ from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
-from api.routes import projects
+from api.routes import projects, users
 from api.routes.auth import router as auth_router
 from db.database import Base, engine
 from dependencies.auth import get_current_user
-from models.user import User
 from core.config import settings
-from models.task import Task
 from api.routes import tasks
 
 
@@ -113,33 +111,17 @@ async def root() -> Dict[str, Any]:
     }
 
 
-@app.get("/api/users/me", tags=["Users"])
-async def get_current_user_info(
-    current_user: User = Depends(get_current_user),
-) -> Dict[str, Any]:
-    """Get current authenticated user information."""
-    try:
-        return {
-            "id": current_user.id,
-            "email": current_user.email,
-            "created_at": (
-                current_user.created_at.isoformat()
-                if hasattr(current_user, "created_at")
-                else None
-            ),
-        }
-    except Exception as exc:
-        logger.error(f"Error retrieving user info: {exc}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error retrieving user information",
-        )
-
-
 app.include_router(
     auth_router,
     prefix="/api/auth",
     tags=["Authentication"],
+)
+
+app.include_router(
+    users.router,
+    prefix="/api/users",
+    tags=["Users"],
+    dependencies=[Depends(get_current_user)],
 )
 
 app.include_router(
