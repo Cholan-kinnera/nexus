@@ -143,3 +143,69 @@ async def delete_task_service(
     return {
         "message": "Task deleted successfully"
     }
+
+async def get_task_service(
+    task_id: int,
+    current_user,
+    db: AsyncSession
+):
+    result = await db.execute(
+        select(Task).where(Task.id == task_id)
+    )
+
+    task = result.scalar_one_or_none()
+
+    if not task:
+        raise HTTPException(
+            status_code=404,
+            detail="Task not found"
+        )
+
+    # Check project ownership
+    project_result = await db.execute(
+        select(Project).where(Project.id == task.project_id)
+    )
+
+    project = project_result.scalar_one()
+
+    if project.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Not authorized to view this task"
+        )
+
+    return task
+
+
+async def get_tasks_by_project_service(
+    project_id: int,
+    current_user,
+    db: AsyncSession
+):
+    # Verify project exists and user owns it
+    project_result = await db.execute(
+        select(Project).where(Project.id == project_id)
+    )
+
+    project = project_result.scalar_one_or_none()
+
+    if not project:
+        raise HTTPException(
+            status_code=404,
+            detail="Project not found"
+        )
+
+    if project.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="Not authorized to view this project"
+        )
+
+    # Get all tasks in project
+    result = await db.execute(
+        select(Task).where(Task.project_id == project_id)
+    )
+
+    tasks = result.scalars().all()
+
+    return tasks   

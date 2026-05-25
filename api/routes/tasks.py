@@ -18,6 +18,15 @@ from services.task_service import (
     update_task_service,
     delete_task_service
 )
+from services.task_service import (
+    create_task_service,
+    get_tasks_service,
+    update_task_service,
+    delete_task_service,
+    get_task_service,
+    get_tasks_by_project_service
+)
+
 
 
 router = APIRouter()
@@ -78,6 +87,31 @@ async def delete_task(
 ):
     return await delete_task_service(
         task_id,
+        current_user,
+        db
+    )
+
+
+@router.get("/{task_id}", response_model=TaskResponse)
+async def get_task(
+    task_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return await get_task_service(
+        task_id,
+        current_user,
+        db
+    )
+
+@router.get("/project/{project_id}", response_model=List[TaskResponse])
+async def get_project_tasks(
+    project_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return await get_tasks_by_project_service(
+        project_id,
         current_user,
         db
     )
