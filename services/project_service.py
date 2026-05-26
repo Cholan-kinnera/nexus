@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from models.project import Project
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 
 async def create_project_service(project_data, owner_id: int, db: AsyncSession):
     new_project = Project(
