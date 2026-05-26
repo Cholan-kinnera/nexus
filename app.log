@@ -2763,3 +2763,218 @@ FROM comments
 WHERE comments.id = $1::INTEGER
 2026-05-26 10:57:34,057 - sqlalchemy.engine.Engine - INFO - [generated in 0.00055s] (3,)
 2026-05-26 10:57:34,059 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-26 16:18:31,622 - main - INFO - Shutting down Nexus PM API...
+2026-05-26 16:18:33,664 - main - INFO - Starting up Nexus PM API...
+2026-05-26 16:18:33,749 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-05-26 16:18:33,750 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:18:33,768 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-05-26 16:18:33,768 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:18:33,770 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-05-26 16:18:33,771 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:18:33,772 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:18:33,775 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:18:33,775 - sqlalchemy.engine.Engine - INFO - [generated in 0.00041s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:18:33,789 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:18:33,789 - sqlalchemy.engine.Engine - INFO - [cached since 0.0145s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:18:33,790 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:18:33,790 - sqlalchemy.engine.Engine - INFO - [cached since 0.01539s ago] ('tasks', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:18:33,791 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:18:33,791 - sqlalchemy.engine.Engine - INFO - [cached since 0.01627s ago] ('comments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:18:33,792 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-26 16:18:33,792 - main - INFO - Database tables created successfully
+2026-05-26 16:26:41,512 - main - INFO - Shutting down Nexus PM API...
+2026-05-26 16:26:43,004 - main - INFO - Starting up Nexus PM API...
+2026-05-26 16:26:43,080 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-05-26 16:26:43,080 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:26:43,082 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-05-26 16:26:43,082 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:26:43,083 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-05-26 16:26:43,083 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:26:43,084 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:26:43,087 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:26:43,087 - sqlalchemy.engine.Engine - INFO - [generated in 0.00031s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:26:43,093 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:26:43,094 - sqlalchemy.engine.Engine - INFO - [cached since 0.006493s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:26:43,094 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:26:43,094 - sqlalchemy.engine.Engine - INFO - [cached since 0.007336s ago] ('tasks', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:26:43,095 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:26:43,095 - sqlalchemy.engine.Engine - INFO - [cached since 0.008083s ago] ('comments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:26:43,096 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-26 16:26:43,096 - main - INFO - Database tables created successfully
+2026-05-26 16:26:56,815 - main - INFO - Shutting down Nexus PM API...
+2026-05-26 16:26:58,247 - main - INFO - Starting up Nexus PM API...
+2026-05-26 16:26:58,320 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-05-26 16:26:58,320 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:26:58,322 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-05-26 16:26:58,322 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:26:58,323 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-05-26 16:26:58,324 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:26:58,325 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:26:58,328 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:26:58,328 - sqlalchemy.engine.Engine - INFO - [generated in 0.00034s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:26:58,334 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:26:58,334 - sqlalchemy.engine.Engine - INFO - [cached since 0.00629s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:26:58,335 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:26:58,335 - sqlalchemy.engine.Engine - INFO - [cached since 0.007263s ago] ('tasks', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:26:58,335 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:26:58,336 - sqlalchemy.engine.Engine - INFO - [cached since 0.008086s ago] ('comments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:26:58,336 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-26 16:26:58,337 - main - INFO - Database tables created successfully
+2026-05-26 16:29:14,303 - main - INFO - Starting up Nexus PM API...
+2026-05-26 16:29:14,377 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-05-26 16:29:14,377 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:29:14,379 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-05-26 16:29:14,379 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:29:14,380 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-05-26 16:29:14,380 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-05-26 16:29:14,381 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:29:14,384 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:29:14,384 - sqlalchemy.engine.Engine - INFO - [generated in 0.00038s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:29:14,390 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:29:14,390 - sqlalchemy.engine.Engine - INFO - [cached since 0.006653s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:29:14,391 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:29:14,391 - sqlalchemy.engine.Engine - INFO - [cached since 0.007776s ago] ('tasks', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:29:14,393 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-05-26 16:29:14,393 - sqlalchemy.engine.Engine - INFO - [cached since 0.009206s ago] ('comments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-05-26 16:29:14,394 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-26 16:29:14,394 - main - INFO - Database tables created successfully
+2026-05-26 16:30:53,498 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:30:53,507 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-26 16:30:53,507 - sqlalchemy.engine.Engine - INFO - [generated in 0.00040s] ('jjjaklj@gmail.com',)
+2026-05-26 16:30:53,738 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (email, password, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::TIMESTAMP WITHOUT TIME ZONE, $4::TIMESTAMP WITHOUT TIME ZONE) RETURNING users.id
+2026-05-26 16:30:53,739 - sqlalchemy.engine.Engine - INFO - [generated in 0.00037s] ('jjjaklj@gmail.com', '$2b$12$kETV3oYdviyQ61PwDEo7tOFDPafpdVtHvHBiZQcxECiZTBzoXBEc6', datetime.datetime(2026, 5, 26, 11, 0, 53, 738770), datetime.datetime(2026, 5, 26, 11, 0, 53, 738774))
+2026-05-26 16:30:53,741 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-26 16:30:53,743 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:30:53,744 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-05-26 16:30:53,744 - sqlalchemy.engine.Engine - INFO - [generated in 0.00024s] (10,)
+2026-05-26 16:30:53,747 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-26 16:31:01,610 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:31:01,610 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-26 16:31:01,610 - sqlalchemy.engine.Engine - INFO - [cached since 8.104s ago] ('jjjaklj@gmail.com',)
+2026-05-26 16:31:01,819 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-26 16:32:27,440 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:32:27,441 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-26 16:32:27,441 - sqlalchemy.engine.Engine - INFO - [cached since 93.93s ago] ('jjjaklj@gmail.com',)
+2026-05-26 16:32:27,444 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-26 16:32:35,424 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:32:35,425 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-26 16:32:35,425 - sqlalchemy.engine.Engine - INFO - [cached since 101.9s ago] ('jjjaklj@gmail.com',)
+2026-05-26 16:32:35,427 - sqlalchemy.engine.Engine - INFO - INSERT INTO projects (title, description, owner_id) VALUES ($1::VARCHAR, $2::VARCHAR, $3::INTEGER) RETURNING projects.id
+2026-05-26 16:32:35,428 - sqlalchemy.engine.Engine - INFO - [generated in 0.00033s] ('Nexus PM', 'Jira Clone', 10)
+2026-05-26 16:32:35,432 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-26 16:32:35,433 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:32:35,434 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-26 16:32:35,435 - sqlalchemy.engine.Engine - INFO - [generated in 0.00030s] (8,)
+2026-05-26 16:32:35,439 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-26 16:32:44,035 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:32:44,035 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-26 16:32:44,036 - sqlalchemy.engine.Engine - INFO - [cached since 110.5s ago] ('jjjaklj@gmail.com',)
+2026-05-26 16:32:44,037 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-26 16:32:44,038 - sqlalchemy.engine.Engine - INFO - [generated in 0.00042s] (10,)
+2026-05-26 16:32:44,040 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-26 16:32:52,329 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:32:52,330 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-26 16:32:52,330 - sqlalchemy.engine.Engine - INFO - [cached since 118.8s ago] ('jjjaklj@gmail.com',)
+2026-05-26 16:32:52,331 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-26 16:32:52,332 - sqlalchemy.engine.Engine - INFO - [generated in 0.00022s] (8,)
+2026-05-26 16:32:52,333 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-26 16:33:18,671 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:33:18,672 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-26 16:33:18,672 - sqlalchemy.engine.Engine - INFO - [cached since 145.2s ago] ('jjjaklj@gmail.com',)
+2026-05-26 16:33:18,674 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-26 16:33:18,674 - sqlalchemy.engine.Engine - INFO - [generated in 0.00023s] (10,)
+2026-05-26 16:33:18,678 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-26 16:33:22,274 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:33:22,274 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-26 16:33:22,274 - sqlalchemy.engine.Engine - INFO - [cached since 148.8s ago] ('jjjaklj@gmail.com',)
+2026-05-26 16:33:22,276 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-26 16:33:22,276 - sqlalchemy.engine.Engine - INFO - [cached since 29.94s ago] (1,)
+2026-05-26 16:33:22,277 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-26 16:33:46,391 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:33:46,391 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-26 16:33:46,391 - sqlalchemy.engine.Engine - INFO - [cached since 172.9s ago] ('jjjaklj@gmail.com',)
+2026-05-26 16:33:46,393 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-26 16:33:46,393 - sqlalchemy.engine.Engine - INFO - [cached since 54.06s ago] (8,)
+2026-05-26 16:33:46,395 - sqlalchemy.engine.Engine - INFO - INSERT INTO tasks (title, description, status, priority, due_date, project_id, assigned_to, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::TIMESTAMP WITH TIME ZONE, $6::INTEGER, $7::INTEGER, $8::TIMESTAMP WITH TIME ZONE, $9::TIMESTAMP WITH TIME ZONE) RETURNING tasks.id
+2026-05-26 16:33:46,395 - sqlalchemy.engine.Engine - INFO - [generated in 0.00034s] ('Build Backend', 'Finish FastAPI', 'TODO', 'MEDIUM', None, 8, None, datetime.datetime(2026, 5, 26, 11, 3, 46, 394955, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 5, 26, 11, 3, 46, 394958, tzinfo=datetime.timezone.utc))
+2026-05-26 16:33:46,397 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-26 16:33:46,398 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:33:46,400 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-05-26 16:33:46,400 - sqlalchemy.engine.Engine - INFO - [generated in 0.00034s] (4,)
+2026-05-26 16:33:46,402 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-26 16:33:55,107 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-26 16:33:55,108 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-26 16:33:55,108 - sqlalchemy.engine.Engine - INFO - [cached since 181.6s ago] ('jjjaklj@gmail.com',)
+2026-05-26 16:33:55,109 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-26 16:33:55,109 - sqlalchemy.engine.Engine - INFO - [cached since 36.44s ago] (10,)
+2026-05-26 16:33:55,110 - sqlalchemy.engine.Engine - INFO - ROLLBACK
