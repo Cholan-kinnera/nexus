@@ -6,7 +6,7 @@ from sqlalchemy import (
     String,
     ForeignKey,
     DateTime)
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, relationship
 from db.database import Base
 
 
@@ -56,3 +56,9 @@ class Task(Base):
     
     project = relationship("Project")
     assignee = relationship("User")
+
+    comments: Mapped[list["Comment"]] = relationship(
+    "Comment",
+    back_populates="task",
+    cascade="all, delete-orphan"
+)

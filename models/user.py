@@ -1,8 +1,9 @@
 from datetime import datetime
 
 from sqlalchemy import Column, DateTime, Integer, String, func
-from db.database import Base
+from sqlalchemy.orm import Mapped, relationship
 
+from db.database import Base
 
 class User(Base):
     """User model for storing user information."""
@@ -25,3 +26,9 @@ class User(Base):
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email={self.email})>"
+
+    comments: Mapped[list["Comment"]] = relationship(
+    "Comment",
+    back_populates="user",
+    cascade="all, delete-orphan"
+)

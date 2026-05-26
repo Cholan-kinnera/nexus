@@ -13,7 +13,7 @@ from db.database import Base, engine
 from dependencies.auth import get_current_user
 from core.config import settings
 from api.routes import tasks
-
+from api.routes import comments
 
 
 
@@ -138,6 +138,10 @@ app.include_router(
     tags=["Tasks"],
     dependencies=[Depends(get_current_user)],
 )
+app.include_router(comments.router)
+
+
+
 
 
 if __name__ == "__main__":
