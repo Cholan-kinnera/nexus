@@ -5,7 +5,7 @@ export const loginUser = async (
   password: string
 ) => {
   const response = await api.post(
-    "/api/auth/login",
+    "/auth/login",
     {
       email,
       password,
