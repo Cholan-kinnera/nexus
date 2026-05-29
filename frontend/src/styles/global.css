@@ -1,6 +1,7 @@
 @import "tailwindcss";
-/* Add this to your src/index.css or src/styles/global.css */
 
+
+/* Auth input base */
 .auth-input {
   width: 100%;
   padding: 10px 12px 10px 36px;
@@ -9,16 +10,91 @@
   border-radius: 8px;
   color: #f1f5f9;
   font-size: 13px;
+  font-family: inherit;
   outline: none;
-  transition: border-color 0.2s;
   box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.3s, background 0.2s;
 }
 
-.auth-input::placeholder {
-  color: #475569;
-}
+.auth-input::placeholder { color: #334155; }
 
+/* Input glow on focus */
 .auth-input:focus {
   border-color: #7c3aed;
   background: rgba(124, 58, 237, 0.05);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12), 0 0 20px rgba(124, 58, 237, 0.08);
 }
+
+/* Magnetic button - smooth transition back */
+.magnetic-btn {
+  transition: transform 0.15s ease-out, background 0.2s, box-shadow 0.2s;
+}
+.magnetic-btn:hover {
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.4);
+}
+
+/* Social buttons lift on hover */
+.social-btn {
+  transition: transform 0.2s ease, border-color 0.2s, background 0.2s;
+}
+.social-btn:hover {
+  transform: translateY(-2px);
+}
+.social-btn:active {
+  transform: translateY(0);
+}
+
+/* ── Keyframe animations ── */
+
+/* Floating orb */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+/* Slow ambient pulse */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+.animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
+
+/* Logo glow breathe */
+@keyframes logo-glow {
+  0%, 100% { box-shadow: 0 0 12px rgba(124, 58, 237, 0.4); }
+  50% { box-shadow: 0 0 28px rgba(124, 58, 237, 0.8), 0 0 50px rgba(124, 58, 237, 0.3); }
+}
+.animate-logo-glow { animation: logo-glow 3s ease-in-out infinite; }
+
+/* Grid subtle shift */
+@keyframes grid-shift {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+.animate-grid-shift { animation: grid-shift 8s linear infinite; }
+
+/* Error shake */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.animate-shake { animation: shake 0.4s ease-in-out; }
+
+/* Success pop */
+@keyframes success-pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-success-pop { animation: success-pop 0.5s ease-out forwards; }
+
+/* Fade in */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 0.4s ease-out forwards; }

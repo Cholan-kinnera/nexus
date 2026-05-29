@@ -12,6 +12,7 @@ from core.security import (
 logger = logging.getLogger(__name__)
 
 async def signup_service(
+    full_name: str,
     email: str,
     password: str,
     db: AsyncSession
@@ -32,6 +33,7 @@ async def signup_service(
 
         # Create new user with hashed password
         new_user = User(
+            full_name=full_name,
             email=email,
             password=hash_password(password)
         )

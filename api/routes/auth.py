@@ -23,7 +23,7 @@ async def signup(
     Raises:
         HTTPException: If user already exists or registration fails
     """
-    return await signup_service(user.email, user.password, db)
+    return await signup_service(user.full_name, user.email, user.password, db)
 
 @router.post("/login",response_model = AuthResponse)
 async def login(user: UserLogin, db: AsyncSession = Depends(get_db)):
