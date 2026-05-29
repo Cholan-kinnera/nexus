@@ -4,7 +4,10 @@ from sqlalchemy import Column, DateTime, Integer, String, func
 from sqlalchemy.orm import Mapped, relationship
 
 from db.database import Base
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from models.comment import Comment
 class User(Base):
     """User model for storing user information."""
 

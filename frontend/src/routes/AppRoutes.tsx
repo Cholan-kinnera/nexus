@@ -3,7 +3,7 @@ import { LoginPage } from "../pages/LoginPage";
 import DashboardPage  from "../pages/DashboardPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import SignupPage from "../pages/SignupPage";
-
+import ProjectsPage from "../pages/ProjectsPage";
 export function AppRoutes() {
   return (
     <Routes>
@@ -20,7 +20,14 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
+<Route
+  path="/projects"
+  element={
+    <ProtectedRoute>
+      <ProjectsPage />
+    </ProtectedRoute>
+  }
+/>
       <Route
         path="/"
         element={<Navigate to="/dashboard" replace />}
