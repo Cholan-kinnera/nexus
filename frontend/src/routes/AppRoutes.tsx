@@ -1,16 +1,16 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { LoginPage } from "../pages/LoginPage";
-import DashboardPage  from "../pages/DashboardPage";
+import DashboardPage from "../pages/DashboardPage";
 import { ProtectedRoute } from "./ProtectedRoute";
-import SignupPage from "../pages/SignupPage";
 import ProjectsPage from "../pages/ProjectsPage";
+import { TasksPage } from "../pages/TasksPage";
+import AuthPage from "../pages/AuthPage";
+
 export function AppRoutes() {
   return (
     <Routes>
-
-      <Route path="/login" element={<LoginPage />} />
-
-      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/auth" element={<AuthPage />} />
+      <Route path="/login" element={<Navigate to="/auth" replace />} />
+      <Route path="/signup" element={<Navigate to="/auth?tab=signup" replace />} />
 
       <Route
         path="/dashboard"
@@ -20,19 +20,23 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
       />
-<Route
-  path="/projects"
-  element={
-    <ProtectedRoute>
-      <ProjectsPage />
-    </ProtectedRoute>
-  }
-/>
       <Route
-        path="/"
-        element={<Navigate to="/dashboard" replace />}
+        path="/projects"
+        element={
+          <ProtectedRoute>
+            <ProjectsPage />
+          </ProtectedRoute>
+        }
       />
-
+      <Route
+        path="/tasks"
+        element={
+          <ProtectedRoute>
+            <TasksPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 }

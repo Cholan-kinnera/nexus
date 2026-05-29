@@ -4058,3 +4058,371 @@ WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind 
 2026-05-29 23:13:46,789 - sqlalchemy.engine.Engine - INFO - [cached since 0.01979s ago] ('comments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
 2026-05-29 23:13:46,791 - sqlalchemy.engine.Engine - INFO - COMMIT
 2026-05-29 23:13:46,792 - main - INFO - Database tables created successfully
+2026-05-30 00:10:44,605 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:10:44,617 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:10:44,617 - sqlalchemy.engine.Engine - INFO - [generated in 0.00048s] ('balaji123@gmail.com',)
+2026-05-30 00:10:44,868 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:10:44,903 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:10:44,903 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:10:44,904 - sqlalchemy.engine.Engine - INFO - [cached since 0.2869s ago] ('balaji123@gmail.com',)
+2026-05-30 00:10:44,906 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:10:44,907 - sqlalchemy.engine.Engine - INFO - [generated in 0.00039s] (12,)
+2026-05-30 00:10:44,912 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:10:44,916 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:10:44,916 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:10:44,917 - sqlalchemy.engine.Engine - INFO - [cached since 0.3001s ago] ('balaji123@gmail.com',)
+2026-05-30 00:10:44,919 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:10:44,919 - sqlalchemy.engine.Engine - INFO - [cached since 0.0129s ago] (12,)
+2026-05-30 00:10:44,921 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:11:02,515 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:11:02,516 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:11:02,516 - sqlalchemy.engine.Engine - INFO - [cached since 17.9s ago] ('balaji123@gmail.com',)
+2026-05-30 00:11:02,519 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:11:02,520 - sqlalchemy.engine.Engine - INFO - [generated in 0.00042s] (12,)
+2026-05-30 00:11:02,527 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:11:02,629 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:11:02,630 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:11:02,630 - sqlalchemy.engine.Engine - INFO - [cached since 18.01s ago] ('balaji123@gmail.com',)
+2026-05-30 00:11:02,638 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:11:02,638 - sqlalchemy.engine.Engine - INFO - [cached since 0.119s ago] (12,)
+2026-05-30 00:11:02,648 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:11:23,536 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:11:23,536 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:11:23,536 - sqlalchemy.engine.Engine - INFO - [cached since 38.92s ago] ('balaji123@gmail.com',)
+2026-05-30 00:11:23,538 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-30 00:11:23,538 - sqlalchemy.engine.Engine - INFO - [generated in 0.00025s] (11,)
+2026-05-30 00:11:23,541 - sqlalchemy.engine.Engine - INFO - INSERT INTO tasks (title, description, status, priority, due_date, project_id, assigned_to, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::TIMESTAMP WITH TIME ZONE, $6::INTEGER, $7::INTEGER, $8::TIMESTAMP WITH TIME ZONE, $9::TIMESTAMP WITH TIME ZONE) RETURNING tasks.id
+2026-05-30 00:11:23,541 - sqlalchemy.engine.Engine - INFO - [generated in 0.00040s] ('nexus 2', 'ui should be added', 'TODO', 'MEDIUM', None, 11, None, datetime.datetime(2026, 5, 29, 18, 41, 23, 541374, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 5, 29, 18, 41, 23, 541378, tzinfo=datetime.timezone.utc))
+2026-05-30 00:11:23,546 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-30 00:11:23,549 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:11:23,550 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-05-30 00:11:23,550 - sqlalchemy.engine.Engine - INFO - [generated in 0.00028s] (6,)
+2026-05-30 00:11:23,553 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:11:23,556 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:11:23,556 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:11:23,556 - sqlalchemy.engine.Engine - INFO - [cached since 38.94s ago] ('balaji123@gmail.com',)
+2026-05-30 00:11:23,558 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:11:23,558 - sqlalchemy.engine.Engine - INFO - [cached since 21.04s ago] (12,)
+2026-05-30 00:11:23,560 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:11:32,160 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:11:32,160 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:11:32,160 - sqlalchemy.engine.Engine - INFO - [cached since 47.54s ago] ('balaji123@gmail.com',)
+2026-05-30 00:11:32,162 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-05-30 00:11:32,162 - sqlalchemy.engine.Engine - INFO - [generated in 0.00024s] (6,)
+2026-05-30 00:11:32,163 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-30 00:11:32,163 - sqlalchemy.engine.Engine - INFO - [cached since 8.625s ago] (11,)
+2026-05-30 00:11:32,166 - sqlalchemy.engine.Engine - INFO - SELECT comments.id AS comments_id, comments.content AS comments_content, comments.task_id AS comments_task_id, comments.user_id AS comments_user_id, comments.created_at AS comments_created_at 
+FROM comments 
+WHERE $1::INTEGER = comments.task_id
+2026-05-30 00:11:32,166 - sqlalchemy.engine.Engine - INFO - [generated in 0.00030s] (6,)
+2026-05-30 00:11:32,172 - sqlalchemy.engine.Engine - INFO - DELETE FROM tasks WHERE tasks.id = $1::INTEGER
+2026-05-30 00:11:32,172 - sqlalchemy.engine.Engine - INFO - [generated in 0.00031s] (6,)
+2026-05-30 00:11:32,175 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-30 00:11:32,181 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:11:32,181 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:11:32,181 - sqlalchemy.engine.Engine - INFO - [cached since 47.56s ago] ('balaji123@gmail.com',)
+2026-05-30 00:11:32,182 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:11:32,182 - sqlalchemy.engine.Engine - INFO - [cached since 29.66s ago] (12,)
+2026-05-30 00:11:32,184 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:14,353 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:14,353 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:14,354 - sqlalchemy.engine.Engine - INFO - [cached since 89.74s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:14,356 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-30 00:12:14,356 - sqlalchemy.engine.Engine - INFO - [cached since 50.82s ago] (11,)
+2026-05-30 00:12:14,357 - sqlalchemy.engine.Engine - INFO - INSERT INTO tasks (title, description, status, priority, due_date, project_id, assigned_to, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::TIMESTAMP WITH TIME ZONE, $6::INTEGER, $7::INTEGER, $8::TIMESTAMP WITH TIME ZONE, $9::TIMESTAMP WITH TIME ZONE) RETURNING tasks.id
+2026-05-30 00:12:14,357 - sqlalchemy.engine.Engine - INFO - [cached since 50.82s ago] ('workin of nexus', 'fast and work on ui and ux man\n', 'TODO', 'MEDIUM', None, 11, None, datetime.datetime(2026, 5, 29, 18, 42, 14, 357591, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 5, 29, 18, 42, 14, 357595, tzinfo=datetime.timezone.utc))
+2026-05-30 00:12:14,359 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-30 00:12:14,361 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:14,362 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-05-30 00:12:14,362 - sqlalchemy.engine.Engine - INFO - [cached since 50.81s ago] (7,)
+2026-05-30 00:12:14,364 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:14,369 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:14,369 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:14,370 - sqlalchemy.engine.Engine - INFO - [cached since 89.75s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:14,372 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:12:14,372 - sqlalchemy.engine.Engine - INFO - [cached since 71.85s ago] (12,)
+2026-05-30 00:12:14,375 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:24,513 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:24,514 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:24,514 - sqlalchemy.engine.Engine - INFO - [cached since 99.9s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:24,515 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-30 00:12:24,515 - sqlalchemy.engine.Engine - INFO - [cached since 60.98s ago] (11,)
+2026-05-30 00:12:24,516 - sqlalchemy.engine.Engine - INFO - INSERT INTO tasks (title, description, status, priority, due_date, project_id, assigned_to, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::TIMESTAMP WITH TIME ZONE, $6::INTEGER, $7::INTEGER, $8::TIMESTAMP WITH TIME ZONE, $9::TIMESTAMP WITH TIME ZONE) RETURNING tasks.id
+2026-05-30 00:12:24,516 - sqlalchemy.engine.Engine - INFO - [cached since 60.98s ago] ('nex', '', 'TODO', 'MEDIUM', None, 11, None, datetime.datetime(2026, 5, 29, 18, 42, 24, 516381, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 5, 29, 18, 42, 24, 516383, tzinfo=datetime.timezone.utc))
+2026-05-30 00:12:24,517 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-30 00:12:24,518 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:24,518 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-05-30 00:12:24,518 - sqlalchemy.engine.Engine - INFO - [cached since 60.97s ago] (8,)
+2026-05-30 00:12:24,520 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:24,524 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:24,524 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:24,525 - sqlalchemy.engine.Engine - INFO - [cached since 99.91s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:24,526 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:12:24,526 - sqlalchemy.engine.Engine - INFO - [cached since 82.01s ago] (12,)
+2026-05-30 00:12:24,528 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:29,899 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:29,900 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:29,900 - sqlalchemy.engine.Engine - INFO - [cached since 105.3s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:29,901 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:31,411 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:31,411 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:31,411 - sqlalchemy.engine.Engine - INFO - [cached since 106.8s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:31,412 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:32,157 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:32,158 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:32,158 - sqlalchemy.engine.Engine - INFO - [cached since 107.5s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:32,159 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:40,255 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:40,255 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:40,255 - sqlalchemy.engine.Engine - INFO - [cached since 115.6s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:40,256 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:41,200 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:41,200 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:41,200 - sqlalchemy.engine.Engine - INFO - [cached since 116.6s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:41,201 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:41,423 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:41,423 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:41,423 - sqlalchemy.engine.Engine - INFO - [cached since 116.8s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:41,425 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:53,472 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:53,473 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:53,473 - sqlalchemy.engine.Engine - INFO - [cached since 128.9s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:53,474 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:53,641 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:53,641 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:53,642 - sqlalchemy.engine.Engine - INFO - [cached since 129s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:53,642 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:53,810 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:53,811 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:53,811 - sqlalchemy.engine.Engine - INFO - [cached since 129.2s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:53,812 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:54,028 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:54,029 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:54,029 - sqlalchemy.engine.Engine - INFO - [cached since 129.4s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:54,030 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:12:54,245 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:12:54,246 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:12:54,246 - sqlalchemy.engine.Engine - INFO - [cached since 129.6s ago] ('balaji123@gmail.com',)
+2026-05-30 00:12:54,247 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:13:25,804 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:13:25,805 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:13:25,805 - sqlalchemy.engine.Engine - INFO - [cached since 161.2s ago] ('balaji123@gmail.com',)
+2026-05-30 00:13:25,806 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:13:31,846 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:13:31,847 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:13:31,847 - sqlalchemy.engine.Engine - INFO - [cached since 167.2s ago] ('balaji123@gmail.com',)
+2026-05-30 00:13:31,848 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:13:32,069 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:13:32,069 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:13:32,070 - sqlalchemy.engine.Engine - INFO - [cached since 167.5s ago] ('balaji123@gmail.com',)
+2026-05-30 00:13:32,071 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:13:32,240 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:13:32,241 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:13:32,241 - sqlalchemy.engine.Engine - INFO - [cached since 167.6s ago] ('balaji123@gmail.com',)
+2026-05-30 00:13:32,243 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:13:41,038 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:13:41,038 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:13:41,039 - sqlalchemy.engine.Engine - INFO - [cached since 176.4s ago] ('balaji123@gmail.com',)
+2026-05-30 00:13:41,040 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-30 00:13:41,040 - sqlalchemy.engine.Engine - INFO - [cached since 137.5s ago] (11,)
+2026-05-30 00:13:41,041 - sqlalchemy.engine.Engine - INFO - INSERT INTO tasks (title, description, status, priority, due_date, project_id, assigned_to, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::TIMESTAMP WITH TIME ZONE, $6::INTEGER, $7::INTEGER, $8::TIMESTAMP WITH TIME ZONE, $9::TIMESTAMP WITH TIME ZONE) RETURNING tasks.id
+2026-05-30 00:13:41,041 - sqlalchemy.engine.Engine - INFO - [cached since 137.5s ago] ('832w', 'hh', 'TODO', 'MEDIUM', None, 11, None, datetime.datetime(2026, 5, 29, 18, 43, 41, 41298, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 5, 29, 18, 43, 41, 41300, tzinfo=datetime.timezone.utc))
+2026-05-30 00:13:41,042 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-30 00:13:41,044 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:13:41,044 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-05-30 00:13:41,045 - sqlalchemy.engine.Engine - INFO - [cached since 137.5s ago] (9,)
+2026-05-30 00:13:41,047 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:13:41,051 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:13:41,051 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:13:41,051 - sqlalchemy.engine.Engine - INFO - [cached since 176.4s ago] ('balaji123@gmail.com',)
+2026-05-30 00:13:41,053 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:13:41,053 - sqlalchemy.engine.Engine - INFO - [cached since 158.5s ago] (12,)
+2026-05-30 00:13:41,054 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:13:47,495 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:13:47,496 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:13:47,496 - sqlalchemy.engine.Engine - INFO - [cached since 182.9s ago] ('balaji123@gmail.com',)
+2026-05-30 00:13:47,497 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-05-30 00:13:47,498 - sqlalchemy.engine.Engine - INFO - [cached since 135.3s ago] (9,)
+2026-05-30 00:13:47,499 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-05-30 00:13:47,500 - sqlalchemy.engine.Engine - INFO - [cached since 144s ago] (11,)
+2026-05-30 00:13:47,502 - sqlalchemy.engine.Engine - INFO - SELECT comments.id AS comments_id, comments.content AS comments_content, comments.task_id AS comments_task_id, comments.user_id AS comments_user_id, comments.created_at AS comments_created_at 
+FROM comments 
+WHERE $1::INTEGER = comments.task_id
+2026-05-30 00:13:47,503 - sqlalchemy.engine.Engine - INFO - [cached since 135.3s ago] (9,)
+2026-05-30 00:13:47,505 - sqlalchemy.engine.Engine - INFO - DELETE FROM tasks WHERE tasks.id = $1::INTEGER
+2026-05-30 00:13:47,505 - sqlalchemy.engine.Engine - INFO - [cached since 135.3s ago] (9,)
+2026-05-30 00:13:47,507 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-05-30 00:13:47,516 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:13:47,517 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:13:47,517 - sqlalchemy.engine.Engine - INFO - [cached since 182.9s ago] ('balaji123@gmail.com',)
+2026-05-30 00:13:47,520 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:13:47,521 - sqlalchemy.engine.Engine - INFO - [cached since 165s ago] (12,)
+2026-05-30 00:13:47,524 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:49:37,907 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:49:37,909 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:49:37,909 - sqlalchemy.engine.Engine - INFO - [cached since 2333s ago] ('balaji123@gmail.com',)
+2026-05-30 00:49:37,914 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:49:37,915 - sqlalchemy.engine.Engine - INFO - [cached since 2315s ago] (12,)
+2026-05-30 00:49:37,919 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:49:37,922 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:49:37,923 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:49:37,924 - sqlalchemy.engine.Engine - INFO - [cached since 2333s ago] ('balaji123@gmail.com',)
+2026-05-30 00:49:37,927 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks JOIN projects ON projects.id = tasks.project_id 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:49:37,928 - sqlalchemy.engine.Engine - INFO - [cached since 2315s ago] (12,)
+2026-05-30 00:49:37,930 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:49:41,041 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:49:41,042 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:49:41,042 - sqlalchemy.engine.Engine - INFO - [cached since 2336s ago] ('balaji123@gmail.com',)
+2026-05-30 00:49:41,045 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:49:41,045 - sqlalchemy.engine.Engine - INFO - [cached since 2336s ago] (12,)
+2026-05-30 00:49:41,050 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 00:49:41,054 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 00:49:41,055 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 00:49:41,056 - sqlalchemy.engine.Engine - INFO - [cached since 2336s ago] ('balaji123@gmail.com',)
+2026-05-30 00:49:41,058 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 00:49:41,058 - sqlalchemy.engine.Engine - INFO - [cached since 2336s ago] (12,)
+2026-05-30 00:49:41,061 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 01:07:51,611 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 01:07:51,612 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 01:07:51,613 - sqlalchemy.engine.Engine - INFO - [cached since 3427s ago] ('balaji123@gmail.com',)
+2026-05-30 01:07:51,615 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 01:07:51,616 - sqlalchemy.engine.Engine - INFO - [cached since 3427s ago] (12,)
+2026-05-30 01:07:51,618 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-05-30 01:07:51,621 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-05-30 01:07:51,622 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.email, users.password, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-05-30 01:07:51,624 - sqlalchemy.engine.Engine - INFO - [cached since 3427s ago] ('balaji123@gmail.com',)
+2026-05-30 01:07:51,629 - sqlalchemy.engine.Engine - INFO - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-05-30 01:07:51,629 - sqlalchemy.engine.Engine - INFO - [cached since 3427s ago] (12,)
+2026-05-30 01:07:51,632 - sqlalchemy.engine.Engine - INFO - ROLLBACK
