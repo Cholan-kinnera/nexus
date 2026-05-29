@@ -75,7 +75,7 @@ async def update_project_service(
             detail="Not authorized to update this project"
         )
 
-    update_data = project_data.dict(exclude_unset=True)
+    update_data = project_data.model_dump(exclude_unset=True)
 
     for key, value in update_data.items():
         setattr(project, key, value)

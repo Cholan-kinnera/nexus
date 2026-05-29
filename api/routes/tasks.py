@@ -16,12 +16,6 @@ from services.task_service import (
     create_task_service,
     get_tasks_service,
     update_task_service,
-    delete_task_service
-)
-from services.task_service import (
-    create_task_service,
-    get_tasks_service,
-    update_task_service,
     delete_task_service,
     get_task_service,
     get_tasks_by_project_service
