@@ -1,10 +1,29 @@
-function DashboardPage() {
+import { useEffect, useState } from "react";
+import { getProjects } from "../services/projectService";
+
+export default function DashboardPage() {
+  const [projects, setProjects] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadProjects = async () => {
+      const data = await getProjects();
+      console.log("PROJECTS:", data);
+      setProjects(data);
+    };
+
+    loadProjects();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-[#0F1117] text-white p-10">
-      <h1 className="text-4xl font-bold">
-        Welcome to Nexus PM 🚀
-      </h1>
+    <div>
+      <h1>Dashboard</h1>
+
+      {projects.map((project) => (
+        <div key={project.id}>
+          <h3>{project.title}</h3>
+          <p>{project.description}</p>
+        </div>
+      ))}
     </div>
   );
 }
-export default DashboardPage;
