@@ -4,7 +4,7 @@ import {
   createTask,
   deleteTask,
 } from "../services/taskService";
-
+import DashboardLayout from "../layouts/DashboardLayout";
 export  function TasksPage() {
   const [tasks, setTasks] = useState<any[]>([]);
 
@@ -40,8 +40,9 @@ export  function TasksPage() {
   };
 
   return (
-    <div>
-      <h1>Tasks</h1>
+    <DashboardLayout>
+      <div>
+        <h1>Tasks</h1>
 
       <input
         placeholder="Task title"
@@ -93,5 +94,6 @@ export  function TasksPage() {
         </div>
       ))}
     </div>
+    </DashboardLayout>
   );
 }
