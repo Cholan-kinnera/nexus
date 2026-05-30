@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/client";
-
+import  ParticleBackground  from "../components/auth/ParticleBackground";
 // ─── Cursor glow hook ─────────────────────────────────────────────────────────
 function useCursorGlow() {
   const ref = useRef<HTMLDivElement>(null);
@@ -112,6 +112,7 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0812] flex items-center justify-center p-4 overflow-hidden">
+    <ParticleBackground />
 
       {/* Ambient background orbs — static, always present */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -123,7 +124,7 @@ export default function AuthPage() {
       {/* Main card with cursor glow effect */}
       <div
         ref={glowRef}
-        className="relative w-full max-w-[960px] flex rounded-2xl overflow-hidden border border-white/[0.06] shadow-2xl shadow-black/70 auth-card-glow"
+        className="relative z-20 max-w-[960px] flex rounded-2xl overflow-hidden border border-white/[0.06] shadow-2xl shadow-black/70 auth-card-glow"
         style={{ "--glow-x": "50%", "--glow-y": "50%", "--glow-opacity": "0" } as React.CSSProperties}
       >
         {/* Cursor glow layer — follows mouse inside card */}
