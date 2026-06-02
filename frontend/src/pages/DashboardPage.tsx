@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getProjects } from "../services/projectService";
+import { getTasks } from "../services/taskService";
 import DashboardLayout from "../layouts/DashboardLayout";
 export default function DashboardPage() {
   const [projects, setProjects] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<any[]>([]);
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -11,11 +13,58 @@ export default function DashboardPage() {
       setProjects(data);
     };
 
-    loadProjects();
-  }, []);
+    const loadTasks = async () => {
+      const data = await getTasks();
+      setTasks(data);
+    };
 
+    loadProjects();
+    loadTasks();
+  }, []);
+const totalProjects = projects.length;
+
+const totalTasks = tasks.length;
+
+const completedTasks = tasks.filter(
+  (task) => task.status === "DONE"
+).length;
+
+const todoTasks = tasks.filter(
+  (task) => task.status === "TODO"
+).length;
   return (
     <DashboardLayout>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+
+  <div className="bg-[#111827] p-6 rounded-xl">
+    <h3 className="text-slate-400">Projects</h3>
+    <p className="text-3xl font-bold">
+      {totalProjects}
+    </p>
+  </div>
+
+  <div className="bg-[#111827] p-6 rounded-xl">
+    <h3 className="text-slate-400">Tasks</h3>
+    <p className="text-3xl font-bold">
+      {totalTasks}
+    </p>
+  </div>
+
+  <div className="bg-[#111827] p-6 rounded-xl">
+    <h3 className="text-slate-400">Todo</h3>
+    <p className="text-3xl font-bold">
+      {todoTasks}
+    </p>
+  </div>
+
+  <div className="bg-[#111827] p-6 rounded-xl">
+    <h3 className="text-slate-400">Done</h3>
+    <p className="text-3xl font-bold">
+      {completedTasks}
+    </p>
+  </div>
+
+</div>
   <div className="min-h-screen bg-[#070B1A] text-white p-8">
     
     <div className="mb-10">
@@ -84,7 +133,6 @@ export default function DashboardPage() {
         ))}
       </div>
     </div>
-
   </div>
   </DashboardLayout>
 );

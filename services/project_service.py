@@ -37,7 +37,7 @@ async def get_projects_service(
     return projects
 
 
-async def get_project_service(
+async def get_project_by_id_service(
     project_id: int,
     current_user,
     db: AsyncSession
