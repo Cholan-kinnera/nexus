@@ -111,44 +111,44 @@ export default function AuthPage() {
   const glowRef = useCursorGlow();
 
   return (
-    <div className="min-h-screen bg-[#0a0812] flex items-center justify-center p-4 overflow-hidden">
+    <div className="min-h-screen bg-[#FAFAF9] flex items-center justify-center p-4 overflow-hidden" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
     <ParticleBackground />
 
-      {/* Ambient background orbs — static, always present */}
+      {/* Ambient background orbs — soft light-theme violet washes */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-15%] left-[-5%] w-[600px] h-[600px] bg-violet-700/8 rounded-full blur-[130px] animate-pulse-slow" />
-        <div className="absolute bottom-[-10%] right-[5%] w-[500px] h-[500px] bg-violet-900/6 rounded-full blur-[110px] animate-pulse-slow" style={{ animationDelay: "2s" }} />
-        <div className="absolute top-[40%] left-[50%] w-[300px] h-[300px] bg-indigo-800/5 rounded-full blur-[90px] animate-pulse-slow" style={{ animationDelay: "4s" }} />
+        <div className="absolute top-[-15%] left-[-5%] w-[600px] h-[600px] bg-violet-200/30 rounded-full blur-[130px] animate-pulse-slow" />
+        <div className="absolute bottom-[-10%] right-[5%] w-[500px] h-[500px] bg-violet-300/20 rounded-full blur-[110px] animate-pulse-slow" style={{ animationDelay: "2s" }} />
+        <div className="absolute top-[40%] left-[50%] w-[300px] h-[300px] bg-indigo-200/15 rounded-full blur-[90px] animate-pulse-slow" style={{ animationDelay: "4s" }} />
       </div>
 
       {/* Main card with cursor glow effect */}
       <div
         ref={glowRef}
-        className="relative z-20 max-w-[960px] flex rounded-2xl overflow-hidden border border-white/[0.06] shadow-2xl shadow-black/70 auth-card-glow"
+        className="relative z-20 max-w-[960px] flex rounded-2xl overflow-hidden border border-[#e5e7eb] shadow-xl shadow-black/[0.06] auth-card-glow"
         style={{ "--glow-x": "50%", "--glow-y": "50%", "--glow-opacity": "0" } as React.CSSProperties}
       >
         {/* Cursor glow layer — follows mouse inside card */}
         <div
           className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-500 rounded-2xl"
           style={{
-            background: "radial-gradient(400px circle at var(--glow-x) var(--glow-y), rgba(124,58,237,0.08), transparent 70%)",
+            background: "radial-gradient(400px circle at var(--glow-x) var(--glow-y), rgba(124,58,237,0.06), transparent 70%)",
             opacity: "var(--glow-opacity)",
           }}
         />
 
         <LeftPanel activeTab={activeTab} />
 
-        <div className="flex-1 bg-[#12101e] flex flex-col p-8 min-h-[600px] relative z-10">
+        <div className="flex-1 bg-white flex flex-col p-8 min-h-[600px] relative z-10">
           {/* Tabs */}
-          <div className="flex border-b border-white/[0.08] mb-8">
+          <div className="flex border-b border-[#e5e7eb] mb-8">
             {(["login", "signup"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`flex-1 pb-3 text-sm font-medium border-b-2 transition-all duration-300
                   ${activeTab === tab
-                    ? "text-violet-400 border-violet-500"
-                    : "text-slate-500 border-transparent hover:text-slate-400"
+                    ? "text-[#6d28d9] border-[#6d28d9]"
+                    : "text-[#9ca3af] border-transparent hover:text-[#6b7280]"
                   }`}
               >
                 {tab === "login" ? "Login" : "Sign Up"}
@@ -194,73 +194,104 @@ function LeftPanel({ activeTab }: { activeTab: "login" | "signup" }) {
   return (
     <div
       ref={tiltRef}
-      className="hidden md:flex flex-col w-[420px] bg-[#0e0b1e] p-10 justify-between relative overflow-hidden border-r border-white/[0.05] transition-transform duration-100 ease-out"
+      className="hidden md:flex flex-col w-[420px] bg-[#f5f3f0] p-10 justify-between relative overflow-hidden border-r border-[#e5e7eb] transition-transform duration-100 ease-out"
       style={{ transformStyle: "preserve-3d" }}
     >
       {/* Animated grid */}
       <div
-        className="absolute inset-0 opacity-[0.025] animate-grid-shift"
+        className="absolute inset-0 opacity-[0.04] animate-grid-shift"
         style={{
           backgroundImage:
-            "linear-gradient(#a78bfa 1px, transparent 1px), linear-gradient(90deg, #a78bfa 1px, transparent 1px)",
+            "linear-gradient(#6d28d9 1px, transparent 1px), linear-gradient(90deg, #6d28d9 1px, transparent 1px)",
           backgroundSize: "40px 40px",
         }}
       />
 
       {/* Floating glow orb inside left panel */}
-      <div className="absolute top-1/3 left-1/4 w-[280px] h-[280px] bg-violet-600/12 rounded-full blur-[70px] animate-float pointer-events-none" />
+      <div className="absolute top-1/3 left-1/4 w-[280px] h-[280px] bg-violet-300/20 rounded-full blur-[70px] animate-float pointer-events-none" />
 
       {/* Logo */}
       <div className="relative flex items-center gap-3 z-10">
-        <div className="w-9 h-9 rounded-lg bg-violet-600 flex items-center justify-center shadow-lg shadow-violet-900/50 animate-logo-glow">
+        <div className="w-9 h-9 rounded-lg bg-[#1a1a2e] flex items-center justify-center shadow-lg shadow-black/10 animate-logo-glow">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
             <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z" fill="#fff" opacity="0.9" />
           </svg>
         </div>
-        <span className="text-white font-semibold text-lg tracking-wide">
-          NEXUS <span className="text-violet-400">PM</span>
+        <span className="text-[#1a1a2e] font-semibold text-lg tracking-wide">
+          NEXUS <span className="text-[#6d28d9]">PM</span>
         </span>
       </div>
 
       {/* Copy — fades between login/signup */}
       <div className="relative z-10">
-        <h2 className="text-white text-3xl font-semibold leading-tight mb-3 transition-all duration-500">
+        <h2 className="text-[#1a1a2e] text-3xl font-semibold leading-tight mb-3 transition-all duration-500">
           {activeTab === "login" ? (
-            <>Welcome<br /><span className="text-violet-400">back.</span></>
+            <>Welcome<br /><span className="text-[#6d28d9]">back.</span></>
           ) : (
-            <>Start<br /><span className="text-violet-400">building.</span></>
+            <>Start<br /><span className="text-[#6d28d9]">building.</span></>
           )}
         </h2>
-        <p className="text-slate-500 text-sm leading-relaxed mb-10 transition-all duration-500">
+        <p className="text-[#6b7280] text-sm leading-relaxed mb-10 transition-all duration-500">
           {activeTab === "login"
             ? "Your projects, tasks, and team are waiting for you."
             : "Streamline your projects, manage tasks, and boost productivity."}
         </p>
 
         {[
-          { icon: "📋", label: "Project Management", sub: "Organise and track your projects" },
-          { icon: "👥", label: "Team Collaboration", sub: "Work together seamlessly" },
-          { icon: "📊", label: "Task Tracking", sub: "Stay on top of every task" },
+          { icon: "clipboard", label: "Project Management", sub: "Organise and track your projects" },
+          { icon: "users", label: "Team Collaboration", sub: "Work together seamlessly" },
+          { icon: "chart", label: "Task Tracking", sub: "Stay on top of every task" },
         ].map((f, i) => (
           <div
             key={f.label}
             className="flex items-center gap-4 mb-5 group"
             style={{ animationDelay: `${i * 0.1}s` }}
           >
-            <div className="w-10 h-10 rounded-xl bg-violet-900/40 border border-violet-800/40 flex items-center justify-center text-base flex-shrink-0 group-hover:bg-violet-800/50 group-hover:border-violet-600/50 transition-all duration-300 group-hover:scale-110">
-              {f.icon}
+            <div className="w-10 h-10 rounded-xl bg-[#ede9fe] border border-[#ddd6fe] flex items-center justify-center text-[#6d28d9] flex-shrink-0 group-hover:bg-[#ddd6fe] group-hover:border-[#c4b5fd] transition-all duration-300 group-hover:scale-110">
+              <FeatureIcon type={f.icon} />
             </div>
             <div>
-              <p className="text-white text-sm font-medium group-hover:text-violet-300 transition-colors duration-200">{f.label}</p>
-              <p className="text-slate-600 text-xs">{f.sub}</p>
+              <p className="text-[#1a1a2e] text-sm font-medium group-hover:text-[#6d28d9] transition-colors duration-200">{f.label}</p>
+              <p className="text-[#9ca3af] text-xs">{f.sub}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <p className="relative z-10 text-slate-700 text-xs">© 2026 Nexus PM. All rights reserved.</p>
+      <p className="relative z-10 text-[#9ca3af] text-xs">&copy; 2026 Nexus PM. All rights reserved.</p>
     </div>
   );
+}
+
+// ─── Feature icons (replacing emojis) ─────────────────────────────────────────
+function FeatureIcon({ type }: { type: string }) {
+  switch (type) {
+    case "clipboard":
+      return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="8" y="2" width="8" height="4" rx="1" />
+          <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" />
+          <path d="M12 11h4M12 16h4M8 11h.01M8 16h.01" />
+        </svg>
+      );
+    case "users":
+      return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+        </svg>
+      );
+    case "chart":
+      return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 3v18h18" />
+          <path d="M7 16l4-6 4 4 5-8" />
+        </svg>
+      );
+    default:
+      return null;
+  }
 }
 
 // ─── Login Form ───────────────────────────────────────────────────────────────
@@ -292,52 +323,52 @@ function LoginForm({ onSwitch, onSuccess, login }: {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full">
-      <p className="text-white text-xl font-semibold mb-1">Welcome back!</p>
-      <p className="text-slate-500 text-sm mb-7">Login to your account</p>
+      <p className="text-[#1a1a2e] text-xl font-semibold mb-1">Welcome back!</p>
+      <p className="text-[#6b7280] text-sm mb-7">Login to your account</p>
 
       {error && <ErrorBox message={error} />}
 
       <Field label="Email">
-        <InputWrap icon="✉">
+        <InputWrap icon="mail">
           <input type="email" placeholder="Enter your email" value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            required className="auth-input" />
+            required className="auth-input-light" />
         </InputWrap>
       </Field>
 
       <Field label="Password">
-        <InputWrap icon="🔒">
+        <InputWrap icon="lock">
           <input type={showPw ? "text" : "password"} placeholder="Enter your password"
             value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}
-            required className="auth-input pr-10" />
+            required className="auth-input-light pr-10" />
           <EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />
         </InputWrap>
       </Field>
 
       <div className="flex justify-between items-center mb-6">
-        <label className="flex items-center gap-2 text-slate-500 text-xs cursor-pointer">
+        <label className="flex items-center gap-2 text-[#6b7280] text-xs cursor-pointer">
           <input type="checkbox" checked={form.remember}
             onChange={(e) => setForm({ ...form, remember: e.target.checked })}
-            className="accent-violet-500" />
+            className="accent-violet-600" />
           Remember me
         </label>
-        <button type="button" className="text-violet-400 text-xs hover:text-violet-300 transition-colors">
+        <button type="button" className="text-[#6d28d9] text-xs hover:text-[#5b21b6] transition-colors">
           Forgot password?
         </button>
       </div>
 
       <button ref={btnRef} type="submit" disabled={loading}
-        className="magnetic-btn w-full py-2.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-60
+        className="magnetic-btn w-full py-2.5 bg-[#6d28d9] hover:bg-[#5b21b6] disabled:opacity-60
           text-white text-sm font-medium rounded-lg flex items-center justify-center gap-2
-          shadow-lg shadow-violet-900/40 mb-5 transition-all duration-200">
-        {loading ? <Spinner /> : <>Login →</>}
+          shadow-lg shadow-violet-500/20 mb-5 transition-all duration-200">
+        {loading ? <Spinner /> : <>Login &rarr;</>}
       </button>
 
       <Divider />
       <SocialButtons />
-      <p className="text-center text-slate-500 text-sm mt-5">
+      <p className="text-center text-[#6b7280] text-sm mt-5">
         Don't have an account?{" "}
-        <button type="button" onClick={onSwitch} className="text-violet-400 font-medium hover:text-violet-300 transition-colors">
+        <button type="button" onClick={onSwitch} className="text-[#6d28d9] font-medium hover:text-[#5b21b6] transition-colors">
           Sign up
         </button>
       </p>
@@ -374,62 +405,66 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
   if (success) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4 animate-fade-in">
-        <div className="w-16 h-16 rounded-full bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-3xl animate-success-pop">✅</div>
-        <p className="text-white text-lg font-medium">Account created!</p>
-        <p className="text-slate-500 text-sm">Redirecting to login…</p>
+        <div className="w-16 h-16 rounded-full bg-[#ede9fe] border border-[#ddd6fe] flex items-center justify-center animate-success-pop">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <p className="text-[#1a1a2e] text-lg font-medium">Account created!</p>
+        <p className="text-[#6b7280] text-sm">Redirecting to login...</p>
       </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full">
-      <p className="text-white text-xl font-semibold mb-1">Create account</p>
-      <p className="text-slate-500 text-sm mb-6">Start managing your projects today</p>
+      <p className="text-[#1a1a2e] text-xl font-semibold mb-1">Create account</p>
+      <p className="text-[#6b7280] text-sm mb-6">Start managing your projects today</p>
 
       {error && <ErrorBox message={error} />}
 
       <Field label="Full name">
-        <InputWrap icon="👤">
+        <InputWrap icon="user">
           <input type="text" placeholder="Enter your name" value={form.fullName}
             onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-            required className="auth-input" />
+            required className="auth-input-light" />
         </InputWrap>
       </Field>
       <Field label="Email">
-        <InputWrap icon="✉">
+        <InputWrap icon="mail">
           <input type="email" placeholder="Enter your email" value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            required className="auth-input" />
+            required className="auth-input-light" />
         </InputWrap>
       </Field>
       <Field label="Password">
-        <InputWrap icon="🔒">
+        <InputWrap icon="lock">
           <input type={showPw ? "text" : "password"} placeholder="Create a password (min 8 chars)"
             value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}
-            required className="auth-input pr-10" />
+            required className="auth-input-light pr-10" />
           <EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />
         </InputWrap>
       </Field>
       <Field label="Confirm password">
-        <InputWrap icon="🔒">
+        <InputWrap icon="lock">
           <input type={showPw ? "text" : "password"} placeholder="Confirm your password"
             value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
-            required className="auth-input" />
+            required className="auth-input-light" />
         </InputWrap>
       </Field>
 
       <button ref={btnRef} type="submit" disabled={loading}
-        className="magnetic-btn w-full py-2.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-60
+        className="magnetic-btn w-full py-2.5 bg-[#6d28d9] hover:bg-[#5b21b6] disabled:opacity-60
           text-white text-sm font-medium rounded-lg flex items-center justify-center gap-2
-          shadow-lg shadow-violet-900/40 mb-5 transition-all duration-200">
-        {loading ? <Spinner /> : <>Create account →</>}
+          shadow-lg shadow-violet-500/20 mb-5 transition-all duration-200">
+        {loading ? <Spinner /> : <>Create account &rarr;</>}
       </button>
 
       <Divider />
       <SocialButtons />
-      <p className="text-center text-slate-500 text-sm mt-4">
+      <p className="text-center text-[#6b7280] text-sm mt-4">
         Already have an account?{" "}
-        <button type="button" onClick={onSwitch} className="text-violet-400 font-medium hover:text-violet-300 transition-colors">
+        <button type="button" onClick={onSwitch} className="text-[#6d28d9] font-medium hover:text-[#5b21b6] transition-colors">
           Login
         </button>
       </p>
@@ -441,7 +476,7 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="mb-4">
-      <label className="block text-slate-400 text-xs font-medium mb-1.5">{label}</label>
+      <label className="block text-[#374151] text-xs font-medium mb-1.5">{label}</label>
       {children}
     </div>
   );
@@ -450,25 +485,67 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 function InputWrap({ icon, children }: { icon: string; children: React.ReactNode }) {
   return (
     <div className="relative">
-      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm pointer-events-none opacity-40">{icon}</span>
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none">
+        <InputIcon type={icon} />
+      </span>
       {children}
     </div>
   );
 }
 
+// ─── Input icons (replacing emojis) ───────────────────────────────────────────
+function InputIcon({ type }: { type: string }) {
+  switch (type) {
+    case "mail":
+      return (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+          <path d="M22 7l-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7" />
+        </svg>
+      );
+    case "lock":
+      return (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" />
+          <path d="M7 11V7a5 5 0 0110 0v4" />
+        </svg>
+      );
+    case "user":
+      return (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
 function EyeToggle({ show, onToggle }: { show: boolean; onToggle: () => void }) {
   return (
     <button type="button" onClick={onToggle}
-      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors text-sm"
+      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#6b7280] transition-colors"
       aria-label={show ? "Hide password" : "Show password"}>
-      {show ? "🙈" : "👁"}
+      {show ? (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
+          <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
+          <line x1="1" y1="1" x2="23" y2="23" />
+        </svg>
+      ) : (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      )}
     </button>
   );
 }
 
 function ErrorBox({ message }: { message: string }) {
   return (
-    <div className="mb-4 px-4 py-3 rounded-lg bg-red-950/60 border border-red-800/50 text-red-400 text-sm animate-shake">
+    <div className="mb-4 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm animate-shake">
       {message}
     </div>
   );
@@ -482,9 +559,9 @@ function Divider() {
   return (
     <div className="relative text-center mb-5">
       <div className="absolute inset-0 flex items-center">
-        <div className="w-full border-t border-white/[0.06]" />
+        <div className="w-full border-t border-[#e5e7eb]" />
       </div>
-      <span className="relative bg-[#12101e] px-3 text-slate-600 text-xs">or continue with</span>
+      <span className="relative bg-white px-3 text-[#9ca3af] text-xs">or continue with</span>
     </div>
   );
 }
@@ -494,12 +571,12 @@ function SocialButtons() {
     <div className="flex gap-3">
       {[
         { name: "Google", logo: <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> },
-        { name: "GitHub", logo: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> },
+        { name: "GitHub", logo: <svg width="16" height="16" viewBox="0 0 24 24" fill="#1a1a2e"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> },
       ].map(({ name, logo }) => (
         <button key={name} type="button"
           className="social-btn flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg
-            border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.07]
-            text-slate-300 text-sm font-medium transition-all duration-200 hover:border-violet-500/30 hover:scale-[1.02]">
+            border border-[#e5e7eb] bg-white hover:bg-[#f9fafb]
+            text-[#374151] text-sm font-medium transition-all duration-200 hover:border-[#c4b5fd] hover:scale-[1.02]">
           {logo}{name}
         </button>
       ))}
