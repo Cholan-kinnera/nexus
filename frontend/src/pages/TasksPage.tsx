@@ -41,13 +41,13 @@ function DroppableColumn({
   return (
     <div
       ref={setNodeRef}
-      className={`bg-[#0F172A] border rounded-2xl p-4 min-h-[200px] transition-all duration-200 ${
+      className={`bg-slate-50 dark:bg-zinc-900/50 border rounded-2xl p-4 min-h-[200px] transition-all duration-200 ${
         isOver
-          ? "border-violet-500/70 shadow-[0_0_20px_rgba(139,92,246,0.15)]"
-          : "border-slate-800"
+          ? "border-violet-500/70 shadow-[0_0_20px_rgba(139,92,246,0.15)] bg-slate-100 dark:bg-zinc-900"
+          : "border-slate-200/80 dark:border-zinc-800/80"
       }`}
     >
-      <h2 className="text-xl font-bold mb-4">{title}</h2>
+      <h2 className="text-xl font-bold mb-4 text-slate-800 dark:text-zinc-200">{title}</h2>
       {children}
     </div>
   );
@@ -91,17 +91,17 @@ function DraggableTaskCard({
       style={style}
       {...listeners}
       {...attributes}
-      className={`bg-[#111827] border rounded-xl p-4 mb-4 cursor-grab active:cursor-grabbing select-none transition-shadow duration-200 ${
+      className={`bg-white dark:bg-zinc-900 border rounded-xl p-4 mb-4 cursor-grab active:cursor-grabbing select-none shadow-sm hover:shadow transition duration-200 ${
         isDragging
-          ? "border-violet-500 shadow-[0_0_16px_rgba(139,92,246,0.3)]"
-          : "border-slate-700 hover:border-slate-600"
+          ? "border-violet-500 shadow-[0_0_16px_rgba(139,92,246,0.25)]"
+          : "border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700"
       }`}
     >
-      <h3 className="font-semibold text-lg">{task.title}</h3>
+      <h3 className="font-semibold text-lg text-slate-800 dark:text-zinc-100">{task.title}</h3>
 
-      <p className="text-slate-400 mt-2">{task.description}</p>
+      <p className="text-slate-500 dark:text-zinc-400 mt-2">{task.description}</p>
 
-      <p className="text-violet-400 text-sm mt-2">
+      <p className="text-violet-600 dark:text-violet-400 font-medium text-sm mt-2">
         Project: {getProjectName(task.project_id)}
       </p>
 
@@ -133,7 +133,7 @@ function DraggableTaskCard({
             e.stopPropagation();
             handleDelete(task.id);
           }}
-          className="text-red-400 hover:text-red-300 text-sm transition-colors"
+          className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 font-medium text-sm transition-colors"
         >
           Delete
         </button>
@@ -272,23 +272,23 @@ const handleStatusChange = async (
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-5xl font-bold text-white">
+          <h1 className="text-5xl font-bold text-slate-900 dark:text-zinc-100">
             Tasks
           </h1>
 
-          <p className="text-slate-400 mt-2">
+          <p className="text-slate-500 dark:text-zinc-400 mt-2">
             Manage and track your work
           </p>
         </div>
 
         {/* Create Task */}
-        <div className="bg-[#0F172A] border border-slate-800 rounded-2xl p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-4">
+        <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 mb-8 shadow-sm text-slate-800 dark:text-zinc-100 transition-colors duration-300">
+          <h2 className="text-xl font-semibold mb-4 text-slate-800 dark:text-zinc-200">
             Create New Task
           </h2>
 
           <input
-            className="w-full bg-[#111827] border border-slate-700 rounded-lg p-3 mb-4"
+            className="w-full bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg p-3 mb-4 focus:ring-2 focus:ring-violet-500/20 dark:focus:ring-violet-500/10 focus:border-violet-500 dark:focus:border-violet-500 text-slate-800 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition duration-200"
             placeholder="Task title"
             value={title}
             onChange={(e) =>
@@ -297,7 +297,7 @@ const handleStatusChange = async (
           />
 
           <textarea
-            className="w-full bg-[#111827] border border-slate-700 rounded-lg p-3 mb-4"
+            className="w-full bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg p-3 mb-4 focus:ring-2 focus:ring-violet-500/20 dark:focus:ring-violet-500/10 focus:border-violet-500 dark:focus:border-violet-500 text-slate-800 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-500 outline-none transition duration-200"
             rows={4}
             placeholder="Task description"
             value={description}
@@ -310,7 +310,7 @@ const handleStatusChange = async (
   onChange={(e) =>
     setSelectedProject(Number(e.target.value))
   }
-  className="w-full bg-[#111827] border border-slate-700 rounded-lg p-3 mb-4"
+  className="w-full bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg p-3 mb-4 focus:ring-2 focus:ring-violet-500/20 dark:focus:ring-violet-500/10 focus:border-violet-500 dark:focus:border-violet-500 text-slate-800 dark:text-zinc-100 outline-none transition duration-200"
 >
   {projects.map((project) => (
     <option
@@ -326,7 +326,7 @@ const handleStatusChange = async (
 
           <button
             onClick={handleCreate}
-            className="bg-violet-600 hover:bg-violet-500 px-5 py-3 rounded-lg font-medium"
+            className="bg-violet-600 hover:bg-violet-500 text-white px-5 py-3 rounded-lg font-medium transition"
           >
             Create Task
           </button>
@@ -388,14 +388,14 @@ const handleStatusChange = async (
           {/* Drag Overlay – ghost card that follows cursor */}
           <DragOverlay dropAnimation={null}>
             {activeTask ? (
-              <div className="bg-[#111827] border border-violet-500 rounded-xl p-4 w-80 shadow-[0_0_24px_rgba(139,92,246,0.35)] rotate-[2deg] opacity-90">
-                <h3 className="font-semibold text-lg text-white">
+              <div className="bg-white dark:bg-zinc-900 border border-violet-500 rounded-xl p-4 w-80 shadow-[0_4px_20px_rgba(139,92,246,0.15)] dark:shadow-zinc-950/80 rotate-[2deg] opacity-95">
+                <h3 className="font-semibold text-lg text-slate-900 dark:text-zinc-100">
                   {activeTask.title}
                 </h3>
-                <p className="text-slate-400 mt-2 text-sm line-clamp-2">
+                <p className="text-slate-500 dark:text-zinc-400 mt-2 text-sm line-clamp-2">
                   {activeTask.description}
                 </p>
-                <p className="text-violet-400 text-xs mt-2">
+                <p className="text-violet-600 dark:text-violet-400 font-medium text-xs mt-2">
                   Project: {getProjectName(activeTask.project_id)}
                 </p>
               </div>

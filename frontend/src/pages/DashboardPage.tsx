@@ -36,104 +36,105 @@ const todoTasks = tasks.filter(
     <DashboardLayout>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
 
-  <div className="bg-[#111827] p-6 rounded-xl">
-    <h3 className="text-slate-400">Projects</h3>
-    <p className="text-3xl font-bold">
-      {totalProjects}
-    </p>
-  </div>
+        <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl shadow-sm transition-colors duration-300">
+          <h3 className="text-slate-500 dark:text-zinc-400 font-medium">Projects</h3>
+          <p className="text-3xl font-bold text-slate-900 dark:text-zinc-100 mt-1">
+            {totalProjects}
+          </p>
+        </div>
 
-  <div className="bg-[#111827] p-6 rounded-xl">
-    <h3 className="text-slate-400">Tasks</h3>
-    <p className="text-3xl font-bold">
-      {totalTasks}
-    </p>
-  </div>
+        <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl shadow-sm transition-colors duration-300">
+          <h3 className="text-slate-500 dark:text-zinc-400 font-medium">Tasks</h3>
+          <p className="text-3xl font-bold text-slate-900 dark:text-zinc-100 mt-1">
+            {totalTasks}
+          </p>
+        </div>
 
-  <div className="bg-[#111827] p-6 rounded-xl">
-    <h3 className="text-slate-400">Todo</h3>
-    <p className="text-3xl font-bold">
-      {todoTasks}
-    </p>
-  </div>
+        <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl shadow-sm transition-colors duration-300">
+          <h3 className="text-slate-500 dark:text-zinc-400 font-medium">Todo</h3>
+          <p className="text-3xl font-bold text-slate-900 dark:text-zinc-100 mt-1">
+            {todoTasks}
+          </p>
+        </div>
 
-  <div className="bg-[#111827] p-6 rounded-xl">
-    <h3 className="text-slate-400">Done</h3>
-    <p className="text-3xl font-bold">
-      {completedTasks}
-    </p>
-  </div>
+        <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl shadow-sm transition-colors duration-300">
+          <h3 className="text-slate-500 dark:text-zinc-400 font-medium">Done</h3>
+          <p className="text-3xl font-bold text-slate-900 dark:text-zinc-100 mt-1">
+            {completedTasks}
+          </p>
+        </div>
 
-</div>
-  <div className="min-h-screen bg-[#070B1A] text-white p-8">
-    
-    <div className="mb-10">
-      <h1 className="text-4xl font-bold">
-        Dashboard
-      </h1>
-
-      <p className="text-gray-400 mt-2">
-        Manage projects and track progress.
-      </p>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-      
-      <div className="bg-[#111827] rounded-2xl p-6 border border-gray-800">
-        <p className="text-gray-400 text-sm">
-          Total Projects
-        </p>
-
-        <h2 className="text-3xl font-bold mt-2">
-          {projects.length}
-        </h2>
       </div>
 
-      <div className="bg-[#111827] rounded-2xl p-6 border border-gray-800">
-        <p className="text-gray-400 text-sm">
-          Active Projects
-        </p>
+      <div className="py-4 text-slate-800 dark:text-zinc-300">
+        
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-zinc-100">
+            Dashboard
+          </h1>
 
-        <h2 className="text-3xl font-bold mt-2">
-          {projects.length}
-        </h2>
-      </div>
+          <p className="text-slate-500 dark:text-zinc-400 mt-2">
+            Manage projects and track progress.
+          </p>
+        </div>
 
-      <div className="bg-[#111827] rounded-2xl p-6 border border-gray-800">
-        <p className="text-gray-400 text-sm">
-          Completed
-        </p>
-
-        <h2 className="text-3xl font-bold mt-2">
-          0
-        </h2>
-      </div>
-
-    </div>
-
-    <div>
-      <h2 className="text-2xl font-semibold mb-6">
-        Recent Projects
-      </h2>
-
-      <div className="grid gap-5">
-        {projects.map((project) => (
-          <div
-            key={project.id}
-            className="bg-[#111827] border border-gray-800 rounded-2xl p-6 hover:border-violet-500 transition"
-          >
-            <h3 className="text-xl font-semibold">
-              {project.title}
-            </h3>
-
-            <p className="text-gray-400 mt-2">
-              {project.description}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-slate-200 dark:border-zinc-800 shadow-sm transition-colors duration-300">
+            <p className="text-slate-500 dark:text-zinc-400 text-sm font-medium">
+              Total Projects
             </p>
+
+            <h2 className="text-3xl font-bold mt-2 text-slate-900 dark:text-zinc-100">
+              {projects.length}
+            </h2>
           </div>
-        ))}
+
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-slate-200 dark:border-zinc-800 shadow-sm transition-colors duration-300">
+            <p className="text-slate-500 dark:text-zinc-400 text-sm font-medium">
+              Active Projects
+            </p>
+
+            <h2 className="text-3xl font-bold mt-2 text-slate-900 dark:text-zinc-100">
+              {projects.length}
+            </h2>
+          </div>
+
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-slate-200 dark:border-zinc-800 shadow-sm transition-colors duration-300">
+            <p className="text-slate-500 dark:text-zinc-400 text-sm font-medium">
+              Completed
+            </p>
+
+            <h2 className="text-3xl font-bold mt-2 text-slate-900 dark:text-zinc-100">
+              0
+            </h2>
+          </div>
+
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold mb-6 text-slate-900 dark:text-zinc-100">
+            Recent Projects
+          </h2>
+
+          <div className="grid gap-5">
+            {projects.map((project) => (
+              <div
+                key={project.id}
+                className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 hover:border-violet-500 dark:hover:border-violet-400 hover:shadow-md dark:hover:shadow-zinc-950/50 transition duration-300"
+              >
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-zinc-100">
+                  {project.title}
+                </h3>
+
+                <p className="text-slate-600 dark:text-zinc-400 mt-2">
+                  {project.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  </DashboardLayout>
-);
+    </DashboardLayout>
+  );
 }

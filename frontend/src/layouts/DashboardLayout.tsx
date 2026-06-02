@@ -7,7 +7,7 @@ interface Props {
 export default function DashboardLayout({ children }: Props) {
   return (
     
-    <div className="min-h-screen bg-[#070B1A] text-white flex">
+    <div className="min-h-screen bg-[#FAFAF9] dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 flex transition-colors duration-300">
 
       <Sidebar />
 
