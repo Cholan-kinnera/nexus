@@ -4,6 +4,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import ProjectsPage from "../pages/ProjectsPage";
 import { TasksPage } from "../pages/TasksPage";
 import AuthPage from "../pages/AuthPage";
+import LandingPage from "../pages/LandingPage";
 
 export function AppRoutes() {
   return (
@@ -36,7 +37,7 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<LandingPage />} />
     </Routes>
   );
 }

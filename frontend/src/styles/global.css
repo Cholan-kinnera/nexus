@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 
@@ -98,3 +99,86 @@
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Landing Page — light-theme-only styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.landing-page {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Animated gradient mesh behind hero */
+.landing-mesh-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(237, 233, 254, 0.6) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(221, 214, 254, 0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 50% 80%, rgba(196, 181, 253, 0.25) 0%, transparent 70%);
+  animation: landing-mesh-drift 20s ease-in-out infinite alternate;
+}
+
+@keyframes landing-mesh-drift {
+  0% {
+    background-position: 0% 0%, 100% 0%, 50% 100%;
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(8deg);
+  }
+  100% {
+    background-position: 20% 10%, 80% 20%, 40% 90%;
+    filter: hue-rotate(0deg);
+  }
+}
+
+/* Floating abstract shapes */
+@keyframes landing-float-shape {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-18px) rotate(6deg);
+  }
+  66% {
+    transform: translateY(8px) rotate(-4deg);
+  }
+}
+.landing-float-shape {
+  animation: landing-float-shape 10s ease-in-out infinite;
+}
+
+/* Gradient text for hero headline */
+.landing-gradient-text {
+  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 40%, #8b5cf6 70%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Infinite marquee — row 1 scrolls left, row 2 scrolls right */
+@keyframes landing-scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes landing-scroll-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.landing-marquee-left {
+  animation: landing-scroll-left 35s linear infinite;
+}
+.landing-marquee-left:hover {
+  animation-play-state: paused;
+}
+
+.landing-marquee-right {
+  animation: landing-scroll-right 40s linear infinite;
+}
+.landing-marquee-right:hover {
+  animation-play-state: paused;
+}
