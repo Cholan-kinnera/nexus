@@ -15,4 +15,10 @@ class UserLogin(BaseModel):
 class AuthResponse(BaseModel):
     message: str
     email: EmailStr
+    full_name: str | None = None
     access_token: str | None = None
+
+
+class VerifyOTPRequest(BaseModel):
+    email: EmailStr
+    otp: str

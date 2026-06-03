@@ -10,4 +10,12 @@ class UserResponse(BaseModel):
     id: int
     full_name: str  | None = None 
     email: EmailStr
+    role: Optional[str] = None
     created_at: Optional[datetime] = None
+
+
+class UserUpdate(BaseModel):
+    full_name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    role: Optional[str] = None
+

@@ -25,7 +25,7 @@ const handleSubmit = async (
       password
     );
 
-    login(data.access_token);
+    login(data.access_token, { full_name: data.full_name, email: data.email || email });
 
     navigate("/dashboard");
   } catch (error) {

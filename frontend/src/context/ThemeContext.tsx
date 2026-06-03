@@ -17,7 +17,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (saved === "light" || saved === "dark") {
       return saved;
     }
-    return "light"; // Default to light mode as requested
+    return "dark"; // Default to dark mode for premium aesthetic
   });
 
   const [themeLogs, setThemeLogs] = useState<string[]>(() => {

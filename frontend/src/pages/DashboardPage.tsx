@@ -3,7 +3,7 @@ import { getProjects } from "../services/projectService";
 import { getTasks } from "../services/taskService";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { motion } from "framer-motion";
-import { useTheme } from "../context/ThemeContext";
+
 import {
   AreaChart,
   Area,
@@ -37,9 +37,10 @@ const logTemplates = [
 ];
 
 export default function DashboardPage() {
-  const { theme } = useTheme();
+
   const [projects, setProjects] = useState<any[]>([]);
   const [tasks, setTasks] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Ticker Activity Log state
   const [logs, setLogs] = useState<ActivityLog[]>(() => [
@@ -61,8 +62,14 @@ export default function DashboardPage() {
       setTasks(data);
     };
 
-    loadProjects();
-    loadTasks();
+    // Parallel load
+    Promise.all([loadProjects(), loadTasks()]).finally(() => {
+      // Add simulated loading delay to showcase beautiful skeletons
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 1200);
+      return () => clearTimeout(timer);
+    });
   }, []);
 
   // Interval ticker to update logs every 15s
@@ -94,7 +101,7 @@ export default function DashboardPage() {
 
   const totalProjects = projects.length;
   const totalTasks = tasks.length;
-  
+
   const completedTasks = tasks.filter(
     (task) => task.status === "DONE"
   ).length;
@@ -107,10 +114,9 @@ export default function DashboardPage() {
     (task) => task.status === "IN_PROGRESS"
   ).length;
 
-  // Chart configuration theme values
-  const isDark = theme === "dark";
-  const gridStroke = isDark ? "#27272a" : "#f1f5f9";
-  const textStroke = isDark ? "#71717a" : "#94a3b8";
+  // Chart configuration theme values (forcing dark tokens)
+  const gridStroke = "#27272a";
+  const textStroke = "#71717a";
 
   // Recharts: Smooth Area Chart Data for "Task Velocity" (completed tasks over the last 7 days)
   const getVelocityData = () => {
@@ -128,10 +134,10 @@ export default function DashboardPage() {
     });
   };
 
-  // Recharts: Pie Chart Data for "Task Distribution" (TODO, IN_PROGRESS, DONE)
+  // Recharts: Pie Chart Data for "Task Distribution" (Grayscale / emerald accents)
   const pieData = [
-    { name: "Todo", value: todoTasks || 3, color: "#64748b" },
-    { name: "In Progress", value: inProgressTasks || 4, color: "#8b5cf6" },
+    { name: "Todo", value: todoTasks || 3, color: "#3f3f46" },
+    { name: "In Progress", value: inProgressTasks || 4, color: "#a1a1aa" },
     { name: "Done", value: completedTasks || 5, color: "#10b981" },
   ];
 
@@ -146,236 +152,307 @@ export default function DashboardPage() {
         {/* Top Header Card */}
         <div className="flex flex-col md:flex-row md:items-center justify-between pb-2">
           <div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-zinc-100">
+            <h1 className="text-4xl font-bold text-zinc-100">
               Dashboard Overview
             </h1>
-            <p className="text-slate-500 dark:text-zinc-400 mt-2">
+            <p className="text-zinc-400 mt-2 text-sm font-sans">
               Visual analytics, active tasks workflow, and live activity stream.
             </p>
           </div>
         </div>
 
-        {/* 4 Summary Stat Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-between">
-            <div>
-              <span className="text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">Total Projects</span>
-              <p className="text-3xl font-extrabold text-slate-900 dark:text-zinc-100 mt-1">{totalProjects}</p>
-            </div>
-            <div className="p-3 bg-violet-50 dark:bg-violet-950/20 text-violet-600 dark:text-violet-400 rounded-xl">
-              <FolderOpen size={20} />
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-between">
-            <div>
-              <span className="text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">Total Tasks</span>
-              <p className="text-3xl font-extrabold text-slate-900 dark:text-zinc-100 mt-1">{totalTasks}</p>
-            </div>
-            <div className="p-3 bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 rounded-xl">
-              <CheckSquare size={20} />
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-between">
-            <div>
-              <span className="text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">Todo Status</span>
-              <p className="text-3xl font-extrabold text-slate-900 dark:text-zinc-100 mt-1">{todoTasks}</p>
-            </div>
-            <div className="p-3 bg-zinc-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 rounded-xl">
-              <LayoutGrid size={20} />
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-between">
-            <div>
-              <span className="text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">Completed</span>
-              <p className="text-3xl font-extrabold text-slate-900 dark:text-zinc-100 mt-1">{completedTasks}</p>
-            </div>
-            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 rounded-xl">
-              <CheckSquare size={20} />
-            </div>
-          </div>
-        </div>
-
-        {/* Interactive Recharts Analytics Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Area Chart: Task Velocity (2/3 width) */}
-          <div className="lg:col-span-2 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-            <div className="mb-4">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-zinc-100">Task Velocity</h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Average task completion rate across the last 7 days.</p>
-            </div>
-            <div className="h-72 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={getVelocityData()} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorVelocity" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
-                  <XAxis dataKey="name" stroke={textStroke} fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis stroke={textStroke} fontSize={11} tickLine={false} axisLine={false} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: isDark ? "#09090b" : "#ffffff",
-                      borderColor: isDark ? "#27272a" : "#e2e8f0",
-                      color: isDark ? "#f4f4f5" : "#0f172a",
-                      borderRadius: "12px",
-                      fontSize: "12px",
-                    }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="velocity"
-                    stroke="#8b5cf6"
-                    strokeWidth={2}
-                    fillOpacity={1}
-                    fill="url(#colorVelocity)"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          {/* Donut Chart: Task Distribution (1/3 width) */}
-          <div className="lg:col-span-1 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-zinc-100">Task Distribution</h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Breakdown of current task statuses.</p>
-            </div>
-            <div className="h-48 w-full relative flex items-center justify-center my-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: isDark ? "#09090b" : "#ffffff",
-                      borderColor: isDark ? "#27272a" : "#e2e8f0",
-                      borderRadius: "10px",
-                      fontSize: "12px",
-                    }}
-                  />
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={4}
-                    dataKey="value"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="absolute text-center">
-                <span className="text-2xs text-slate-400 dark:text-zinc-500 uppercase tracking-widest font-semibold">Active</span>
-                <p className="text-2xl font-black text-slate-800 dark:text-zinc-100">{totalTasks}</p>
-              </div>
-            </div>
-            {/* Custom Legends */}
-            <div className="flex justify-center gap-4 text-xs font-semibold mt-2">
-              {pieData.map((d) => (
-                <div key={d.name} className="flex items-center gap-1.5 text-slate-600 dark:text-zinc-300">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: d.color }}></span>
-                  <span>{d.name} ({d.value})</span>
+        {isLoading ? (
+          // ── SKELETON LOADING PLACEHOLDERS ────────────────────────────────
+          <div className="space-y-8">
+            {/* 4 Summary Stat Cards Skeletons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map((k) => (
+                <div key={k} className="bg-zinc-900/30 border border-zinc-800/80 p-6 rounded-xl h-24 animate-pulse flex items-center justify-between">
+                  <div className="space-y-2.5 w-2/3">
+                    <div className="h-3 bg-zinc-850 rounded w-1/2"></div>
+                    <div className="h-6 bg-zinc-800 rounded w-1/3"></div>
+                  </div>
+                  <div className="w-10 h-10 bg-zinc-850 rounded-lg"></div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
 
-        {/* Lower Section: Projects (2/3 width) and Recent Team Activity (1/3 width) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left: Projects List */}
-          <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-zinc-100">
-              Recent Projects
-            </h2>
-
-            <div className="grid gap-5">
-              {projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 hover:border-violet-500 dark:hover:border-violet-400 shadow-sm hover:shadow-md dark:hover:shadow-zinc-950/50 hover:-translate-y-0.5 transition-all duration-300 ease-in-out"
-                >
-                  <h3 className="text-xl font-semibold text-slate-900 dark:text-zinc-100">
-                    {project.title}
-                  </h3>
-
-                  <p className="text-slate-600 dark:text-zinc-400 mt-2">
-                    {project.description}
-                  </p>
+            {/* Charts Skeletons */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 bg-zinc-900/30 border border-zinc-800/80 rounded-xl p-6 h-80 animate-pulse flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="h-4 bg-zinc-800 rounded w-1/4"></div>
+                  <div className="h-3 bg-zinc-850 rounded w-1/3"></div>
                 </div>
-              ))}
-              {projects.length === 0 && (
-                <div className="text-center py-10 bg-slate-50 dark:bg-zinc-900/50 border border-dashed border-slate-200 dark:border-zinc-800 rounded-2xl">
-                  <p className="text-slate-500 dark:text-zinc-400">No projects found. Create one to get started!</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Right: Live activity logs */}
-          <div className="lg:col-span-1">
-            <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-zinc-100">
-              Recent Team Activity
-            </h2>
-
-            <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm space-y-4">
-              <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-zinc-800">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping inline-block"></span>
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400">
-                  Live Stream Ticker
-                </span>
+                <div className="h-48 bg-zinc-950/40 rounded-xl border border-zinc-850/50"></div>
               </div>
+              <div className="lg:col-span-1 bg-zinc-900/30 border border-zinc-800/80 rounded-xl p-6 h-80 animate-pulse flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="h-4 bg-zinc-800 rounded w-1/3"></div>
+                  <div className="h-3 bg-zinc-850 rounded w-1/2"></div>
+                </div>
+                <div className="w-32 h-32 rounded-full border-8 border-zinc-850/60 mx-auto flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-zinc-900"></div>
+                </div>
+                <div className="h-4 bg-zinc-800 rounded w-2/3 mx-auto"></div>
+              </div>
+            </div>
 
-              <div className="space-y-3.5 max-h-[24rem] overflow-y-auto pr-1">
-                {logs.map((log) => (
-                  <div key={log.id} className="flex gap-3 text-xs leading-relaxed">
-                    {/* Icon mapping */}
-                    <div className="mt-0.5">
-                      {log.type === "commit" && (
-                        <span className="p-1 rounded bg-violet-100 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 block">
-                          <GitBranch size={12} />
-                        </span>
-                      )}
-                      {log.type === "task" && (
-                        <span className="p-1 rounded bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 block">
-                          <CheckSquare size={12} />
-                        </span>
-                      )}
-                      {log.type === "system" && (
-                        <span className="p-1 rounded bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 block">
-                          <Shield size={12} />
-                        </span>
-                      )}
-                      {log.type === "backup" && (
-                        <span className="p-1 rounded bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 block">
-                          <Terminal size={12} />
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Message content */}
-                    <div className="flex-1">
-                      <p className="text-slate-700 dark:text-zinc-300 font-mono text-3xs font-medium">
-                        {log.message}
-                      </p>
-                      <span className="text-[10px] text-slate-400 dark:text-zinc-500">
-                        {log.timestamp}
-                      </span>
-                    </div>
+            {/* Projects list + logs skeletons */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-4">
+                <div className="h-6 bg-zinc-800 rounded w-1/4 mb-6"></div>
+                {[1, 2].map((k) => (
+                  <div key={k} className="bg-zinc-900/30 border border-zinc-800/80 rounded-xl p-6 h-32 animate-pulse space-y-3">
+                    <div className="h-4 bg-zinc-850 rounded w-1/3"></div>
+                    <div className="h-3 bg-zinc-800 rounded w-2/3"></div>
+                    <div className="h-3 bg-zinc-800 rounded w-1/2"></div>
                   </div>
                 ))}
               </div>
+              <div className="lg:col-span-1">
+                <div className="h-6 bg-zinc-800 rounded w-1/3 mb-6"></div>
+                <div className="bg-zinc-900/30 border border-zinc-800/80 rounded-xl p-6 h-[24rem] animate-pulse space-y-4">
+                  <div className="h-4 bg-zinc-850 rounded w-1/2"></div>
+                  {[1, 2, 3, 4].map((k) => (
+                    <div key={k} className="flex gap-3">
+                      <div className="w-5 h-5 bg-zinc-850 rounded"></div>
+                      <div className="flex-1 space-y-2">
+                        <div className="h-3 bg-zinc-800 rounded w-5/6"></div>
+                        <div className="h-2 bg-zinc-850 rounded w-1/4"></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          // ── ACTUAL DASHBOARD RENDER ──────────────────────────────────────
+          <>
+            {/* 4 Summary Stat Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-zinc-900/50 border border-zinc-800/85 p-6 rounded-xl shadow-md hover:translate-y-[-2px] hover:border-zinc-700/80 hover:shadow-lg transition-all duration-200 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-medium text-zinc-350 uppercase tracking-wider font-mono">Total Projects</span>
+                  <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">{totalProjects}</p>
+                </div>
+                <div className="p-3 bg-zinc-800 border border-zinc-750 text-zinc-300 rounded-lg">
+                  <FolderOpen size={18} />
+                </div>
+              </div>
+
+              <div className="bg-zinc-900/50 border border-zinc-800/85 p-6 rounded-xl shadow-md hover:translate-y-[-2px] hover:border-zinc-700/80 hover:shadow-lg transition-all duration-200 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-medium text-zinc-350 uppercase tracking-wider font-mono">Total Tasks</span>
+                  <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">{totalTasks}</p>
+                </div>
+                <div className="p-3 bg-zinc-800 border border-zinc-750 text-zinc-300 rounded-lg">
+                  <CheckSquare size={18} />
+                </div>
+              </div>
+
+              <div className="bg-zinc-900/50 border border-zinc-800/85 p-6 rounded-xl shadow-md hover:translate-y-[-2px] hover:border-zinc-700/80 hover:shadow-lg transition-all duration-200 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-medium text-zinc-350 uppercase tracking-wider font-mono">Todo Status</span>
+                  <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">{todoTasks}</p>
+                </div>
+                <div className="p-3 bg-zinc-800 border border-zinc-750 text-zinc-300 rounded-lg">
+                  <LayoutGrid size={18} />
+                </div>
+              </div>
+
+              <div className="bg-zinc-900/50 border border-zinc-800/85 p-6 rounded-xl shadow-md hover:translate-y-[-2px] hover:border-zinc-700/80 hover:shadow-lg transition-all duration-200 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-medium text-zinc-350 uppercase tracking-wider font-mono">Completed</span>
+                  <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">{completedTasks}</p>
+                </div>
+                <div className="p-3 bg-zinc-800 border border-zinc-750 text-zinc-300 rounded-lg">
+                  <CheckSquare size={18} className="text-emerald-400" />
+                </div>
+              </div>
+            </div>
+
+            {/* Recharts Analytics Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Area Chart: Task Velocity */}
+              <div className="lg:col-span-2 bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 shadow-md">
+                <div className="mb-4">
+                  <h3 className="text-lg font-bold text-zinc-100">Task Velocity</h3>
+                  <p className="text-xs text-zinc-500 font-mono mt-0.5">Average task completion rate across the last 7 days.</p>
+                </div>
+                <div className="h-72 w-full font-mono text-[10px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={getVelocityData()} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="colorVelocity" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#d4d4d8" stopOpacity={0.15} />
+                          <stop offset="95%" stopColor="#d4d4d8" stopOpacity={0.0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
+                      <XAxis dataKey="name" stroke={textStroke} fontSize={10} tickLine={false} axisLine={false} />
+                      <YAxis stroke={textStroke} fontSize={10} tickLine={false} axisLine={false} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#09090b",
+                          borderColor: "#27272a",
+                          color: "#f4f4f5",
+                          borderRadius: "8px",
+                          fontSize: "11px",
+                          fontFamily: "monospace",
+                        }}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="velocity"
+                        stroke="#a1a1aa"
+                        strokeWidth={1.5}
+                        fillOpacity={1}
+                        fill="url(#colorVelocity)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Donut Chart: Task Distribution */}
+              <div className="lg:col-span-1 bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 shadow-md flex flex-col justify-between">
+                <div>
+                  <h3 className="text-lg font-bold text-zinc-100">Task Distribution</h3>
+                  <p className="text-xs text-zinc-500 font-mono mt-0.5">Breakdown of current task statuses.</p>
+                </div>
+                <div className="h-48 w-full relative flex items-center justify-center my-4 font-mono">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#09090b",
+                          borderColor: "#27272a",
+                          borderRadius: "8px",
+                          fontSize: "11px",
+                        }}
+                      />
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={62}
+                        outerRadius={78}
+                        paddingAngle={3}
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute text-center">
+                    <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-semibold">Active</span>
+                    <p className="text-2xl font-bold text-zinc-100">{totalTasks}</p>
+                  </div>
+                </div>
+                {/* Custom Legends */}
+                <div className="flex justify-center gap-4 text-2xs font-mono mt-2">
+                  {pieData.map((d) => (
+                    <div key={d.name} className="flex items-center gap-1.5 text-zinc-400">
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }}></span>
+                      <span>{d.name} ({d.value})</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Lower Section: Projects and Recent Team Activity */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left: Projects List */}
+              <div className="lg:col-span-2">
+                <h2 className="text-2xl font-bold mb-6 text-zinc-100">
+                  Recent Projects
+                </h2>
+
+                <div className="grid gap-5">
+                  {projects.map((project) => (
+                    <div
+                      key={project.id}
+                      className="bg-zinc-900/50 border border-zinc-800/80 rounded-xl p-6 hover:translate-y-[-2px] hover:border-zinc-700 hover:shadow-lg transition-all duration-200 ease-in-out"
+                    >
+                      <h3 className="text-lg font-bold text-zinc-100">
+                        {project.title}
+                      </h3>
+                      <p className="text-zinc-300 mt-2 text-sm leading-relaxed">
+                        {project.description}
+                      </p>
+                    </div>
+                  ))}
+                  {projects.length === 0 && (
+                    <div className="text-center py-10 bg-zinc-900/20 border border-dashed border-zinc-800 rounded-xl flex flex-col items-center justify-center p-6">
+                      <p className="text-zinc-500 font-mono text-xs">No projects found. Create one to get started!</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Right: Live activity logs */}
+              <div className="lg:col-span-1">
+                <h2 className="text-2xl font-bold mb-6 text-zinc-100 font-sans">
+                  Recent Team Activity
+                </h2>
+
+                <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 shadow-md space-y-4">
+                  <div className="flex items-center gap-2 pb-2 border-b border-zinc-800">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping inline-block"></span>
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500">
+                      Live Stream Ticker
+                    </span>
+                  </div>
+
+                  <div className="space-y-3.5 max-h-[24rem] overflow-y-auto pr-1">
+                    {logs.map((log) => (
+                      <div key={log.id} className="flex gap-3 text-xs leading-relaxed">
+                        {/* Icon mapping */}
+                        <div className="mt-0.5">
+                          {log.type === "commit" && (
+                            <span className="p-1 rounded bg-zinc-800 border border-zinc-750 text-zinc-400 block">
+                              <GitBranch size={12} />
+                            </span>
+                          )}
+                          {log.type === "task" && (
+                            <span className="p-1 rounded bg-zinc-800 border border-zinc-750 text-zinc-400 block">
+                              <CheckSquare size={12} />
+                            </span>
+                          )}
+                          {log.type === "system" && (
+                            <span className="p-1 rounded bg-zinc-800 border border-zinc-750 text-zinc-400 block">
+                              <Shield size={12} />
+                            </span>
+                          )}
+                          {log.type === "backup" && (
+                            <span className="p-1 rounded bg-zinc-800 border border-zinc-750 text-zinc-400 block">
+                              <Terminal size={12} />
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Message content */}
+                        <div className="flex-1">
+                          <p className="text-zinc-300 font-mono text-[10px] font-medium break-all">
+                            {log.message}
+                          </p>
+                          <span className="text-[9px] text-zinc-500 font-mono">
+                            {log.timestamp}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </motion.div>
     </DashboardLayout>
   );

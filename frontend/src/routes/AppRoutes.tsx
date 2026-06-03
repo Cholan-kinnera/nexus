@@ -4,8 +4,10 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import ProjectsPage from "../pages/ProjectsPage";
 import { TasksPage } from "../pages/TasksPage";
 import AuthPage from "../pages/AuthPage";
-import LandingPage from "../pages/LandingPage";
+import Landing3D from "../pages/Landing3D";
 import SettingsPage from "../pages/SettingsPage";
+import StoragePage from "../pages/StoragePage";
+import SecurityLogsPage from "../pages/SecurityLogsPage";
 
 export function AppRoutes() {
   return (
@@ -46,7 +48,23 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route path="/" element={<LandingPage />} />
+      <Route
+        path="/storage"
+        element={
+          <ProtectedRoute>
+            <StoragePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/security"
+        element={
+          <ProtectedRoute>
+            <SecurityLogsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/" element={<Landing3D />} />
     </Routes>
   );
 }

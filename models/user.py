@@ -17,6 +17,7 @@ class User(Base):
     full_name = Column(String(255), nullable=False)
     email = Column(String(255), unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
+    role = Column(String(255), nullable=True)
     created_at = Column(
         DateTime, nullable=False, default=datetime.utcnow, server_default=func.now()
     )

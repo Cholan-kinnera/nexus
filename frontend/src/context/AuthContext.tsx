@@ -7,9 +7,19 @@ import {
 } from "react";
 
 import type { ReactNode } from "react";
+
+export interface User {
+  full_name: string | null;
+  email: string;
+  role?: string | null;
+}
+
 interface AuthContextType {
   token: string | null;
-  login: (token: string) => void;
+  user: User | null;
+  hasBooted: boolean;
+  setHasBooted: (val: boolean) => void;
+  login: (token: string, user: User) => void;
   logout: () => void;
 }
 
@@ -22,18 +32,44 @@ export function AuthProvider({
 }: {
   children: ReactNode;
 }) {
+  const [hasBooted, setHasBootedState] = useState(() => {
+    return sessionStorage.getItem("hasBooted") === "true";
+  });
+
+  const setHasBooted = (val: boolean) => {
+    sessionStorage.setItem("hasBooted", val ? "true" : "false");
+    setHasBootedState(val);
+  };
   const [token, setToken] = useState<string | null>(
     localStorage.getItem("token")
   );
 
-  const login = (newToken: string) => {
+  const [user, setUser] = useState<User | null>(() => {
+    const saved = localStorage.getItem("user");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        // ignore
+      }
+    }
+    return null;
+  });
+
+  const login = (newToken: string, userData: User) => {
     localStorage.setItem("token", newToken);
+    localStorage.setItem("user", JSON.stringify(userData));
     setToken(newToken);
+    setUser(userData);
   };
 
   const logout = useCallback(() => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("hasBooted");
+    setHasBootedState(false);
     setToken(null);
+    setUser(null);
   }, []);
 
   // 15-minute auto-logout inactivity tracker
@@ -72,6 +108,9 @@ export function AuthProvider({
     <AuthContext.Provider
       value={{
         token,
+        user,
+        hasBooted,
+        setHasBooted,
         login,
         logout,
       }}
