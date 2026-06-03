@@ -5,6 +5,7 @@ import ProjectsPage from "../pages/ProjectsPage";
 import { TasksPage } from "../pages/TasksPage";
 import AuthPage from "../pages/AuthPage";
 import LandingPage from "../pages/LandingPage";
+import SettingsPage from "../pages/SettingsPage";
 
 export function AppRoutes() {
   return (
@@ -34,6 +35,14 @@ export function AppRoutes() {
         element={
           <ProtectedRoute>
             <TasksPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <SettingsPage />
           </ProtectedRoute>
         }
       />

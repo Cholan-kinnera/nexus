@@ -315,7 +315,16 @@ function LoginForm({ onSwitch, onSuccess, login }: {
       login(data.access_token);
       onSuccess();
     } catch (err: any) {
-      setError(err?.response?.data?.detail || "Invalid email or password.");
+      if (err?.response?.status === 422) {
+        setError("Invalid input formatting. Please check your email and fields.");
+      } else if (typeof err?.response?.data?.detail === "string") {
+        setError(err.response.data.detail);
+      } else if (Array.isArray(err?.response?.data?.detail)) {
+        const msgs = err.response.data.detail.map((d: any) => d.msg).join(", ");
+        setError(`Validation Error: ${msgs}`);
+      } else {
+        setError("Invalid email or password.");
+      }
     } finally {
       setLoading(false);
     }
@@ -383,6 +392,14 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  
+  // OTP Verification States
+  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+  const [otpTimer, setOtpTimer] = useState(59);
+  const [verifying, setVerifying] = useState(false);
+  const [otpError, setOtpError] = useState("");
+  const inputRefs = useRef<HTMLInputElement[]>([]);
+
   const btnRef = useMagnetic();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -394,25 +411,139 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
     try {
       await api.post("/auth/signup", { email: form.email, password: form.password, full_name: form.fullName });
       setSuccess(true);
-      setTimeout(onSuccess, 1800);
+      setOtpTimer(59);
     } catch (err: any) {
-      setError(err?.response?.data?.detail || "Something went wrong. Try again.");
+      if (err?.response?.status === 422) {
+        setError("Invalid input formatting. Please check your email and fields.");
+      } else if (typeof err?.response?.data?.detail === "string") {
+        setError(err.response.data.detail);
+      } else if (Array.isArray(err?.response?.data?.detail)) {
+        const msgs = err.response.data.detail.map((d: any) => d.msg).join(", ");
+        setError(`Validation Error: ${msgs}`);
+      } else {
+        setError("Something went wrong. Try again.");
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  // Countdown timer for OTP
+  useEffect(() => {
+    if (success && otpTimer > 0) {
+      const timerInterval = setInterval(() => {
+        setOtpTimer((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timerInterval);
+    }
+  }, [success, otpTimer]);
+
+  const handleOtpChange = (element: HTMLInputElement, index: number) => {
+    const value = element.value.replace(/[^0-9]/g, "");
+    if (!value) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value.substring(value.length - 1);
+    setOtp(newOtp);
+
+    // Focus next input box
+    if (index < 5 && element.value) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    if (e.key === "Backspace") {
+      const newOtp = [...otp];
+      newOtp[index] = "";
+      setOtp(newOtp);
+      // Focus previous input box
+      if (index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const otpCode = otp.join("");
+    if (otpCode.length < 6) {
+      setOtpError("Please enter all 6 digits.");
+      return;
+    }
+    
+    setVerifying(true);
+    setOtpError("");
+    
+    // Simulate API Verification call
+    setTimeout(() => {
+      setVerifying(false);
+      onSuccess(); // Triggers transition to Login layout
+    }, 1500);
+  };
+
+  const handleResendCode = () => {
+    setOtpTimer(59);
+    setOtp(Array(6).fill(""));
+    setOtpError("");
+    alert("A new OTP code has been sent to your email!");
+  };
+
   if (success) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 animate-fade-in">
-        <div className="w-16 h-16 rounded-full bg-[#ede9fe] border border-[#ddd6fe] flex items-center justify-center animate-success-pop">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
+      <form onSubmit={handleVerifyOtp} className="flex flex-col h-full justify-between animate-fade-in text-slate-800 dark:text-zinc-200">
+        <div>
+          <p className="text-[#1a1a2e] dark:text-zinc-100 text-xl font-semibold mb-1">Verify your email</p>
+          <p className="text-[#6b7280] dark:text-zinc-400 text-sm mb-6">
+            We sent a secure code to your address: <span className="font-semibold text-violet-600 dark:text-violet-400">{form.email}</span>
+          </p>
+
+          {otpError && <ErrorBox message={otpError} />}
+
+          {/* 6 OTP Boxes Row */}
+          <div className="flex justify-between gap-2.5 mb-6">
+            {otp.map((digit, idx) => (
+              <input
+                key={idx}
+                type="text"
+                maxLength={1}
+                value={digit}
+                ref={(el) => { inputRefs.current[idx] = el as HTMLInputElement; }}
+                onChange={(e) => handleOtpChange(e.target, idx)}
+                onKeyDown={(e) => handleKeyDown(e, idx)}
+                className="w-10 h-12 text-center text-xl font-bold font-mono bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-violet-500/20 dark:focus:ring-violet-500/10 focus:border-violet-500 dark:focus:border-violet-500 text-slate-800 dark:text-zinc-100 outline-none transition-all duration-200"
+              />
+            ))}
+          </div>
+
+          {/* Resend Timer section */}
+          <div className="text-center mb-6">
+            {otpTimer > 0 ? (
+              <p className="text-xs text-slate-500 dark:text-zinc-400">
+                Resend code in <span className="font-mono font-bold text-violet-600 dark:text-violet-400">{otpTimer}s</span>
+              </p>
+            ) : (
+              <button
+                type="button"
+                onClick={handleResendCode}
+                className="text-xs font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 transition-colors cursor-pointer"
+              >
+                Resend Verification Code
+              </button>
+            )}
+          </div>
         </div>
-        <p className="text-[#1a1a2e] text-lg font-medium">Account created!</p>
-        <p className="text-[#6b7280] text-sm">Redirecting to login...</p>
-      </div>
+
+        <div>
+          <button
+            type="submit"
+            disabled={verifying}
+            className="w-full py-2.5 bg-[#6d28d9] hover:bg-[#5b21b6] disabled:opacity-60 text-white text-sm font-medium rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-violet-500/20 mb-4 transition-all duration-200 cursor-pointer"
+          >
+            {verifying ? <Spinner /> : "Verify OTP"}
+          </button>
+        </div>
+      </form>
     );
   }
 
