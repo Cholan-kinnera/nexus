@@ -37,7 +37,7 @@ export default function DashboardLayout({ children }: Props) {
         getNotifications(10, 0),
         getUnreadCount(),
       ]);
-      setNotifications(notifsData?.items ?? []);
+      setNotifications(notifsData ?? []);
       setUnreadCount(countData.unread_count);
     } catch (err) {
       console.error("Failed to load notifications:", err);

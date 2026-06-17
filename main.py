@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 async def cleanup_expired_otps_job():
     import asyncio
-    from datetime import datetime
+    from datetime import datetime, UTC
     from sqlalchemy import delete
     from db.database import AsyncSessionLocal
     from models.password_reset_otp import PasswordResetOTP
@@ -46,7 +46,7 @@ async def cleanup_expired_otps_job():
             logger.info("Running daily cleanup of expired password reset OTPs...")
             async with AsyncSessionLocal() as session:
                 async with session.begin():
-                    stmt = delete(PasswordResetOTP).where(PasswordResetOTP.expires_at < datetime.utcnow())
+                    stmt = delete(PasswordResetOTP).where(PasswordResetOTP.expires_at < datetime.now(UTC))
                     res = await session.execute(stmt)
                     logger.info(f"Cleaned up {res.rowcount} expired OTPs.")
             # Sleep for 24 hours

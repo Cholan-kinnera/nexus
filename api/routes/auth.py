@@ -10,7 +10,8 @@ from schemas.auth import (
     ForgotPasswordRequest,
     VerifyResetOTPRequest,
     ResetPasswordRequest,
-    GenericMessageResponse
+    GenericMessageResponse,
+    GoogleLoginRequest
 )
 from services.auth_service import (
     login_service,
@@ -20,7 +21,8 @@ from services.auth_service import (
     logout_service,
     forgot_password_service,
     verify_reset_otp_service,
-    reset_password_service
+    reset_password_service,
+    google_login_service
 )
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -101,3 +103,11 @@ async def reset_password(
 ) -> GenericMessageResponse:
     """Reset the password using a verified OTP code."""
     return await reset_password_service(data.email, data.otp, data.new_password, db)
+
+
+@router.post("/google", response_model=AuthResponse)
+async def google_login(
+    data: GoogleLoginRequest, db: AsyncSession = Depends(get_db)
+) -> AuthResponse:
+    """Authenticates the user using Google OAuth ID token."""
+    return await google_login_service(data.credential_token, db)

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, UTC
 
 from sqlalchemy import Column, DateTime, Integer, String, func
 from sqlalchemy.orm import Mapped, relationship
@@ -18,14 +18,16 @@ class User(Base):
     email = Column(String(255), unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     role = Column(String(255), nullable=True)
+    google_id = Column(String(255), nullable=True, unique=True)
+    auth_provider = Column(String(50), nullable=False, default="local", server_default="local")
     created_at = Column(
-        DateTime, nullable=False, default=datetime.utcnow, server_default=func.now()
+        DateTime(timezone=True), nullable=False, default=lambda: datetime.now(UTC), server_default=func.now()
     )
     updated_at = Column(
-        DateTime,
+        DateTime(timezone=True),
         nullable=False,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
+        default=lambda: datetime.now(UTC),
+        onupdate=lambda: datetime.now(UTC),
         server_default=func.now(),
     )
 

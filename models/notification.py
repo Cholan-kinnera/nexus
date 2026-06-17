@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, UTC
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, JSON, ForeignKey, func
 from sqlalchemy.orm import relationship
 from db.database import Base
@@ -15,7 +15,7 @@ class Notification(Base):
     created_at = Column(
         DateTime(timezone=True),
         nullable=False,
-        default=datetime.utcnow,
+        default=lambda: datetime.now(UTC),
         server_default=func.now()
     )
 

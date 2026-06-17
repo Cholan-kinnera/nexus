@@ -299,7 +299,7 @@ function TaskModal({
     const fetchComments = async () => {
       try {
         const data = await getComments(task.id);
-        setComments(data?.items ?? []);
+        setComments(data ?? []);
       } catch (err) {
         console.error("Failed to load task comments:", err);
       }
@@ -323,7 +323,7 @@ function TaskModal({
       await createComment(task.id, newComment.trim());
       setNewComment("");
       const data = await getComments(task.id);
-      setComments(data?.items ?? []);
+      setComments(data ?? []);
     } catch (err) {
       console.error("Failed to post comment:", err);
       alert("Failed to post comment. Ensure you have Developer, Manager, or Owner role.");

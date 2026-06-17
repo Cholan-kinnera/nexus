@@ -57,4 +57,8 @@ class ResetPasswordRequest(BaseModel):
 
 class GenericMessageResponse(BaseModel):
     message: str
+
+
+class GoogleLoginRequest(BaseModel):
+    credential_token: str
 
