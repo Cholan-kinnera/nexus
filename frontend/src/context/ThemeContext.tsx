@@ -1,9 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-type Theme = "light" | "dark";
+export type Theme = "light" | "dark" | "system";
 
-interface ThemeContextType {
+export interface ThemeContextType {
   theme: Theme;
+  resolvedTheme: "light" | "dark";
+  setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
   themeLogs: string[];
   clearThemeLogs: () => void;
@@ -12,13 +15,15 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
+  const [theme, setThemeState] = useState<Theme>(() => {
     const saved = localStorage.getItem("theme");
-    if (saved === "light" || saved === "dark") {
+    if (saved === "light" || saved === "dark" || saved === "system") {
       return saved;
     }
-    return "dark"; // Default to dark mode for premium aesthetic
+    return "dark"; // Default to dark first
   });
+
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
 
   const [themeLogs, setThemeLogs] = useState<string[]>(() => {
     const saved = localStorage.getItem("themeLogs");
@@ -29,34 +34,73 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         // Fallback
       }
     }
-    return [`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}] Theme initialized: ${theme}`];
+    return [`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}] Theme initialized: system`];
   });
+
+  const location = (() => {
+    try {
+      return useLocation();
+    } catch {
+      return null;
+    }
+  })();
+
+  const isPublicRoute = location
+    ? ["/", "/auth", "/login", "/signup"].includes(location.pathname)
+    : false;
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const applyTheme = () => {
+      let activeTheme: "light" | "dark" = "dark";
+      if (isPublicRoute) {
+        activeTheme = "dark";
+      } else if (theme === "system") {
+        activeTheme = mediaQuery.matches ? "dark" : "light";
+      } else {
+        activeTheme = theme;
+      }
+
+      setResolvedTheme(activeTheme);
+
+      if (activeTheme === "dark") {
+        root.classList.add("dark");
+        root.classList.remove("light");
+      } else {
+        root.classList.add("light");
+        root.classList.remove("dark");
+      }
+    };
+
+    applyTheme();
+
+    if (theme === "system" && !isPublicRoute) {
+      mediaQuery.addEventListener("change", applyTheme);
+      return () => mediaQuery.removeEventListener("change", applyTheme);
     }
-    localStorage.setItem("theme", theme);
+  }, [theme, isPublicRoute]);
+
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+    localStorage.setItem("theme", newTheme);
 
     const now = new Date();
-    const logEntry = `[${now.toLocaleDateString()} ${now.toLocaleTimeString()}] Switched theme to: ${theme}`;
+    const logEntry = `[${now.toLocaleDateString()} ${now.toLocaleTimeString()}] Switched theme to: ${newTheme}`;
 
     setThemeLogs((prev) => {
-      // Avoid duplicate logs during initialization
-      if (prev.length > 0 && prev[prev.length - 1].includes(`Switched theme to: ${theme}`)) {
+      if (prev.length > 0 && prev[prev.length - 1].includes(`Switched theme to: ${newTheme}`)) {
         return prev;
       }
       const updated = [...prev, logEntry].slice(-50);
       localStorage.setItem("themeLogs", JSON.stringify(updated));
       return updated;
     });
-  }, [theme]);
+  };
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   const clearThemeLogs = () => {
@@ -67,7 +111,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, themeLogs, clearThemeLogs }}>
+    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, toggleTheme, themeLogs, clearThemeLogs }}>
       {children}
     </ThemeContext.Provider>
   );

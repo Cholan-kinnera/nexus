@@ -37,16 +37,18 @@ export default function StoragePage() {
         className="max-w-6xl mx-auto space-y-8"
       >
         {/* Header */}
-        <div className="flex justify-between items-center pb-2">
-          <div>
+        <div className="relative flex justify-between items-center pb-2">
+          {/* Ambient header glow */}
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+          <div className="z-10 w-full max-w-5xl">
             <h1 className="text-4xl font-bold text-zinc-100">
               Storage Vault
             </h1>
-            <p className="text-zinc-400 mt-2 text-sm font-sans">
+            <p className="text-zinc-300 mt-2 text-sm font-sans max-w-2xl leading-relaxed">
               Securely store and manage project deliverables, documents, and assets.
             </p>
           </div>
-          
+
           {files.length > 0 && (
             <button
               onClick={handleUpload}
@@ -85,7 +87,7 @@ export default function StoragePage() {
             </div>
 
             <h3 className="text-lg font-bold text-zinc-200 mb-2">Storage vault is empty</h3>
-            <p className="text-xs text-zinc-500 max-w-sm leading-relaxed mb-8">
+            <p className="text-xs text-zinc-300 max-w-lg leading-relaxed mb-8">
               Connect an AWS S3 bucket or upload files here to securely host build artifacts, server database backups, and media assets.
             </p>
 
@@ -107,7 +109,7 @@ export default function StoragePage() {
           </motion.div>
         ) : (
           /* ── HIGH-FIDELITY ACTIVE STORAGE VAULT LIST ────────────────────── */
-          <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-xl overflow-hidden shadow-md">
+          <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl overflow-hidden shadow-md">
             <div className="p-5 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/20">
               <div className="flex items-center gap-2">
                 <HardDrive size={16} className="text-zinc-500" />
@@ -132,8 +134,8 @@ export default function StoragePage() {
                 </thead>
                 <tbody className="divide-y divide-zinc-800/40 text-xs">
                   {files.map((file) => (
-                    <tr 
-                      key={file.id} 
+                    <tr
+                      key={file.id}
                       className="hover:bg-zinc-900/40 transition-colors duration-150"
                     >
                       <td className="py-3.5 px-5 font-mono text-zinc-500 text-[10px]">

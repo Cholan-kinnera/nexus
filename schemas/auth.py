@@ -17,8 +17,44 @@ class AuthResponse(BaseModel):
     email: EmailStr
     full_name: str | None = None
     access_token: str | None = None
+    refresh_token: str | None = None
+    token_type: str = "bearer"
 
 
 class VerifyOTPRequest(BaseModel):
     email: EmailStr
     otp: str
+
+
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str
+
+
+class LogoutRequest(BaseModel):
+    refresh_token: str
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class VerifyResetOTPRequest(BaseModel):
+    email: EmailStr
+    otp: str
+
+
+class ResetPasswordRequest(BaseModel):
+    email: EmailStr
+    otp: str
+    new_password: str
+
+
+class GenericMessageResponse(BaseModel):
+    message: str
+

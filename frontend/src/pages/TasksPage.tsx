@@ -9,6 +9,9 @@ import { getComments, createComment } from "../services/commentService";
 import { getProjects } from "../services/projectService";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
+import { getProjectMembers } from "../services/projectMemberService";
+import api from "../api/client";
 import {
   DndContext,
   closestCenter,
@@ -20,10 +23,10 @@ import {
   useDraggable,
 } from "@dnd-kit/core";
 import type { DragStartEvent, DragEndEvent } from "@dnd-kit/core";
-import { 
-  ClipboardList, 
-  Clock, 
-  MessageSquare, 
+import {
+  ClipboardList,
+  Clock,
+  MessageSquare,
   ArrowUpRight
 } from "lucide-react";
 
@@ -61,9 +64,9 @@ function DroppableColumn({
   return (
     <div
       ref={setNodeRef}
-      className={`bg-zinc-900/35 border rounded-xl p-4 min-h-[380px] transition-all duration-200 flex flex-col ${isOver
-          ? "border-zinc-700 bg-zinc-900/60 shadow-lg"
-          : "border-zinc-850"
+      className={`bg-zinc-900/25 border rounded-xl p-4 min-h-[380px] transition-all duration-200 flex flex-col ${isOver
+        ? "border-zinc-700/80 bg-zinc-900/50 shadow-lg shadow-black/20"
+        : "border-zinc-800"
         }`}
     >
       <div className="flex justify-between items-center mb-4">
@@ -72,7 +75,7 @@ function DroppableColumn({
           <span className={`w-1.5 h-1.5 rounded-full ${dotColors[id] || "bg-zinc-650"}`} />
           <span className="text-zinc-350">{title}</span>
         </div>
-        
+
         <div className="flex items-center gap-1.5 text-4xs font-mono text-zinc-550">
           <span>{totalHours}h</span>
           <span className="w-1 h-1 rounded-full bg-zinc-800" />
@@ -86,7 +89,7 @@ function DroppableColumn({
             <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-600">
               No tasks here
             </span>
-            <p className="text-[9px] text-zinc-550 mt-1 max-w-[130px] leading-relaxed">
+            <p className="text-[9px] text-zinc-300 mt-1 max-w-xs leading-relaxed">
               Drag and drop items here to update status.
             </p>
           </div>
@@ -173,9 +176,9 @@ function DraggableTaskCard({
       {...listeners}
       {...attributes}
       onClick={() => onCardClick(task)}
-      className={`bg-zinc-900/50 border rounded-xl p-5 mb-3 cursor-grab active:cursor-grabbing select-none shadow-sm hover:translate-y-[-2px] hover:shadow-lg hover:border-zinc-700 transition-all duration-200 flex flex-col justify-between min-h-[160px] ${isDragging
-          ? "border-zinc-600 shadow-2xl"
-          : "border-zinc-850"
+      className={`bg-zinc-900/50 backdrop-blur-sm border rounded-xl p-5 mb-3 cursor-grab active:cursor-grabbing select-none shadow-sm hover:translate-y-[-2px] hover:shadow-[0_0_15px_rgba(124,58,237,0.04)] hover:border-zinc-700/80 transition-all duration-200 flex flex-col justify-between min-h-[160px] ${isDragging
+        ? "border-zinc-600 shadow-2xl"
+        : "border-zinc-800"
         }`}
     >
       <div>
@@ -264,100 +267,103 @@ function TaskModal({
   onClose: () => void;
   getProjectName: (id: number) => string;
 }) {
+  const { user } = useAuth();
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
+  const [projectMembers, setProjectMembers] = useState<any[]>([]);
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
   useEffect(() => {
-    if (task && isOpen) {
-      const fetchComments = async () => {
-        try {
-          const data = await getComments(task.id);
-          if (data.length === 0) {
-            const seedComments = [
-              {
-                id: -1,
-                content: "Is this task ready for engineering review? Let's check the schema definitions.",
-                task_id: task.id,
-                user_id: 101,
-                created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-              },
-              {
-                id: -2,
-                content: "I am finishing up the API endpoints right now. I will push a branch for review in an hour.",
-                task_id: task.id,
-                user_id: 102,
-                created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-              }
-            ];
-            setComments(seedComments);
-          } else {
-            setComments(data);
-          }
-        } catch (e) {
-          const seedComments = [
-            {
-              id: -1,
-              content: "Is this task ready for engineering review? Let's check the schema definitions.",
-              task_id: task.id,
-              user_id: 101,
-              created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-            }
-          ];
-          setComments(seedComments);
-        }
-      };
-      fetchComments();
-    }
-  }, [task, isOpen]);
+    if (!isOpen || !task) return;
+
+    const fetchUserAndMembers = async () => {
+      try {
+        const [meRes, membersData] = await Promise.all([
+          api.get("/users/me"),
+          getProjectMembers(task.project_id)
+        ]);
+        setCurrentUser(meRes.data);
+        setProjectMembers(membersData);
+      } catch (err) {
+        console.error("Failed to load user or project members:", err);
+      }
+    };
+
+    fetchUserAndMembers();
+  }, [isOpen, task]);
+
+  useEffect(() => {
+    if (!isOpen || !task) return;
+
+    const fetchComments = async () => {
+      try {
+        const data = await getComments(task.id);
+        setComments(data?.items ?? []);
+      } catch (err) {
+        console.error("Failed to load task comments:", err);
+      }
+    };
+
+    fetchComments();
+  }, [isOpen, task]);
 
   if (!isOpen || !task) return null;
 
+  const currentUserMember = projectMembers.find((m) => m.email === user?.email);
+  const currentUserRole = currentUserMember ? currentUserMember.role : "viewer";
+  const isViewer = currentUserRole === "viewer";
+
   const handlePostComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newComment.trim()) return;
+    if (!newComment.trim() || isViewer) return;
     setLoading(true);
 
-    const tempComment = {
-      id: Math.random(),
-      content: newComment,
-      task_id: task.id,
-      user_id: 999,
-      created_at: new Date().toISOString(),
-    };
-
-    setComments((prev) => [...prev, tempComment]);
-    setNewComment("");
-
     try {
-      await createComment(task.id, newComment);
-    } catch (e) {
-      console.error("Failed to post comment", e);
+      await createComment(task.id, newComment.trim());
+      setNewComment("");
+      const data = await getComments(task.id);
+      setComments(data?.items ?? []);
+    } catch (err) {
+      console.error("Failed to post comment:", err);
+      alert("Failed to post comment. Ensure you have Developer, Manager, or Owner role.");
     } finally {
       setLoading(false);
     }
   };
 
   const getCommenterInfo = (userId: number) => {
-    const currentUserName = localStorage.getItem("userName") || "Cholan Kinnera";
-    if (userId === 1 || userId === 2 || userId === 0 || userId === 999) {
+    const member = projectMembers.find((m) => m.user_id === userId);
+    if (member) {
+      const initials = member.full_name
+        ? member.full_name.split(" ").map((n: string) => n[0]).join("").toUpperCase()
+        : member.email
+          ? member.email.substring(0, 2).toUpperCase()
+          : "?";
       return {
-        name: currentUserName,
-        initials: currentUserName.split(" ").map(n => n[0]).join("").toUpperCase(),
-        color: "bg-zinc-950 border border-zinc-800 text-zinc-300"
+        name: member.full_name || member.email || "Unknown Member",
+        initials,
+        color: "bg-zinc-950 border border-zinc-800 text-zinc-300",
       };
     }
-    if (userId === 101) {
+
+    if (currentUser && currentUser.id === userId) {
+      const initials = currentUser.full_name
+        ? currentUser.full_name.split(" ").map((n: string) => n[0]).join("").toUpperCase()
+        : currentUser.email
+          ? currentUser.email.substring(0, 2).toUpperCase()
+          : "?";
       return {
-        name: "Alice Miller",
-        initials: "AM",
-        color: "bg-zinc-950 border border-zinc-800 text-zinc-300"
+        name: currentUser.full_name || currentUser.email || "You",
+        initials,
+        color: "bg-zinc-950 border border-zinc-800 text-zinc-300",
       };
     }
+
     return {
-      name: "John Doe",
-      initials: "JD",
-      color: "bg-zinc-950 border border-zinc-800 text-zinc-300"
+      name: `User #${userId}`,
+      initials: `U${userId}`,
+      color: "bg-zinc-950 border border-zinc-800 text-zinc-300",
     };
   };
 
@@ -369,7 +375,7 @@ function TaskModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-black/70 backdrop-blur-xs"
+          className="absolute inset-0 bg-slate-900/15 dark:bg-black/70 backdrop-blur-sm"
         />
 
         <motion.div
@@ -377,7 +383,7 @@ function TaskModal({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.96, opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden shadow-2xl relative z-10 flex flex-col md:flex-row text-zinc-200"
+          className="bg-zinc-900/80 backdrop-blur-lg border border-zinc-800 rounded-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden shadow-2xl relative z-10 flex flex-col md:flex-row text-zinc-200"
         >
           {/* Close button */}
           <button
@@ -396,7 +402,7 @@ function TaskModal({
               {task.priority || "MEDIUM"} Priority
             </span>
 
-            <h2 className="text-xl font-bold text-white mt-4 leading-tight">
+            <h2 className="text-xl font-bold text-zinc-100 mt-4 leading-tight">
               {task.title}
             </h2>
 
@@ -422,7 +428,7 @@ function TaskModal({
           {/* Right Column - Discussion */}
           <div className="w-full md:w-[400px] flex flex-col h-[45vh] md:h-[500px] bg-zinc-950/30 border-t md:border-t-0 md:border-l border-zinc-850">
             <div className="p-6 pb-4 border-b border-zinc-850">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <h3 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
                 <MessageSquare size={14} />
                 Discussion
               </h3>
@@ -475,16 +481,17 @@ function TaskModal({
                 <textarea
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Write a comment..."
-                  className="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-xs text-zinc-200 placeholder-zinc-600 outline-none focus:border-zinc-700 transition duration-200 resize-none h-16"
+                  placeholder={isViewer ? "Viewers cannot post comments" : "Write a comment..."}
+                  disabled={isViewer}
+                  className="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-xs text-zinc-200 placeholder-zinc-600 outline-none focus:border-zinc-700 transition duration-200 resize-none h-16 disabled:opacity-60 disabled:cursor-not-allowed"
                   required
                 />
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="self-end bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-[10px] px-3.5 py-1.5 rounded transition duration-200 shadow-sm cursor-pointer disabled:opacity-60 font-mono"
+                  disabled={loading || isViewer}
+                  className="self-end bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-[10px] px-3.5 py-1.5 rounded transition duration-200 shadow-sm cursor-pointer disabled:opacity-60 font-mono disabled:cursor-not-allowed"
                 >
-                  {loading ? "Posting..." : "Post Comment"}
+                  {isViewer ? "Viewer Role Locked" : (loading ? "Posting..." : "Post Comment")}
                 </button>
               </div>
             </form>
@@ -521,14 +528,15 @@ export function TasksPage() {
 
   const loadTasks = async () => {
     const data = await getTasks();
-    setTasks(data);
+    setTasks(data?.items ?? []);
   };
 
   const loadProjects = async () => {
     const data = await getProjects();
-    setProjects(data);
-    if (data.length > 0) {
-      setSelectedProject(data[0].id);
+    const projectsList = data?.items ?? [];
+    setProjects(projectsList);
+    if (projectsList.length > 0) {
+      setSelectedProject(projectsList[0].id);
     }
   };
 
@@ -652,26 +660,28 @@ export function TasksPage() {
         className="max-w-7xl mx-auto"
       >
         {/* Header */}
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
+        <div className="relative mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          {/* Ambient header glow */}
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+          <div className="z-10 w-full max-w-5xl">
             <h1 className="text-4xl font-bold text-zinc-150">
               Tasks
             </h1>
-            <p className="text-zinc-400 mt-2 text-sm font-sans">
+            <p className="text-zinc-300 mt-2 text-sm font-sans max-w-2xl leading-relaxed">
               Manage and track your active workflows on the Kanban Board.
             </p>
           </div>
 
           <button
             onClick={handleLoadSampleData}
-            className="self-start sm:self-center px-4 py-2 border border-zinc-850 hover:border-zinc-700 text-zinc-300 hover:text-white rounded-lg text-xs font-semibold transition duration-200 shadow-sm font-mono cursor-pointer"
+            className="z-10 self-start sm:self-center px-4 py-2 border border-zinc-800 hover:border-zinc-700/80 text-zinc-300 hover:text-white rounded-lg text-xs font-semibold transition duration-200 shadow-sm font-mono cursor-pointer bg-zinc-900/50 hover:shadow-[0_0_15px_rgba(124,58,237,0.04)]"
           >
             Load Sample Data
           </button>
         </div>
 
         {/* Create Task Form */}
-        <div ref={formRef} className="bg-zinc-900/50 border border-zinc-850 rounded-xl p-6 mb-8 text-zinc-100 backdrop-blur-sm transition-colors duration-300">
+        <div ref={formRef} className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 mb-8 text-zinc-100 transition-colors duration-300">
           <h2 className="text-lg font-bold text-zinc-200 mb-4 flex items-center gap-2">
             <ClipboardList size={18} className="text-zinc-450" />
             Create New Task
@@ -749,7 +759,7 @@ export function TasksPage() {
             </div>
 
             <h3 className="text-lg font-bold text-zinc-200 mb-2">No active tasks configured</h3>
-            <p className="text-xs text-zinc-500 max-w-sm leading-relaxed mb-8">
+            <p className="text-xs text-zinc-300 max-w-lg leading-relaxed mb-8">
               Populate your active boards to organize pipelines, resolve blockers, and calculate story points.
             </p>
 

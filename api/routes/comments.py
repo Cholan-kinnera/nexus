@@ -5,6 +5,7 @@ from dependencies.auth import get_current_user
 from db.database import get_db
 from models.user import User
 from schemas.comment import CommentCreate, CommentResponse
+from core.pagination import PaginationParams, PaginatedResponse
 from services.comment_service import (
     create_comment,
     get_comments_by_task,
@@ -24,13 +25,14 @@ async def create_task_comment(
     return await create_comment(db=db, task_id=task_id, user_id=current_user.id, data=data)
 
 
-@router.get("/api/tasks/{task_id}/comments", response_model=list[CommentResponse])
+@router.get("/api/tasks/{task_id}/comments", response_model=PaginatedResponse[CommentResponse])
 async def get_task_comments(
     task_id: int,
+    params: PaginationParams = Depends(),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
-) -> list[CommentResponse]:
-    return await get_comments_by_task(db=db, task_id=task_id)
+) -> PaginatedResponse[CommentResponse]:
+    return await get_comments_by_task(db=db, task_id=task_id, params=params)
 
 
 @router.delete("/api/comments/{comment_id}", status_code=204)

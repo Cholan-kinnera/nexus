@@ -147,7 +147,10 @@ export default function CommandPalette() {
           getTasks()
         ]);
 
-        const projectCommands: CommandItem[] = projectsData.map((proj: any) => ({
+        const projectsList = projectsData?.items ?? [];
+        const tasksList = tasksData?.items ?? [];
+
+        const projectCommands: CommandItem[] = projectsList.map((proj: any) => ({
           id: `proj-${proj.id}`,
           title: `Go to Project: ${proj.title}`,
           category: "Projects",
@@ -157,7 +160,7 @@ export default function CommandPalette() {
           }
         }));
 
-        const taskCommands: CommandItem[] = tasksData.map((task: any) => ({
+        const taskCommands: CommandItem[] = tasksList.map((task: any) => ({
           id: `task-${task.id}`,
           title: `Go to Task: ${task.title}`,
           category: "Tasks",
@@ -245,7 +248,7 @@ export default function CommandPalette() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.97 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="w-full max-w-[600px] bg-zinc-900/90 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden z-10 flex flex-col backdrop-blur-md"
+            className="w-full max-w-[600px] bg-zinc-900/80 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden z-10 flex flex-col backdrop-blur-md"
           >
             {/* Search Input field */}
             <div className="flex items-center gap-3 px-4 py-3.5 border-b border-zinc-850 bg-zinc-950/30">
@@ -285,8 +288,8 @@ export default function CommandPalette() {
                       setIsOpen(false);
                     }}
                     className={`w-full flex items-center justify-between p-3 rounded-lg text-left transition-all duration-150 ${isSelected
-                        ? "bg-zinc-800 text-white shadow-sm"
-                        : "text-zinc-400 hover:bg-zinc-850/40 hover:text-zinc-200"
+                        ? "bg-zinc-800/60 text-white shadow-sm"
+                        : "text-zinc-400 hover:bg-zinc-900/30 hover:text-zinc-200"
                       }`}
                   >
                     <div className="flex items-center gap-3">

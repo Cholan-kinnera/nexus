@@ -30,12 +30,17 @@ class TaskCreate(BaseModel):
     due_date: Optional[datetime] = None
 
     project_id: int
+    assigned_to: Optional[int] = Field(
+        default=None,
+        description="ID of the user assigned to this task"
+    )
 
 class TaskUpdate(BaseModel):
     title: Optional[str] = Field(default=None, min_length=3, max_length=100)
     description: Optional[str] = Field(default=None)
     status: Optional[str] = Field(default=None)
     priority: Optional[str] = Field(default=None)
+    assigned_to: Optional[int] = Field(default=None)
 
 
 class TaskResponse(BaseModel):

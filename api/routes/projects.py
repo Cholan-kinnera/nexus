@@ -4,6 +4,7 @@ from typing import List
 from db.database import get_db
 from dependencies.auth import get_current_user
 from models.user import User
+from core.pagination import PaginationParams, PaginatedResponse
 from services.project_service import(
     create_project_service,
     get_projects_service,
@@ -33,16 +34,18 @@ async def create_project(
         db)
 
 
-@router.get("/", response_model=List[ProjectResponse])
+@router.get("/", response_model=PaginatedResponse[ProjectResponse])
 async def get_projects(
+    params: PaginationParams = Depends(),
     db: AsyncSession = Depends(get_db),
     current_user = Depends(get_current_user)
 ):
     
     return await get_projects_service(
-    db,
-    current_user.id
-)
+        db,
+        current_user.id,
+        params
+    )
 
 @router.get("/{project_id}", response_model=ProjectResponse)
 async def get_project(

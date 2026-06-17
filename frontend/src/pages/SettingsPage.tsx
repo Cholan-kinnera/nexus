@@ -14,10 +14,14 @@ import {
   Trash2,
   Check,
   Copy,
+  Monitor,
+  Sun,
+  Moon,
+  Eye,
 } from "lucide-react";
 
 export default function SettingsPage() {
-  const { themeLogs, clearThemeLogs } = useTheme();
+  const { theme, setTheme, themeLogs, clearThemeLogs } = useTheme();
   const { user, login, token } = useAuth();
 
   const [fullName, setFullName] = useState("");
@@ -31,7 +35,7 @@ export default function SettingsPage() {
       setFullName(user.full_name || "");
       setEmail(user.email || "");
       setRole(user.role || "");
-      
+
       const timer = setTimeout(() => {
         setIsLoading(false);
       }, 1000);
@@ -135,13 +139,17 @@ export default function SettingsPage() {
         className="max-w-5xl mx-auto"
       >
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-zinc-100">
-            Developer Settings
-          </h1>
-          <p className="text-zinc-400 mt-2 text-sm font-sans">
-            Configure profile credentials, manage API integrations, and view system logs.
-          </p>
+        <div className="relative mb-8">
+          {/* Ambient header glow */}
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+          <div className="z-10 w-full max-w-5xl">
+            <h1 className="text-4xl font-bold text-zinc-100">
+              Developer Settings
+            </h1>
+            <p className="text-zinc-300 mt-2 text-sm font-sans max-w-2xl leading-relaxed">
+              Configure profile credentials, manage API integrations, and view system logs.
+            </p>
+          </div>
         </div>
 
         {isLoading ? (
@@ -167,7 +175,7 @@ export default function SettingsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column: User Info Form */}
             <div className="lg:col-span-1 space-y-6">
-              <div className="bg-zinc-900/50 border border-zinc-850 rounded-xl p-6 shadow-md">
+              <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md">
                 <h2 className="text-sm font-bold text-zinc-150 mb-4 flex items-center gap-2 font-mono uppercase tracking-wider">
                   <User size={16} className="text-zinc-400" />
                   User Profile
@@ -232,7 +240,7 @@ export default function SettingsPage() {
               </div>
 
               {/* Profile Avatar Card */}
-              <div className="bg-zinc-900/50 border border-zinc-850 rounded-xl p-6 shadow-md flex flex-col items-center text-center">
+              <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md flex flex-col items-center text-center">
                 <div className="w-16 h-16 rounded-full bg-zinc-950 border border-zinc-800 text-zinc-300 flex items-center justify-center font-bold text-xl mb-3 shadow-inner">
                   {user?.full_name ? user.full_name.split(" ").map(n => n[0]).join("").toUpperCase() : "U"}
                 </div>
@@ -247,7 +255,7 @@ export default function SettingsPage() {
             {/* Right Column: API Keys + Logs */}
             <div className="lg:col-span-2 space-y-6">
               {/* Terminal Box (Generate API Keys) */}
-              <div className="bg-zinc-900/50 border border-zinc-850 rounded-xl p-6 shadow-md">
+              <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h2 className="text-sm font-bold text-zinc-150 flex items-center gap-2 font-mono uppercase tracking-wider">
@@ -262,8 +270,8 @@ export default function SettingsPage() {
                     onClick={handleGenerateKey}
                     disabled={isGenerating}
                     className={`px-4 py-2 text-xs font-semibold font-mono rounded-lg text-white shadow-sm transition-all duration-200 ${isGenerating
-                        ? "bg-zinc-800 border border-zinc-700 text-zinc-500 cursor-not-allowed"
-                        : "bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 hover:shadow-md cursor-pointer"
+                      ? "bg-zinc-800 border border-zinc-700 text-zinc-500 cursor-not-allowed"
+                      : "bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 hover:shadow-md cursor-pointer"
                       }`}
                   >
                     {isGenerating ? "Generating..." : "Generate API Key"}
@@ -339,8 +347,64 @@ export default function SettingsPage() {
                 )}
               </div>
 
+              {/* Preferences / Theme Selector Card */}
+              <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md">
+                <h2 className="text-sm font-bold text-zinc-150 mb-4 flex items-center gap-2 font-mono uppercase tracking-wider">
+                  <Eye size={16} className="text-zinc-400" />
+                  Preferences
+                </h2>
+
+                <div className="space-y-4">
+                  <div>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-zinc-450 mb-1.5 font-mono">
+                      Appearance Theme
+                    </span>
+                    <p className="text-2xs text-zinc-500 font-mono mb-3">
+                      Select how Nexus PM appears on this device.
+                    </p>
+
+                    {/* Segmented Theme Switcher */}
+                    <div className="flex bg-zinc-950 border border-zinc-800 rounded-lg p-1 gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setTheme("system")}
+                        className={`flex-1 flex items-center justify-center gap-2 py-2 text-center text-xs font-mono rounded-md transition-all duration-200 cursor-pointer ${theme === "system"
+                            ? "bg-violet-600 text-white shadow-sm font-bold"
+                            : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/30"
+                          }`}
+                      >
+                        <Monitor size={14} />
+                        <span>System</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTheme("light")}
+                        className={`flex-1 flex items-center justify-center gap-2 py-2 text-center text-xs font-mono rounded-md transition-all duration-200 cursor-pointer ${theme === "light"
+                            ? "bg-violet-600 text-white shadow-sm font-bold"
+                            : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/30"
+                          }`}
+                      >
+                        <Sun size={14} />
+                        <span>Light</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTheme("dark")}
+                        className={`flex-1 flex items-center justify-center gap-2 py-2 text-center text-xs font-mono rounded-md transition-all duration-200 cursor-pointer ${theme === "dark"
+                            ? "bg-violet-600 text-white shadow-sm font-bold"
+                            : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/30"
+                          }`}
+                      >
+                        <Moon size={14} />
+                        <span>Dark</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Theme Toggle Persistence Log */}
-              <div className="bg-zinc-900/50 border border-zinc-850 rounded-xl p-6 shadow-md">
+              <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h2 className="text-sm font-bold text-zinc-150 flex items-center gap-2 font-mono uppercase tracking-wider">

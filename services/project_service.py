@@ -3,7 +3,15 @@ from sqlalchemy import select, delete
 from fastapi import HTTPException
 
 from models.project import Project
+from models.project_member import ProjectMember
 from models.task import Task
+from services.activity_service import create_activity_log
+from services.notification_service import create_notification
+from services.project_member_service import require_project_role
+from core.pagination import PaginationParams, paginate
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 async def create_project_service(
@@ -18,23 +26,57 @@ async def create_project_service(
     )
 
     db.add(new_project)
+    await db.flush()  # assigns new_project.id without committing
+
+    # Automatically add creator as OWNER in project_members
+    owner_member = ProjectMember(
+        project_id=new_project.id,
+        user_id=owner_id,
+        role="owner",
+        invited_by=None,
+    )
+    db.add(owner_member)
+
     await db.commit()
     await db.refresh(new_project)
+
+    # Log PROJECT_CREATED
+    try:
+        await create_activity_log(
+            db=db,
+            user_id=owner_id,
+            action="PROJECT_CREATED",
+            entity_type="project",
+            entity_id=new_project.id,
+            metadata={
+                "project_id": new_project.id,
+                "project_name": new_project.title
+            }
+        )
+    except Exception as e:
+        logger.error(f"Failed to log PROJECT_CREATED event: {e}", exc_info=True)
 
     return new_project
 
 
 async def get_projects_service(
     db: AsyncSession,
-    owner_id: int
+    owner_id: int,
+    params: PaginationParams
 ):
-    result = await db.execute(
-        select(Project).where(Project.owner_id == owner_id)
+    query = (
+        select(Project)
+        .outerjoin(ProjectMember, Project.id == ProjectMember.project_id)
+        .where((ProjectMember.user_id == owner_id) | (Project.owner_id == owner_id))
+        .distinct()
     )
-
-    projects = result.scalars().all()
-
-    return projects
+    return await paginate(
+        db=db,
+        query=query,
+        model=Project,
+        params=params,
+        search_fields=["title", "description"]
+    )
 
 
 async def get_project_by_id_service(
@@ -54,11 +96,10 @@ async def get_project_by_id_service(
             detail="Project not found"
         )
 
-    if project.owner_id != current_user.id:
-        raise HTTPException(
-            status_code=403,
-            detail="Not authorized to view this project"
-        )
+    await require_project_role(
+        db, project_id, current_user.id,
+        ["owner", "manager", "developer", "viewer"]
+    )
 
     return project
 
@@ -81,11 +122,10 @@ async def update_project_service(
             detail="Project not found"
         )
 
-    if project.owner_id != current_user.id:
-        raise HTTPException(
-            status_code=403,
-            detail="Not authorized to update this project"
-        )
+    await require_project_role(
+        db, project_id, current_user.id,
+        ["owner", "manager"]
+    )
 
     update_data = project_data.model_dump(exclude_unset=True)
 
@@ -94,6 +134,47 @@ async def update_project_service(
 
     await db.commit()
     await db.refresh(project)
+
+    # Log PROJECT_UPDATED
+    try:
+        await create_activity_log(
+            db=db,
+            user_id=current_user.id,
+            action="PROJECT_UPDATED",
+            entity_type="project",
+            entity_id=project.id,
+            metadata={
+                "project_id": project.id,
+                "project_name": project.title
+            }
+        )
+    except Exception as e:
+        logger.error(f"Failed to log PROJECT_UPDATED event: {e}", exc_info=True)
+
+    # Notify all project members (excluding updater)
+    try:
+        member_result = await db.execute(
+            select(ProjectMember.user_id).where(
+                ProjectMember.project_id == project.id
+            )
+        )
+        stakeholders = {row[0] for row in member_result.fetchall()}
+            
+        stakeholders.discard(current_user.id)
+        
+        for stakeholder_id in stakeholders:
+            await create_notification(
+                db=db,
+                user_id=stakeholder_id,
+                title="Project Updated",
+                message=f"Project {project.title} was updated",
+                metadata={
+                    "project_id": project.id,
+                    "project_name": project.title
+                }
+            )
+    except Exception as e:
+        logger.error(f"Failed to notify project stakeholders: {e}", exc_info=True)
 
     return project
 
@@ -115,11 +196,13 @@ async def delete_project_service(
             detail="Project not found"
         )
 
-    if project.owner_id != current_user.id:
-        raise HTTPException(
-            status_code=403,
-            detail="Not authorized to delete this project"
-        )
+    await require_project_role(
+        db, project_id, current_user.id,
+        ["owner"]
+    )
+
+    # Keep metadata for logging post-deletion
+    project_title = project.title
 
     # Delete all tasks belonging to this project
     await db.execute(
@@ -132,6 +215,22 @@ async def delete_project_service(
     await db.delete(project)
 
     await db.commit()
+
+    # Log PROJECT_DELETED
+    try:
+        await create_activity_log(
+            db=db,
+            user_id=current_user.id,
+            action="PROJECT_DELETED",
+            entity_type="project",
+            entity_id=project_id,
+            metadata={
+                "project_id": project_id,
+                "project_name": project_title
+            }
+        )
+    except Exception as e:
+        logger.error(f"Failed to log PROJECT_DELETED event: {e}", exc_info=True)
 
     return {
         "message": "Project deleted successfully"

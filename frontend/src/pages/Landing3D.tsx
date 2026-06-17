@@ -11,7 +11,6 @@ import {
   Layers, 
   Sparkles, 
   ArrowRight, 
-  Search, 
   Cpu, 
   Lock, 
   Database,
@@ -36,12 +35,15 @@ const WorkspaceModel = memo(function WorkspaceModel() {
           });
           mesh.material = new THREE.MeshPhysicalMaterial({
             color: '#ffffff',
-            roughness: 0.1,
-            metalness: 0.1,
+            roughness: 0.05,
+            metalness: 0.05,
             transparent: true,
-            opacity: 0.25,
-            transmission: 0.6,
-            thickness: 1.0
+            opacity: 0.15,
+            transmission: 0.9,
+            thickness: 1.5,
+            ior: 1.5,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.05
           });
         }
       }
@@ -101,7 +103,6 @@ const FloatingParticles = memo(function FloatingParticles() {
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
     if (pointsRef.current) {
-      // Soft, organic wave oscillation
       pointsRef.current.rotation.y = time * 0.02;
       pointsRef.current.rotation.x = Math.sin(time * 0.015) * 0.05;
     }
@@ -137,21 +138,37 @@ const revealVariants: Variants = {
 };
 
 export default function Landing3D() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [activeAITab, setActiveAITab] = useState<'sprint' | 'tasks' | 'summary' | 'risks'>('sprint');
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Monitor scroll for shrinking header
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Realistic Kanban Board preview data
+  const todoTasks = [
+    { id: "NEX-1024", title: "Design System Refactor", priority: "HIGH", assignee: "CK", hours: 8 },
+    { id: "NEX-1025", title: "Security Audit Logs", priority: "MEDIUM", assignee: "AM", hours: 6 }
+  ];
+
+  const progressTasks = [
+    { id: "NEX-1002", title: "AI Task Suggestions Engine", priority: "HIGH", assignee: "CK", hours: 12 },
+    { id: "NEX-1033", title: "Database Optimization", priority: "MEDIUM", assignee: "SL", hours: 10 }
+  ];
+
+  const reviewTasks = [
+    { id: "NEX-1030", title: "API Rate Limiting", priority: "LOW", assignee: "JD", hours: 4 },
+    { id: "NEX-1031", title: "Sprint Planning", priority: "MEDIUM", assignee: "AM", hours: 8 }
+  ];
+
+  const doneTasks = [
+    { id: "NEX-1005", title: "CI/CD Pipeline Setup", priority: "DONE", assignee: "SL", hours: 14 }
+  ];
+
+  const priorityColors: Record<string, string> = {
+    HIGH: "bg-zinc-950 text-red-400 border-zinc-800",
+    MEDIUM: "bg-zinc-950 text-amber-400 border-zinc-800",
+    LOW: "bg-zinc-950 text-blue-400 border-zinc-800",
+    DONE: "bg-zinc-950 text-emerald-400 border-zinc-800"
+  };
 
   return (
-    <div ref={containerRef} className="relative min-h-screen bg-zinc-950 text-zinc-100 font-sans overflow-x-hidden selection:bg-violet-500/30">
+    <div className="relative min-h-screen bg-zinc-950 text-zinc-100 font-sans overflow-x-hidden selection:bg-violet-500/30">
       
       {/* 🌌 THE FIXED WEBGL 3D CANVAS LAYER */}
       <div className="fixed inset-0 w-full h-screen pointer-events-none z-0">
@@ -186,13 +203,9 @@ export default function Landing3D() {
         </Canvas>
       </div>
 
-      {/* ── FLOATING, SHRINKING GLASS HEADER ───────────────────────────────── */}
+      {/* ── FLOATING GLASS HEADER ───────────────────────────────── */}
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50 transition-all duration-300">
-        <div className={`flex items-center justify-between transition-all duration-300 border border-zinc-800/80 backdrop-blur-md ${
-          isScrolled 
-            ? 'py-2.5 px-6 rounded-full bg-zinc-950/65 shadow-lg shadow-black/30' 
-            : 'py-4 px-8 rounded-2xl bg-zinc-950/40'
-        }`}>
+        <div className="flex items-center justify-between border border-zinc-800/80 backdrop-blur-md rounded-full bg-zinc-950/40 py-2.5 px-6 shadow-lg shadow-black/20">
           {/* Brand Logo */}
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center">
@@ -215,13 +228,6 @@ export default function Landing3D() {
 
           {/* Right Action: Search / Sign In */}
           <div className="flex items-center gap-4">
-            {/* Search KBD Indicator */}
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900/60 border border-zinc-800/60 rounded-md text-[10px] text-zinc-500 font-mono select-none">
-              <Search size={10} />
-              <span>Search</span>
-              <kbd className="px-1 bg-zinc-800 text-[8px] rounded border border-zinc-700 text-zinc-400">⌘K</kbd>
-            </div>
-
             <Link 
               to="/auth"
               className="h-8 px-4 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-medium text-xs rounded-full flex items-center justify-center transition-colors shadow-sm"
@@ -236,7 +242,7 @@ export default function Landing3D() {
       <div className="relative z-10 w-full">
         
         {/* === SECTION 1: HERO SUITE === */}
-        <section className="relative h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden">
+        <section className="relative min-h-[85vh] pt-48 pb-20 flex flex-col justify-center items-center text-center px-6 overflow-hidden">
           {/* Extremely subtle violet ambient radial glow */}
           <div className="absolute inset-0 w-full h-full ambient-glow-violet opacity-100 z-0 pointer-events-none" />
           
@@ -245,73 +251,60 @@ export default function Landing3D() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={revealVariants}
-            className="max-w-5xl flex flex-col items-center z-10"
+            className="max-w-6xl flex flex-col items-center z-10"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 text-[10px] font-mono bg-zinc-900/80 border border-zinc-800 rounded-full text-zinc-300 mb-8 backdrop-blur-md shadow-inner">
+            <div className="inline-flex items-center gap-2 px-3 py-1 text-[10px] font-mono bg-zinc-900/80 border border-zinc-800 rounded-full text-zinc-355 mb-8 backdrop-blur-md shadow-inner">
               <span className="w-1.5 h-1.5 bg-violet-500 rounded-full animate-pulse" />
-              Nexus v1.0 • Next-Gen AI Coordination Engine
+              Nexus PM • AI-Powered Project Management
             </div>
             
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-white leading-[1.1] mb-6 max-w-5xl select-none">
-              Project tracking, <br className="hidden sm:inline" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-b from-zinc-100 to-zinc-400">
-                engineered with autonomous AI.
+            <h1 className="text-6xl sm:text-8xl md:text-[90px] lg:text-[104px] font-extrabold tracking-tighter text-white leading-[1.02] mb-8 max-w-6xl select-none">
+              Ship exceptional products, faster. <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-violet-500">
+                Powered by AI.
               </span>
             </h1>
             
-            <p className="text-sm sm:text-base text-zinc-300 max-w-2xl mb-10 leading-relaxed font-mono">
-              Linear velocity meets Notion flexibility. Eliminate micro-management with dynamic cryptographic status updates, asset vaults, and continuous context compilation.
+            <p className="text-sm sm:text-base md:text-lg text-zinc-300 max-w-3xl mb-10 leading-relaxed">
+              Nexus PM unifies projects, tasks, and teams in one intelligent workspace. Plan, track, and deliver with unmatched velocity.
             </p>
 
             <div className="flex items-center gap-4">
-              <Link 
-                to="/auth"
-                className="h-11 px-6 bg-white hover:bg-zinc-100 text-zinc-950 font-medium rounded-full flex items-center justify-center transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:shadow-white/5 active:scale-[0.99] text-sm"
-              >
-                Launch Workspace
-              </Link>
               <a 
                 href="#showcase"
-                className="h-11 px-6 bg-zinc-900/60 hover:bg-zinc-800/60 text-zinc-300 border border-zinc-800 hover:border-zinc-700 font-medium rounded-full backdrop-blur-sm flex items-center justify-center transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] text-sm"
+                className="h-12 px-6 bg-violet-600 hover:bg-violet-755 hover:bg-violet-700 text-white font-medium rounded-md flex items-center justify-center transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-violet-600/10 text-sm cursor-pointer"
               >
-                Documentation
+                Explore Showcase
               </a>
+              <Link 
+                to="/auth"
+                className="h-12 px-6 bg-zinc-950/40 border border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900/50 text-zinc-350 hover:text-white backdrop-blur rounded-md font-medium flex items-center justify-center transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] text-sm"
+              >
+                View Live Dashboard
+              </Link>
             </div>
           </motion.div>
         </section>
 
-        {/* === SECTION 2: BRAND TICKER === */}
-        <section className="py-10 border-y border-zinc-900 bg-zinc-950/40 backdrop-blur-sm">
+        {/* === SECTION 2: BRAND TICKER (TRUST PROOF) === */}
+        <section className="py-10 border-y border-zinc-900 bg-zinc-950/40 backdrop-blur-sm relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-6">
-            <p className="text-center text-[10px] font-mono uppercase tracking-widest text-zinc-600 mb-6">
-              Trusted by Elite Engineering Teams
-            </p>
-            <div className="relative overflow-hidden w-full">
-              {/* Fade Edges */}
-              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-zinc-950 to-transparent z-10 pointer-events-none" />
-              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-zinc-950 to-transparent z-10 pointer-events-none" />
-              
-              <div className="flex gap-20 w-max landing-marquee-left">
-                {/* Brand names row */}
-                {[1, 2].map((k) => (
-                  <div key={k} className="flex gap-20 items-center text-xs font-mono font-bold uppercase tracking-widest text-zinc-500">
-                    <span>Vercel</span>
-                    <span>AWS Cloud</span>
-                    <span>Stripe</span>
-                    <span>Linear</span>
-                    <span>Supabase</span>
-                    <span>Datadog</span>
-                    <span>GitHub</span>
-                    <span>Netlify</span>
-                  </div>
-                ))}
-              </div>
+            <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-4 text-[10px] font-mono uppercase tracking-widest text-zinc-550 select-none">
+              <span>Enterprise Ready</span>
+              <span className="w-1 h-1 bg-zinc-800 rounded-full hidden sm:inline" />
+              <span>Cloud Native</span>
+              <span className="w-1 h-1 bg-zinc-800 rounded-full hidden sm:inline" />
+              <span>Developer First</span>
+              <span className="w-1 h-1 bg-zinc-800 rounded-full hidden sm:inline" />
+              <span>AI Workflows</span>
+              <span className="w-1 h-1 bg-zinc-800 rounded-full hidden sm:inline" />
+              <span>Secure By Design</span>
             </div>
           </div>
         </section>
 
-        {/* === SECTION 3: INTERACTIVE SHOWCASE PANEL === */}
-        <section id="showcase" className="py-32 px-6 max-w-7xl mx-auto">
+        {/* === SECTION 3: REAL WORKSPACE SHOWCASE (INLINE KANBAN PREVIEW) === */}
+        <section id="showcase" className="py-32 px-6 max-w-7xl mx-auto relative">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -319,95 +312,450 @@ export default function Landing3D() {
             variants={revealVariants}
             className="text-center mb-16"
           >
-            <h2 className="text-xs font-mono tracking-widest text-violet-400 uppercase mb-3">Workspace Showcase</h2>
-            <p className="text-3xl sm:text-4xl font-bold text-white tracking-tight">Experience unmatched velocity.</p>
-            <p className="text-sm text-zinc-400 mt-2 max-w-md mx-auto">A live dashboard mockup illustrating high-density Kanban columns and project sprint statistics.</p>
+            <h2 className="text-xs font-mono tracking-widest text-violet-400 uppercase mb-3">Live Workspace Preview</h2>
+            <p className="text-3xl sm:text-4xl font-bold text-white tracking-tight">Real-Time Workspaces. Built for engineers.</p>
+            <p className="text-sm text-zinc-300 mt-2 max-w-lg mx-auto leading-relaxed">
+              Live workspace showcasing Kanban workflows, sprint planning, project tracking, and engineering collaboration.
+            </p>
           </motion.div>
 
-          {/* Interactive Mockup Dashboard Panel */}
+          {/* Interactive Mockup Kanban Board Preview Panel */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={revealVariants}
-            className="w-full bg-zinc-900/30 border border-zinc-800 rounded-2xl p-6 backdrop-blur-md shadow-2xl overflow-hidden"
+            className="w-full bg-zinc-900/50 border border-zinc-800/80 rounded-xl p-6 backdrop-blur-md shadow-2xl overflow-hidden"
           >
-            {/* Window control details */}
-            <div className="flex items-center gap-1.5 pb-4 border-b border-zinc-800 mb-6">
-              <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
-              <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
-              <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
-              <span className="text-[10px] text-zinc-500 font-mono ml-4">nexus-dashboard.env</span>
+            {/* Header window dots */}
+            <div className="flex items-center justify-between pb-4 border-b border-zinc-800/60 mb-6">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
+                <span className="text-[10px] text-zinc-550 font-mono ml-4">nexus-kanban.env</span>
+              </div>
+              <span className="text-[9px] font-mono text-zinc-550 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-850">
+                ACTIVE WORKSPACE
+              </span>
             </div>
 
-            {/* Mock layout grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Column 1: TODO */}
-              <div className="bg-zinc-950/40 border border-zinc-800/80 rounded-xl p-4 flex flex-col gap-3">
-                <div className="flex items-center justify-between text-xs font-mono text-zinc-400 pb-2 border-b border-zinc-900">
-                  <span>TODO</span>
-                  <span className="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[10px]">3</span>
+            {/* 4 Kanban Columns */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              
+              {/* TO DO */}
+              <div className="bg-zinc-950/20 border border-zinc-850/80 rounded-lg p-4 flex flex-col gap-4 min-h-[250px]">
+                <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 pb-2 border-b border-zinc-900">
+                  <span className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-650" />
+                    TO DO
+                  </span>
+                  <span className="px-1.5 bg-zinc-950 border border-zinc-850 rounded text-[9px] text-zinc-500">2</span>
                 </div>
-                <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-3 space-y-2">
-                  <h4 className="text-xs font-bold text-zinc-100">Setup production backup</h4>
-                  <p className="text-[11px] text-zinc-400">Configure weekly database snapshot dump uploads directly to encrypted vaults.</p>
-                  <div className="flex justify-between items-center text-[9px] font-mono text-zinc-500 pt-2">
-                    <span>📁 Infra</span>
-                    <span className="px-1.5 py-0.5 rounded bg-zinc-950 border border-zinc-800 text-red-400">High</span>
+                {todoTasks.map(task => (
+                  <div key={task.id} className="bg-zinc-900/30 border border-zinc-800/60 p-4 rounded-md flex flex-col justify-between min-h-[110px] hover:translate-y-[-2px] hover:border-zinc-700/80 hover:shadow-lg transition-all duration-200 select-none group cursor-pointer">
+                    <div>
+                      <div className="flex justify-between items-center text-[9px] font-mono mb-2">
+                        <span className="text-zinc-500">{task.id}</span>
+                        <span className={`px-1.5 py-0.2 rounded border text-[8px] font-bold ${priorityColors[task.priority]}`}>{task.priority}</span>
+                      </div>
+                      <h4 className="text-xs font-semibold text-zinc-200 group-hover:text-white transition-colors">{task.title}</h4>
+                    </div>
+                    <div className="flex justify-between items-center mt-4 pt-2 border-t border-zinc-850/60 text-[9px] font-mono text-zinc-500">
+                      <span>👤 {task.assignee}</span>
+                      <span>⏳ {task.hours}h</span>
+                    </div>
                   </div>
-                </div>
-                <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-3 space-y-2">
-                  <h4 className="text-xs font-bold text-zinc-100">Implement OAuth2 API keys</h4>
-                  <p className="text-[11px] text-zinc-400">Allow programmatic connection tokens via settings console.</p>
-                  <div className="flex justify-between items-center text-[9px] font-mono text-zinc-500 pt-2">
-                    <span>📁 Auth</span>
-                    <span className="px-1.5 py-0.5 rounded bg-zinc-950 border border-zinc-800 text-amber-400">Medium</span>
-                  </div>
-                </div>
+                ))}
               </div>
 
-              {/* Column 2: IN PROGRESS */}
-              <div className="bg-zinc-950/40 border border-zinc-800/80 rounded-xl p-4 flex flex-col gap-3">
-                <div className="flex items-center justify-between text-xs font-mono text-zinc-400 pb-2 border-b border-zinc-900">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+              {/* IN PROGRESS */}
+              <div className="bg-zinc-950/20 border border-zinc-850/80 rounded-lg p-4 flex flex-col gap-4 min-h-[250px]">
+                <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 pb-2 border-b border-zinc-900">
+                  <span className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500/80 animate-pulse" />
                     IN PROGRESS
                   </span>
-                  <span className="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[10px]">1</span>
+                  <span className="px-1.5 bg-zinc-950 border border-zinc-850 rounded text-[9px] text-zinc-500">2</span>
                 </div>
-                <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-3 space-y-2 border-l-2 border-l-violet-500 shadow-md">
-                  <h4 className="text-xs font-bold text-zinc-100">Complete landing page layout</h4>
-                  <p className="text-[11px] text-zinc-400">Assemble WebGL Canvas, stars system, and glassmorphic navigation header.</p>
-                  <div className="flex justify-between items-center text-[9px] font-mono text-zinc-500 pt-2">
-                    <span>📁 Frontend</span>
-                    <span className="px-1.5 py-0.5 rounded bg-zinc-950 border border-zinc-800 text-violet-400">High</span>
+                {progressTasks.map(task => (
+                  <div key={task.id} className="bg-zinc-900/30 border border-zinc-800/60 p-4 rounded-md flex flex-col justify-between min-h-[110px] hover:translate-y-[-2px] hover:border-zinc-700/80 hover:shadow-lg transition-all duration-200 select-none group cursor-pointer">
+                    <div>
+                      <div className="flex justify-between items-center text-[9px] font-mono mb-2">
+                        <span className="text-zinc-500">{task.id}</span>
+                        <span className={`px-1.5 py-0.2 rounded border text-[8px] font-bold ${priorityColors[task.priority]}`}>{task.priority}</span>
+                      </div>
+                      <h4 className="text-xs font-semibold text-zinc-200 group-hover:text-white transition-colors">{task.title}</h4>
+                    </div>
+                    <div className="flex justify-between items-center mt-4 pt-2 border-t border-zinc-850/60 text-[9px] font-mono text-zinc-500">
+                      <span>👤 {task.assignee}</span>
+                      <span>⏳ {task.hours}h</span>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
 
-              {/* Column 3: DONE */}
-              <div className="bg-zinc-950/40 border border-zinc-800/80 rounded-xl p-4 flex flex-col gap-3">
-                <div className="flex items-center justify-between text-xs font-mono text-zinc-400 pb-2 border-b border-zinc-900">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+              {/* REVIEW */}
+              <div className="bg-zinc-950/20 border border-zinc-850/80 rounded-lg p-4 flex flex-col gap-4 min-h-[250px]">
+                <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 pb-2 border-b border-zinc-900">
+                  <span className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500/80" />
+                    REVIEW
+                  </span>
+                  <span className="px-1.5 bg-zinc-950 border border-zinc-850 rounded text-[9px] text-zinc-500">2</span>
+                </div>
+                {reviewTasks.map(task => (
+                  <div key={task.id} className="bg-zinc-900/30 border border-zinc-800/60 p-4 rounded-md flex flex-col justify-between min-h-[110px] hover:translate-y-[-2px] hover:border-zinc-700/80 hover:shadow-lg transition-all duration-200 select-none group cursor-pointer">
+                    <div>
+                      <div className="flex justify-between items-center text-[9px] font-mono mb-2">
+                        <span className="text-zinc-500">{task.id}</span>
+                        <span className={`px-1.5 py-0.2 rounded border text-[8px] font-bold ${priorityColors[task.priority]}`}>{task.priority}</span>
+                      </div>
+                      <h4 className="text-xs font-semibold text-zinc-200 group-hover:text-white transition-colors">{task.title}</h4>
+                    </div>
+                    <div className="flex justify-between items-center mt-4 pt-2 border-t border-zinc-850/60 text-[9px] font-mono text-zinc-500">
+                      <span>👤 {task.assignee}</span>
+                      <span>⏳ {task.hours}h</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* DONE */}
+              <div className="bg-zinc-950/20 border border-zinc-850/80 rounded-lg p-4 flex flex-col gap-4 min-h-[250px]">
+                <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 pb-2 border-b border-zinc-900">
+                  <span className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80" />
                     DONE
                   </span>
-                  <span className="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[10px]">2</span>
+                  <span className="px-1.5 bg-zinc-950 border border-zinc-850 rounded text-[9px] text-zinc-500">1</span>
                 </div>
-                <div className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-3 space-y-2 opacity-60">
-                  <h4 className="text-xs font-bold text-zinc-100 line-through">Database schema migrations</h4>
-                  <p className="text-[11px] text-zinc-400">Apply index constraints to user and task relational tables.</p>
-                  <div className="flex justify-between items-center text-[9px] font-mono text-zinc-500 pt-2">
-                    <span>📁 DB</span>
-                    <span className="px-1.5 py-0.5 rounded bg-zinc-950 border border-zinc-800 text-emerald-400">Done</span>
+                {doneTasks.map(task => (
+                  <div key={task.id} className="bg-zinc-900/30 border border-zinc-800/60 p-4 rounded-md flex flex-col justify-between min-h-[110px] hover:translate-y-[-2px] hover:border-zinc-700/80 hover:shadow-lg transition-all duration-200 select-none group cursor-pointer">
+                    <div>
+                      <div className="flex justify-between items-center text-[9px] font-mono mb-2">
+                        <span className="text-zinc-500">{task.id}</span>
+                        <span className={`px-1.5 py-0.2 rounded border text-[8px] font-bold ${priorityColors[task.priority]}`}>{task.priority}</span>
+                      </div>
+                      <h4 className="text-xs font-semibold text-zinc-200 group-hover:text-white transition-colors">{task.title}</h4>
+                    </div>
+                    <div className="flex justify-between items-center mt-4 pt-2 border-t border-zinc-850/60 text-[9px] font-mono text-zinc-500">
+                      <span>👤 {task.assignee}</span>
+                      <span>⏳ {task.hours}h</span>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
+
             </div>
           </motion.div>
         </section>
 
-        {/* === SECTION 4: BENTO GRID MATRIX === */}
+        {/* === SECTION 4: AI COORDINATION SHOWCASE === */}
+        <section id="ai-workspace" className="relative py-32 border-t border-zinc-900/80 overflow-hidden px-6">
+          {/* Extremely subtle violet ambient radial glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] ambient-glow-violet opacity-100 z-0 pointer-events-none" />
+          
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={revealVariants}
+              className="text-center mb-16 relative z-10"
+            >
+              <h2 className="text-xs font-mono tracking-widest text-violet-400 uppercase mb-3">AI Intelligence</h2>
+              <p className="text-3xl font-bold text-white tracking-tight">AI Coordination Workspace</p>
+              <p className="text-sm text-zinc-300 mt-2 max-w-2xl mx-auto leading-relaxed">
+                Automate task break downs, generate summaries, and detect delivery risks natively using contextual workspace metadata.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-12 relative z-10">
+              {/* Left: Tab Selectors */}
+              <div className="lg:col-span-4 flex flex-col gap-3">
+                {[
+                  { id: 'sprint', label: 'AI Sprint Planning', desc: 'Predictive velocity allocations.', icon: Sparkles },
+                  { id: 'tasks', label: 'AI Task Suggestions', desc: 'Automated requirement breakdown.', icon: Cpu },
+                  { id: 'summary', label: 'AI Project Summaries', desc: 'Real-time contextual briefings.', icon: Layers },
+                  { id: 'risks', label: 'AI Risk Detection', desc: 'Early delivery bottleneck warnings.', icon: AlertTriangle }
+                ].map((tab) => {
+                  const Icon = tab.icon;
+                  const isSelected = activeAITab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveAITab(tab.id as any)}
+                      className={`flex items-start text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer hover:scale-[1.01] active:scale-[0.99] ${
+                        isSelected 
+                          ? 'bg-zinc-900/60 border-zinc-700/80 shadow-md text-white' 
+                          : 'bg-zinc-950/40 border-zinc-900/60 text-zinc-400 hover:border-zinc-800 hover:bg-zinc-900/20 hover:text-zinc-200'
+                      }`}
+                    >
+                      <div className={`p-2 rounded-lg mr-4 border ${
+                        isSelected ? 'bg-violet-950/60 border-violet-800 text-violet-400' : 'bg-zinc-900 border-zinc-800 text-zinc-500'
+                      }`}>
+                        <Icon size={16} />
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold font-mono uppercase tracking-wider">{tab.label}</h4>
+                        <p className="text-2xs text-zinc-500 mt-1">{tab.desc}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Right: Tab Visualizer Display */}
+              <div className="lg:col-span-8 bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-6 backdrop-blur-md flex flex-col justify-between min-h-[300px] shadow-2xl relative overflow-hidden">
+                {/* Subtle radial glow inside card for visual depth */}
+                <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none" />
+                
+                <div className="flex items-center justify-between pb-3 border-b border-zinc-800/60 mb-4 z-10">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
+                    <span className="text-[10px] text-zinc-550 font-mono ml-4">nexus-ai-workspace.log</span>
+                  </div>
+                  <span className="text-[9px] font-mono uppercase bg-violet-950/60 border border-violet-800 px-1.5 py-0.5 rounded text-violet-400">
+                    AI ACTIVE
+                  </span>
+                </div>
+
+                <div className="flex-1 font-mono text-zinc-300 text-xs space-y-4 z-10 flex flex-col justify-center">
+                  {activeAITab === 'sprint' && (
+                    <div className="space-y-3">
+                      <div className="text-[10px] text-zinc-550 flex items-center gap-2">
+                        <span>[ENG_VELOCITY_CALC]</span>
+                        <span className="text-emerald-400">READY</span>
+                      </div>
+                      <div className="p-3.5 bg-zinc-950/50 border border-zinc-850 rounded-lg space-y-2.5">
+                        <div className="flex justify-between items-center text-[10px]">
+                          <span className="text-zinc-400">Sprint Target Capacity:</span>
+                          <span className="text-zinc-200">45 Story Points</span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px]">
+                          <span className="text-zinc-400">AI Allocated Tasks:</span>
+                          <span className="text-zinc-200">32 Story Points (Optimal)</span>
+                        </div>
+                        <div className="w-full bg-zinc-900 border border-zinc-800 rounded-full h-2 overflow-hidden mt-1">
+                          <div className="bg-violet-500 h-full w-[72%]" />
+                        </div>
+                        <div className="text-[10px] text-zinc-400 pt-1 leading-relaxed">
+                          AI Prediction: <span className="text-emerald-400 font-semibold">92% Completion Probability</span> based on past 3 sprint velocities.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeAITab === 'tasks' && (
+                    <div className="space-y-3">
+                      <div className="text-[10px] text-zinc-550 flex items-center gap-2">
+                        <span>[GEN_BREAKDOWN_LOOP]</span>
+                        <span>Parent task: "Setup OAuth keyserver"</span>
+                      </div>
+                      <div className="bg-zinc-950/50 border border-zinc-850 rounded-lg p-3.5 space-y-3 text-[10px] text-zinc-400">
+                        <div className="flex items-center gap-2">
+                          <span className="text-emerald-400 font-bold">[✔]</span>
+                          <span>NEXUS-1024: Define JWT encryption scopes (Estimated: 2h)</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-violet-400">[ ]</span>
+                          <span className="text-zinc-200">NEXUS-1025: Implement keyserver rotating validation keys (Estimated: 4h)</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-violet-400">[ ]</span>
+                          <span>NEXUS-1026: Connect dashboard settings UI key generation form (Estimated: 3h)</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeAITab === 'summary' && (
+                    <div className="space-y-3">
+                      <div className="text-[10px] text-zinc-550 flex items-center gap-2">
+                        <span>[BRIEF_COMPILER_V1]</span>
+                        <span>Target: Sprint 4 Active Branch</span>
+                      </div>
+                      <div className="bg-zinc-950/50 border border-zinc-850 rounded-lg p-3.5 text-[10px] leading-relaxed space-y-2 text-zinc-400">
+                        <p>
+                          <strong className="text-white">Active Status Summary:</strong> Sprint progress is trending <span className="text-emerald-400 font-bold">14% ahead of schedule</span>. 
+                          Subsystems are operating normally. 
+                        </p>
+                        <p>
+                          <strong className="text-white">Key Contributors:</strong> 5 commits merged into <code className="text-zinc-300">auth-service/kms-fix</code>. 
+                          No new regressions introduced.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeAITab === 'risks' && (
+                    <div className="space-y-3">
+                      <div className="text-[10px] text-zinc-550 flex items-center gap-2 text-amber-500">
+                        <span>[WARNING_BOT_ENG]</span>
+                        <span>1 critical blocker dependency detected</span>
+                      </div>
+                      <div className="bg-zinc-950/50 border border-amber-900/50 bg-amber-950/5 rounded-lg p-3.5 space-y-2.5 text-[10px]">
+                        <div className="flex items-start gap-2.5">
+                          <span className="text-amber-500 mt-0.5">⚠️</span>
+                          <div>
+                            <p className="text-zinc-200 font-bold">Task Blocked: NEXUS-1025 (Security Audit Logs)</p>
+                            <p className="text-zinc-400 mt-1">Blocked by: NEX-1024. Owner (cholan-kinnera) is currently assigned 4 concurrent tasks.</p>
+                            <p className="text-violet-400 mt-1.5 font-bold">AI Recommendation: Re-allocate NEX-1024 task load to secondary owner to resolve bottleneck.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* === SECTION 5: PLATFORM ARCHITECTURE & STACK SHOWCASE === */}
+        <section id="architecture" className="py-32 bg-zinc-950/40 border-y border-zinc-900">
+          <div className="max-w-7xl mx-auto px-6">
+            
+            {/* Part A: Architecture Stack flows */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={revealVariants}
+              className="text-center mb-16"
+            >
+              <h2 className="text-xs font-mono tracking-widest text-emerald-400 uppercase mb-3">Enterprise Core</h2>
+              <p className="text-3xl font-bold text-white tracking-tight">Platform Stack & Data Pipeline</p>
+              <p className="text-sm text-zinc-300 mt-2 max-w-2xl mx-auto leading-relaxed">
+                Nexus PM operates on a secure, modern stack designed for high responsiveness, concurrent task updates, and robust audit trail storage.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative py-12">
+              {/* Card 1: Frontend */}
+              <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between hover:translate-y-[-2px] hover:border-zinc-700 hover:shadow-lg transition-all duration-200">
+                <div>
+                  <h3 className="text-[10px] font-bold font-mono text-emerald-400 mb-2 uppercase tracking-wider">Frontend Layer</h3>
+                  <p className="text-sm font-bold text-white mb-1">React SPA Client</p>
+                  <p className="text-xs text-zinc-400 leading-relaxed">Modern React application delivering high-performance interfaces, animated workflows, and interactive 3D experiences.</p>
+                </div>
+                <span className="text-[9px] font-mono text-zinc-500 mt-4 block">React 19 • TypeScript • Vite • TailwindCSS • Framer Motion • React Three Fiber</span>
+              </div>
+
+              {/* Card 2: Backend */}
+              <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between hover:translate-y-[-2px] hover:border-zinc-700 hover:shadow-lg transition-all duration-200">
+                <div>
+                  <h3 className="text-[10px] font-bold font-mono text-emerald-400 mb-2 uppercase tracking-wider">Backend API</h3>
+                  <p className="text-sm font-bold text-white mb-1">FastAPI Core</p>
+                  <p className="text-xs text-zinc-400 leading-relaxed">FastAPI-powered asynchronous API layer featuring JWT authentication, AWS SES OTP verification, PostgreSQL persistence, SQLAlchemy ORM, and Alembic migrations.</p>
+                </div>
+                <span className="text-[9px] font-mono text-zinc-500 mt-4 block">FastAPI • JWT • SQLAlchemy • Alembic</span>
+              </div>
+
+              {/* Card 3: Database */}
+              <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between hover:translate-y-[-2px] hover:border-zinc-700 hover:shadow-lg transition-all duration-200">
+                <div>
+                  <h3 className="text-[10px] font-bold font-mono text-emerald-400 mb-2 uppercase tracking-wider">Database Engine</h3>
+                  <p className="text-sm font-bold text-white mb-1">PostgreSQL Database</p>
+                  <p className="text-xs text-zinc-400 leading-relaxed">Enterprise-grade relational storage with ACID-compliant transactions, advanced indexing, JSONB support, and scalable project metadata management.</p>
+                </div>
+                <span className="text-[9px] font-mono text-zinc-500 mt-4 block">PostgreSQL • SQLAlchemy • Alembic</span>
+              </div>
+
+              {/* Card 4: Infrastructure */}
+              <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between hover:translate-y-[-2px] hover:border-zinc-700 hover:shadow-lg transition-all duration-200">
+                <div>
+                  <h3 className="text-[10px] font-bold font-mono text-emerald-400 mb-2 uppercase tracking-wider">Infrastructure</h3>
+                  <p className="text-sm font-bold text-white mb-1">AWS Cloud Infrastructure</p>
+                  <p className="text-xs text-zinc-400 leading-relaxed">Cloud-native services powering email verification, secure object storage, deployment automation, observability, and future containerized workloads.</p>
+                </div>
+                <span className="text-[9px] font-mono text-zinc-500 mt-4 block">AWS • S3 • SES • Cloud</span>
+              </div>
+            </div>
+
+            {/* Part B: Security Framework details */}
+            <div className="pt-24 border-t border-zinc-900/80 mt-16">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={revealVariants}
+                className="text-center mb-16"
+              >
+                <h2 className="text-xs font-mono tracking-widest text-emerald-400 uppercase mb-3">Enterprise Security</h2>
+                <p className="text-3xl font-bold text-white tracking-tight">Security & Infrastructure Framework</p>
+              </motion.div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
+                {/* Card 1: JWT Authentication */}
+                <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Lock size={16} className="text-emerald-400" />
+                      <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">JWT Authentication</h3>
+                    </div>
+                    <p className="text-xs text-zinc-350 leading-relaxed">Encrypted header session handshakes with programmatic user authentication signatures built into core routes.</p>
+                  </div>
+                  <span className="text-[9px] font-mono text-zinc-600 mt-4 block">SHA-256 HMAC encryption</span>
+                </div>
+
+                {/* Card 2: AWS SES OTP */}
+                <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Database size={16} className="text-emerald-400" />
+                      <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">AWS SES OTP</h3>
+                    </div>
+                    <p className="text-xs text-zinc-350 leading-relaxed">Dynamic verification login codes routed securely via automated Amazon Simple Email Service configurations.</p>
+                  </div>
+                  <span className="text-[9px] font-mono text-zinc-600 mt-4 block">2FA One-Time Passwords</span>
+                </div>
+
+                {/* Card 3: Audit Logging */}
+                <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Eye size={16} className="text-emerald-400" />
+                      <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">Audit Logging</h3>
+                    </div>
+                    <p className="text-xs text-zinc-350 leading-relaxed">Immutable state change verification logging. Logs theme changes, task movements, and keyserver connections.</p>
+                  </div>
+                  <span className="text-[9px] font-mono text-zinc-600 mt-4 block">Persistent session audit logs</span>
+                </div>
+
+                {/* Card 4: Role-Based Access */}
+                <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <CheckCircle size={16} className="text-emerald-400" />
+                      <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">Role-Based Access</h3>
+                    </div>
+                    <p className="text-xs text-zinc-355 leading-relaxed">Granular permissions restricting actions across projects and admin configurations dynamically per role classification.</p>
+                  </div>
+                  <span className="text-[9px] font-mono text-zinc-600 mt-4 block">RBAC authorization checks</span>
+                </div>
+
+                {/* Card 5: Encrypted Storage */}
+                <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Database size={16} className="text-emerald-400" />
+                      <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">Encrypted Storage</h3>
+                    </div>
+                    <p className="text-xs text-zinc-355 leading-relaxed">Core file storage buckets encrypted using custom vaults, preventing access to credentials and active assets.</p>
+                  </div>
+                  <span className="text-[9px] font-mono text-zinc-600 mt-4 block">AES-256 asset encryption</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* === SECTION 6: BENTO MATRIX OVERVIEW === */}
         <section id="features" className="py-32 px-6 max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
@@ -433,7 +781,7 @@ export default function Landing3D() {
                 <Layers size={16} className="text-violet-400" />
               </div>
               <h3 className="text-lg font-semibold text-zinc-50 mb-2">Automated Cloud Pipelines</h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">Secure programmatic execution loops monitoring tasks and triggering updates via localized cloud transaction blocks instantly.</p>
+              <p className="text-sm text-zinc-300 leading-relaxed">Secure programmatic execution loops monitoring tasks and triggering updates via localized cloud transaction blocks instantly.</p>
             </motion.div>
 
             {/* Bento Card 2: Interactive Kanban Matrix */}
@@ -448,7 +796,7 @@ export default function Landing3D() {
                 <Terminal size={16} className="text-violet-400" />
               </div>
               <h3 className="text-lg font-semibold text-zinc-50 mb-2">Interactive Kanban Matrix</h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">Micro-interactions wired into a strict metadata index layer. Fluid drag motions with real-time story point calculation loops.</p>
+              <p className="text-sm text-zinc-300 leading-relaxed">Micro-interactions wired into a strict metadata index layer. Fluid drag motions with real-time story point calculation loops.</p>
             </motion.div>
 
             {/* Bento Card 3: Asynchronous Security Logs */}
@@ -463,256 +811,12 @@ export default function Landing3D() {
                 <Shield size={16} className="text-violet-400" />
               </div>
               <h3 className="text-lg font-semibold text-zinc-50 mb-2">Asynchronous Security Logs</h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">Cryptographic handshake monitoring verifying users via live token pipelines and reflecting active audit metrics natively.</p>
+              <p className="text-sm text-zinc-300 leading-relaxed">Cryptographic handshake monitoring verifying users via live token pipelines and reflecting active audit metrics natively.</p>
             </motion.div>
           </div>
         </section>
 
-        {/* === SECTION 5: PLATFORM ARCHITECTURE, ENTERPRISE SECURITY & AI WORKSPACE === */}
-        <section id="architecture" className="py-32 bg-zinc-950/40 border-y border-zinc-900">
-          <div className="max-w-7xl mx-auto px-6">
-            
-            {/* Part A: Enterprise Security Showcase */}
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={revealVariants}
-              className="text-center mb-16"
-            >
-              <h2 className="text-xs font-mono tracking-widest text-emerald-400 uppercase mb-3">Enterprise Core</h2>
-              <p className="text-3xl font-bold text-white tracking-tight">Security & Infrastructure Framework</p>
-              <p className="text-sm text-zinc-400 mt-2 max-w-md mx-auto">Engineered to secure production data using modern token systems and end-to-end cryptographic logging.</p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
-              {/* Card 1: JWT Authentication */}
-              <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <Lock size={16} className="text-emerald-400" />
-                    <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">JWT Authentication</h3>
-                  </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed">Encrypted header session handshakes with programmatic user authentication signatures built into core services.</p>
-                </div>
-                <span className="text-[10px] font-mono text-zinc-600 mt-4 block">SHA-256 HMAC encryption</span>
-              </div>
-
-              {/* Card 2: AWS SES OTP */}
-              <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <Database size={16} className="text-emerald-400" />
-                    <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">AWS SES OTP</h3>
-                  </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed">Dynamic verification login codes routed securely via automated Amazon Simple Email Service configurations.</p>
-                </div>
-                <span className="text-[10px] font-mono text-zinc-600 mt-4 block">2FA One-Time Passwords</span>
-              </div>
-
-              {/* Card 3: Audit Logging */}
-              <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <Eye size={16} className="text-emerald-400" />
-                    <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">Audit Logging</h3>
-                  </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed">Immutable state change verification logging. Logs theme changes, task movements, and keyserver connections.</p>
-                </div>
-                <span className="text-[10px] font-mono text-zinc-600 mt-4 block">Persistent session audit logs</span>
-              </div>
-
-              {/* Card 4: Role-Based Access */}
-              <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <CheckCircle size={16} className="text-emerald-400" />
-                    <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">Role-Based Access</h3>
-                  </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed">Granular permissions restricting actions across projects and admin configurations dynamically per role classification.</p>
-                </div>
-                <span className="text-[10px] font-mono text-zinc-600 mt-4 block">RBAC authorization checks</span>
-              </div>
-
-              {/* Card 5: Encrypted Storage */}
-              <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <Database size={16} className="text-emerald-400" />
-                    <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">Encrypted Storage</h3>
-                  </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed">Core file storage buckets encrypted using custom vaults, preventing access to credentials and active assets.</p>
-                </div>
-                <span className="text-[10px] font-mono text-zinc-600 mt-4 block">AES-256 asset encryption</span>
-              </div>
-            </div>
-
-            {/* Part B: AI Workspace Section */}
-            <div id="ai-workspace" className="relative pt-24 border-t border-zinc-900/80 overflow-hidden">
-              {/* Extremely subtle violet ambient radial glow */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] ambient-glow-violet opacity-100 z-0 pointer-events-none" />
-              
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={revealVariants}
-                className="text-center mb-16 relative z-10"
-              >
-                <h2 className="text-xs font-mono tracking-widest text-violet-400 uppercase mb-3">AI Engine</h2>
-                <p className="text-3xl font-bold text-white tracking-tight">AI Coordination Workspace</p>
-                <p className="text-sm text-zinc-300 mt-2 max-w-md mx-auto leading-relaxed">
-                  Automate task summaries and detect project delivery risks dynamically using contextual intelligence.
-                </p>
-              </motion.div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-12 relative z-10">
-                {/* Left: Tab Selectors */}
-                <div className="lg:col-span-4 flex flex-col gap-3">
-                  {[
-                    { id: 'sprint', label: 'AI Sprint Planning', desc: 'Predictive velocity allocations.', icon: Sparkles },
-                    { id: 'tasks', label: 'AI Task Suggestions', desc: 'Automated requirement breakdown.', icon: Cpu },
-                    { id: 'summary', label: 'AI Project Summaries', desc: 'Real-time contextual briefings.', icon: Layers },
-                    { id: 'risks', label: 'AI Risk Detection', desc: 'Early delivery bottleneck warnings.', icon: AlertTriangle }
-                  ].map((tab) => {
-                    const Icon = tab.icon;
-                    const isSelected = activeAITab === tab.id;
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => setActiveAITab(tab.id as any)}
-                        className={`flex items-start text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer hover:scale-[1.01] active:scale-[0.99] ${
-                          isSelected 
-                            ? 'bg-zinc-900/60 border-zinc-700/80 shadow-md text-white' 
-                            : 'bg-zinc-950/40 border-zinc-900/60 text-zinc-400 hover:border-zinc-800 hover:bg-zinc-900/20 hover:text-zinc-200'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-lg mr-4 border ${
-                          isSelected ? 'bg-violet-950/60 border-violet-800 text-violet-400' : 'bg-zinc-900 border-zinc-800 text-zinc-500'
-                        }`}>
-                          <Icon size={16} />
-                        </div>
-                        <div>
-                          <h4 className="text-xs font-bold font-mono uppercase tracking-wider">{tab.label}</h4>
-                          <p className="text-2xs text-zinc-500 mt-1">{tab.desc}</p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Right: Tab Visualizer Display */}
-                <div className="lg:col-span-8 bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-6 backdrop-blur-md flex flex-col justify-between min-h-[300px] shadow-2xl relative overflow-hidden">
-                  {/* Subtle radial glow inside card for visual depth */}
-                  <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none" />
-                  
-                  <div className="flex items-center justify-between pb-3 border-b border-zinc-800/60 mb-4 z-10">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
-                      <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
-                      <span className="w-2.5 h-2.5 rounded-full bg-zinc-800"></span>
-                      <span className="text-[10px] text-zinc-500 font-mono ml-4">nexus-ai-workspace.log</span>
-                    </div>
-                    <span className="text-[9px] font-mono uppercase bg-violet-950/60 border border-violet-800 px-1.5 py-0.5 rounded text-violet-400">
-                      AI ACTIVE
-                    </span>
-                  </div>
-
-                  <div className="flex-1 font-mono text-zinc-300 text-xs space-y-4 z-10 flex flex-col justify-center">
-                    {activeAITab === 'sprint' && (
-                      <div className="space-y-3">
-                        <div className="text-[10px] text-zinc-500 flex items-center gap-2">
-                          <span>[ENG_VELOCITY_CALC]</span>
-                          <span className="text-emerald-400">READY</span>
-                        </div>
-                        <div className="p-3.5 bg-zinc-950/50 border border-zinc-850 rounded-lg space-y-2.5">
-                          <div className="flex justify-between items-center text-[10px]">
-                            <span className="text-zinc-400">Sprint Target Capacity:</span>
-                            <span className="text-zinc-200">45 Story Points</span>
-                          </div>
-                          <div className="flex justify-between items-center text-[10px]">
-                            <span className="text-zinc-400">AI Allocated Tasks:</span>
-                            <span className="text-zinc-200">32 Story Points (Optimal)</span>
-                          </div>
-                          <div className="w-full bg-zinc-900 border border-zinc-800 rounded-full h-2 overflow-hidden mt-1">
-                            <div className="bg-violet-500 h-full w-[72%]" />
-                          </div>
-                          <div className="text-[10px] text-zinc-400 pt-1 leading-relaxed">
-                            AI Prediction: <span className="text-emerald-400 font-semibold">92% Completion Probability</span> based on past 3 sprint velocities.
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {activeAITab === 'tasks' && (
-                      <div className="space-y-3">
-                        <div className="text-[10px] text-zinc-500 flex items-center gap-2">
-                          <span>[GEN_BREAKDOWN_LOOP]</span>
-                          <span>Parent task: "Setup OAuth keyserver"</span>
-                        </div>
-                        <div className="bg-zinc-950/50 border border-zinc-850 rounded-lg p-3.5 space-y-3 text-[10px] text-zinc-400">
-                          <div className="flex items-center gap-2">
-                            <span className="text-emerald-400 font-bold">[✔]</span>
-                            <span>NEXUS-304: Define JWT encryption scopes (Estimated: 2h)</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-violet-400">[ ]</span>
-                            <span className="text-zinc-200">NEXUS-305: Implement keyserver rotating validation keys (Estimated: 4h)</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-violet-400">[ ]</span>
-                            <span>NEXUS-306: Connect dashboard settings UI key generation form (Estimated: 3h)</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {activeAITab === 'summary' && (
-                      <div className="space-y-3">
-                        <div className="text-[10px] text-zinc-500 flex items-center gap-2">
-                          <span>[BRIEF_COMPILER_V1]</span>
-                          <span>Target: Sprint 4 Active Branch</span>
-                        </div>
-                        <div className="bg-zinc-950/50 border border-zinc-850 rounded-lg p-3.5 text-[10px] leading-relaxed space-y-2 text-zinc-400">
-                          <p>
-                            <strong className="text-white">Active Status Summary:</strong> Sprint progress is trending <span className="text-emerald-400 font-bold">14% ahead of schedule</span>. 
-                            Subsystems are operating normally. 
-                          </p>
-                          <p>
-                            <strong className="text-white">Key Contributors:</strong> 5 commits merged into <code className="text-zinc-300">auth-service/kms-fix</code>. 
-                            No new regressions introduced.
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    {activeAITab === 'risks' && (
-                      <div className="space-y-3">
-                        <div className="text-[10px] text-zinc-500 flex items-center gap-2 text-amber-500">
-                          <span>[WARNING_BOT_ENG]</span>
-                          <span>1 critical blocker dependency detected</span>
-                        </div>
-                        <div className="bg-zinc-950/50 border border-amber-900/50 bg-amber-950/5 rounded-lg p-3.5 space-y-2.5 text-[10px]">
-                          <div className="flex items-start gap-2.5">
-                            <span className="text-amber-500 mt-0.5">⚠️</span>
-                            <div>
-                              <p className="text-zinc-200 font-bold">Task Blocked: NEXUS-305 (Implement keyserver rotating keys)</p>
-                              <p className="text-zinc-400 mt-1">Blocked by: NEXUS-304. Owner (cholan-kinnera) is currently assigned 4 concurrent tasks.</p>
-                              <p className="text-violet-400 mt-1.5 font-bold">AI Recommendation: Re-allocate NEXUS-304 task load to secondary owner to resolve bottleneck.</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* === SECTION 6: CTA FOOTER BLOCK === */}
+        {/* === SECTION 7: CTA FOOTER BLOCK === */}
         <section className="py-36 px-6 relative overflow-hidden">
           <motion.div 
             initial="hidden"
@@ -724,13 +828,13 @@ export default function Landing3D() {
             <h2 className="text-4xl sm:text-6xl font-bold tracking-tight text-white mb-6">
               Ready to manage the future?
             </h2>
-            <p className="text-sm sm:text-base text-zinc-400 mb-10 max-w-lg mx-auto font-mono">
+            <p className="text-sm sm:text-base md:text-lg text-zinc-300 mb-10 max-w-2xl mx-auto leading-relaxed">
               Join thousands of high-performing engineering teams using Nexus PM to secure and accelerate their release pipelines.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <Link 
                 to="/auth"
-                className="h-12 px-8 bg-white hover:bg-zinc-200 text-zinc-950 font-semibold rounded-full flex items-center justify-center transition-all duration-200 shadow-md text-sm gap-2"
+                className="h-12 px-8 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-md flex items-center justify-center transition-all duration-200 hover:scale-[1.01] active:scale-[0.99] shadow-md shadow-violet-600/10 text-sm gap-2"
               >
                 <span>Get Started — It's Free</span>
                 <ArrowRight size={14} />
@@ -752,7 +856,7 @@ export default function Landing3D() {
                 NEXUS <span className="text-zinc-500">PM</span>
               </span>
             </div>
-            <p className="text-[10px] text-zinc-650 font-mono">
+            <p className="text-[10px] text-zinc-600 font-mono">
               &copy; 2026 Nexus PM. Built for engineering teams.
             </p>
           </div>

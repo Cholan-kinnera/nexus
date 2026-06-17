@@ -42,12 +42,14 @@ export default function SecurityLogsPage() {
         className="max-w-6xl mx-auto space-y-8"
       >
         {/* Header */}
-        <div className="flex justify-between items-center pb-2">
-          <div>
+        <div className="relative flex justify-between items-center pb-2">
+          {/* Ambient header glow */}
+          <div className="absolute -left-20 -top-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none z-0" />
+          <div className="z-10 w-full max-w-5xl">
             <h1 className="text-4xl font-bold text-zinc-100">
               Security Audit Logs
             </h1>
-            <p className="text-zinc-400 mt-2 text-sm font-sans">
+            <p className="text-zinc-300 mt-2 text-sm font-sans max-w-2xl leading-relaxed">
               Track authentication transactions, API handshakes, and access audits.
             </p>
           </div>
@@ -55,7 +57,7 @@ export default function SecurityLogsPage() {
 
         {/* Empty State / Audit Console */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
+
           {/* Left Columns - Beautiful Empty State */}
           <div className="lg:col-span-2">
             <motion.div
@@ -69,18 +71,17 @@ export default function SecurityLogsPage() {
               </div>
 
               <h3 className="text-lg font-bold text-zinc-200 mb-2">No security incidents detected</h3>
-              <p className="text-xs text-zinc-500 max-w-sm leading-relaxed mb-8">
+              <p className="text-xs text-zinc-300 max-w-lg leading-relaxed mb-8">
                 Your workspace is secured. Active access control audits and JWT token verification systems are operating normally.
               </p>
 
               <button
                 onClick={handleScan}
                 disabled={isScanning}
-                className={`px-4 py-2 rounded-lg text-xs font-semibold font-mono flex items-center gap-1.5 transition-all shadow-sm ${
-                  isScanning 
-                    ? "bg-zinc-850 border border-zinc-800 text-zinc-500 cursor-not-allowed" 
+                className={`px-4 py-2 rounded-lg text-xs font-semibold font-mono flex items-center gap-1.5 transition-all shadow-sm ${isScanning
+                    ? "bg-zinc-850 border border-zinc-800 text-zinc-500 cursor-not-allowed"
                     : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950 cursor-pointer"
-                }`}
+                  }`}
               >
                 <Play size={12} fill="currentColor" />
                 <span>{isScanning ? "Scanning System..." : "Run Security Scan"}</span>
@@ -90,7 +91,7 @@ export default function SecurityLogsPage() {
 
           {/* Right Column - Scan Console */}
           <div className="lg:col-span-1">
-            <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-xl p-6 shadow-md flex flex-col justify-between h-full min-h-[300px]">
+            <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md flex flex-col justify-between h-full min-h-[300px]">
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <Terminal size={14} />
@@ -121,7 +122,7 @@ export default function SecurityLogsPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="mt-4 p-3 bg-zinc-950 border border-zinc-850/85 rounded-lg text-emerald-400 text-[10px] font-mono flex items-center gap-2 shadow-inner"
+                    className="mt-4 p-3 bg-zinc-950 border border-zinc-800 rounded-lg text-emerald-400 text-[10px] font-mono flex items-center gap-2 shadow-inner"
                   >
                     <CheckCircle2 size={12} />
                     <span>Audit complete. system status: SECURE.</span>

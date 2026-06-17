@@ -5,8 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from db.database import get_db
 from dependencies.auth import get_current_user
 from models.user import User
+from typing import List
 from schemas.user import UserResponse, UserUpdate
-
+from schemas.project import ProjectResponse
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
@@ -72,5 +73,46 @@ async def update_current_user_info(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error updating user information",
+        )
+
+@router.get("/me/projects", response_model=List[ProjectResponse], tags=["Users"])
+async def get_my_projects(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    from services.project_member_service import get_user_projects
+    projects = await get_user_projects(db, current_user.id)
+    return projects
+
+
+@router.get("/lookup", response_model=UserResponse, tags=["Users"])
+async def lookup_user_by_email(
+    email: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+) -> UserResponse:
+    """Lookup a user by email address."""
+    try:
+        result = await db.execute(select(User).where(User.email == email))
+        user = result.scalar_one_or_none()
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found with this email"
+            )
+        return UserResponse(
+            id=user.id,
+            email=user.email,
+            full_name=user.full_name,
+            role=user.role,
+            created_at=user.created_at if hasattr(user, "created_at") else None
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error(f"Error looking up user by email {email}: {exc}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error looking up user"
         )
 

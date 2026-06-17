@@ -14,6 +14,9 @@ from dependencies.auth import get_current_user
 from core.config import settings
 from api.routes import tasks
 from api.routes import comments
+from api.routes import activity_logs
+from api.routes import notifications
+import models
 
 
 
@@ -31,9 +34,36 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+async def cleanup_expired_otps_job():
+    import asyncio
+    from datetime import datetime
+    from sqlalchemy import delete
+    from db.database import AsyncSessionLocal
+    from models.password_reset_otp import PasswordResetOTP
+
+    while True:
+        try:
+            logger.info("Running daily cleanup of expired password reset OTPs...")
+            async with AsyncSessionLocal() as session:
+                async with session.begin():
+                    stmt = delete(PasswordResetOTP).where(PasswordResetOTP.expires_at < datetime.utcnow())
+                    res = await session.execute(stmt)
+                    logger.info(f"Cleaned up {res.rowcount} expired OTPs.")
+            # Sleep for 24 hours
+            await asyncio.sleep(24 * 3600)
+        except asyncio.CancelledError:
+            logger.info("Cleanup job cancelled.")
+            break
+        except Exception as e:
+            logger.error(f"Error in cleanup_expired_otps_job: {e}")
+            await asyncio.sleep(3600)  # retry in an hour on error
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager for startup and shutdown events."""
+    import asyncio
+    cleanup_task = asyncio.create_task(cleanup_expired_otps_job())
     try:
         logger.info("Starting up Nexus PM API...")
         async with engine.begin() as conn:
@@ -45,6 +75,7 @@ async def lifespan(app: FastAPI):
         raise
     finally:
         logger.info("Shutting down Nexus PM API...")
+        cleanup_task.cancel()
         await engine.dispose()
 
 
@@ -111,6 +142,8 @@ async def root() -> Dict[str, Any]:
     }
 
 
+from api.routes import project_members
+
 app.include_router(
     auth_router,
     prefix="/api/auth",
@@ -121,24 +154,35 @@ app.include_router(
     users.router,
     prefix="/api/users",
     tags=["Users"],
-    dependencies=[Depends(get_current_user)],
 )
 
 app.include_router(
     projects.router,
     prefix="/api/projects",
     tags=["Projects"],
-    dependencies=[Depends(get_current_user)],
 )
 
+app.include_router(
+    project_members.router,
+    prefix="/api/projects",
+    tags=["Project Members"],
+)
 
 app.include_router(
     tasks.router,
     prefix="/api/tasks",
     tags=["Tasks"],
-    dependencies=[Depends(get_current_user)],
 )
 app.include_router(comments.router)
+app.include_router(activity_logs.router)
+app.include_router(notifications.router)
+
+from api.routes import analytics
+app.include_router(
+    analytics.router,
+    prefix="/api/analytics",
+    tags=["Analytics"],
+)
 
 
 
