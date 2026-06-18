@@ -67,8 +67,9 @@ export interface TaskAttachment {
 }
 
 export const getTaskAttachments = async (taskId: number): Promise<TaskAttachment[]> => {
-  const response = await api.get<TaskAttachment[]>(`/tasks/${taskId}/attachments`);
-  return response.data;
+  const response = await api.get<any>(`/tasks/${taskId}/attachments`);
+  const data = response.data;
+  return Array.isArray(data) ? data : (Array.isArray(data?.items) ? data.items : []);
 };
 
 export const uploadTaskAttachment = async (

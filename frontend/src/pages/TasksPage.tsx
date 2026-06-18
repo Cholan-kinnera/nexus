@@ -12,6 +12,7 @@ import type { TaskAttachment } from "../services/taskService";
 import { getComments, createComment } from "../services/commentService";
 import { getProjects } from "../services/projectService";
 import DashboardLayout from "../layouts/DashboardLayout";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import { getProjectMembers } from "../services/projectMemberService";
@@ -445,6 +446,10 @@ function TaskModal({
   const currentUserRole = currentUserMember ? currentUserMember.role : "viewer";
   const isViewer = currentUserRole === "viewer";
 
+  // Defensive array derivations to prevent .map() crashes
+  const safeComments = Array.isArray(comments) ? comments : [];
+  const safeAttachments = Array.isArray(attachments) ? attachments : [];
+
   const handlePostComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newComment.trim() || isViewer) return;
@@ -559,12 +564,12 @@ function TaskModal({
             <div className="mt-6 pt-4 border-t border-zinc-850">
               <h4 className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-3 flex items-center gap-1.5 font-bold">
                 <Paperclip size={12} className="text-zinc-500" />
-                Attachments ({attachments.length})
+                Attachments ({safeAttachments.length})
               </h4>
 
-              {attachments.length > 0 ? (
+              {safeAttachments.length > 0 ? (
                 <div className="grid grid-cols-1 gap-2 mb-4">
-                  {attachments.map((att) => {
+                  {safeAttachments.map((att) => {
                     const timeStr = new Date(att.created_at).toLocaleDateString(undefined, {
                       month: "short",
                       day: "numeric",
@@ -683,7 +688,7 @@ function TaskModal({
             </div>
 
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
-              {comments.map((comment) => {
+              {safeComments.map((comment) => {
                 const info = getCommenterInfo(comment.user_id);
                 const timeStr = new Date(comment.created_at).toLocaleTimeString(undefined, {
                   hour: "2-digit",
@@ -717,7 +722,7 @@ function TaskModal({
                 );
               })}
 
-              {comments.length === 0 && (
+              {safeComments.length === 0 && (
                 <div className="text-center py-12 text-zinc-600 italic text-[11px] font-mono">
                   No comments yet.
                 </div>
@@ -1129,16 +1134,18 @@ export function TasksPage() {
         )}
 
         {/* Task Detail Modal */}
-        <TaskModal
-          task={selectedModalTask}
-          isOpen={modalOpen}
-          onClose={() => {
-            setModalOpen(false);
-            setSelectedModalTask(null);
-            loadTasks();
-          }}
-          getProjectName={getProjectName}
-        />
+        <ErrorBoundary>
+          <TaskModal
+            task={selectedModalTask}
+            isOpen={modalOpen}
+            onClose={() => {
+              setModalOpen(false);
+              setSelectedModalTask(null);
+              loadTasks();
+            }}
+            getProjectName={getProjectName}
+          />
+        </ErrorBoundary>
       </motion.div>
     </DashboardLayout>
   );

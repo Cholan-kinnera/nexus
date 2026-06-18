@@ -3,6 +3,7 @@ import logging
 import uuid
 import mimetypes
 from typing import Optional, Tuple
+from datetime import datetime
 import boto3
 from botocore.client import Config
 from botocore.exceptions import ClientError
@@ -57,6 +58,17 @@ class StorageService:
             self.bucket_name
         ])
 
+        # ── Startup Diagnostics ──────────────────────────────────────────
+        logger.info("=" * 60)
+        logger.info("STORAGE SERVICE STARTUP DIAGNOSTICS")
+        logger.info("=" * 60)
+        logger.info(f"  R2_ACCOUNT_ID    : {'[SET]' if self.account_id else '[EMPTY]'}")
+        logger.info(f"  R2_ACCESS_KEY_ID : {'[SET]' if self.access_key_id else '[EMPTY]'}")
+        logger.info(f"  R2_SECRET_ACCESS : {'[SET]' if self.secret_access_key else '[EMPTY]'}")
+        logger.info(f"  R2_BUCKET_NAME   : {self.bucket_name or '[EMPTY]'}")
+        logger.info(f"  R2_PUBLIC_URL    : {self.public_url or '[EMPTY]'}")
+        logger.info(f"  MODE             : {'☁️  CLOUDFLARE R2 (LIVE)' if not self.use_simulator else '💾 LOCAL SIMULATOR'}")
+
         if self.use_simulator:
             logger.warning(
                 "Cloudflare R2 environment variables are not fully configured. "
@@ -68,16 +80,78 @@ class StorageService:
                 "local_storage_uploads"
             )
             os.makedirs(self.local_storage_path, exist_ok=True)
+            logger.info(f"  LOCAL PATH       : {self.local_storage_path}")
+            logger.info(f"  CONNECTION TEST  : SKIPPED (simulator mode)")
         else:
             # Initialize S3 client for Cloudflare R2
+            endpoint_url = f"https://{self.account_id}.r2.cloudflarestorage.com"
             self.s3_client = boto3.client(
                 service_name="s3",
-                endpoint_url=f"https://{self.account_id}.r2.cloudflarestorage.com",
+                endpoint_url=endpoint_url,
                 aws_access_key_id=self.access_key_id,
                 aws_secret_access_key=self.secret_access_key,
                 config=Config(signature_version="s3v4"),
             )
+            logger.info(f"  ENDPOINT URL     : {endpoint_url}")
+
+            # Connection test — try to list objects (max 1) to verify credentials
+            try:
+                self.s3_client.list_objects_v2(
+                    Bucket=self.bucket_name, MaxKeys=1
+                )
+                logger.info(f"  CONNECTION TEST  : ✅ SUCCESS — bucket '{self.bucket_name}' reachable")
+            except ClientError as e:
+                error_code = e.response["Error"]["Code"]
+                logger.error(f"  CONNECTION TEST  : ❌ FAILED — {error_code}: {e}")
+            except Exception as e:
+                logger.error(f"  CONNECTION TEST  : ❌ FAILED — {e}")
+
             logger.info("Cloudflare R2 storage client successfully initialized.")
+
+        logger.info("=" * 60)
+
+
+    def list_files(self) -> list[dict]:
+        """
+        Lists all files in R2 storage (or local simulator).
+        """
+        if self.use_simulator:
+            files_list = []
+            try:
+                for filename in os.listdir(self.local_storage_path):
+                    filepath = os.path.join(self.local_storage_path, filename)
+                    if os.path.isfile(filepath):
+                        stat = os.stat(filepath)
+                        mime_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+                        files_list.append({
+                            "file_key": filename,
+                            "filename": filename,
+                            "size": stat.st_size,
+                            "content_type": mime_type,
+                            "url": self.generate_file_url(filename),
+                            "updated_at": datetime.fromtimestamp(stat.st_mtime).isoformat()
+                        })
+            except Exception as e:
+                logger.error(f"Failed to list files in local simulator: {e}")
+            return files_list
+        else:
+            files_list = []
+            try:
+                response = self.s3_client.list_objects_v2(Bucket=self.bucket_name)
+                for obj in response.get("Contents", []):
+                    key = obj["Key"]
+                    mime_type = mimetypes.guess_type(key)[0] or "application/octet-stream"
+                    files_list.append({
+                        "file_key": key,
+                        "filename": key,
+                        "size": obj["Size"],
+                        "content_type": mime_type,
+                        "url": self.generate_file_url(key),
+                        "updated_at": obj["LastModified"].isoformat()
+                    })
+            except Exception as e:
+                logger.error(f"Failed to list files in Cloudflare R2: {e}")
+            return files_list
 
     def validate_file(self, file_data: bytes, file_name: str, content_type: Optional[str] = None) -> Tuple[bool, str]:
         """

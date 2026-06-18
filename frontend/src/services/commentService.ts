@@ -10,7 +10,7 @@ export interface Comment {
 
 export const getComments = async (taskId: number): Promise<Comment[]> => {
   const response = await api.get(`/tasks/${taskId}/comments`);
-  return response.data;
+  return Array.isArray(response.data?.items) ? response.data.items : (Array.isArray(response.data) ? response.data : []);
 };
 
 export const createComment = async (taskId: number, content: string): Promise<Comment> => {

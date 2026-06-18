@@ -66,3 +66,19 @@ async def delete_file(
         "success": True,
         "message": f"File key '{file_key}' was deleted successfully."
     }
+
+@router.get("", status_code=status.HTTP_200_OK)
+async def list_files(
+    current_user: User = Depends(get_current_user),
+):
+    """
+    List all uploaded files in Cloudflare R2 storage (or local simulator).
+    """
+    try:
+        return storage_service.list_files()
+    except Exception as e:
+        logger.error(f"Error occurred during file listing: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to list files: {str(e)}"
+        )
