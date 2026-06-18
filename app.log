@@ -65299,3 +65299,1064 @@ WHERE project_members.user_id = $1::INTEGER OR projects.owner_id = $2::INTEGER O
  LIMIT $3::INTEGER OFFSET $4::INTEGER
 2026-06-18 09:52:22,742 - sqlalchemy.engine.Engine - INFO - [cached since 33.65s ago] (43, 43, 20, 0)
 2026-06-18 09:52:22,744 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:14:02,892 - main - INFO - Starting up Nexus PM API...
+2026-06-18 15:14:02,921 - main - INFO - Running daily cleanup of expired password reset OTPs...
+2026-06-18 15:14:03,360 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-06-18 15:14:03,361 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 15:14:03,414 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-06-18 15:14:03,415 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 15:14:03,424 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-06-18 15:14:03,424 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 15:14:03,428 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:14:03,434 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 15:14:03,436 - sqlalchemy.engine.Engine - INFO - [generated in 0.00152s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 15:14:03,437 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:14:03,440 - sqlalchemy.engine.Engine - INFO - DELETE FROM password_reset_otps WHERE password_reset_otps.expires_at < $1::TIMESTAMP WITH TIME ZONE
+2026-06-18 15:14:03,441 - sqlalchemy.engine.Engine - INFO - [generated in 0.00099s] (datetime.datetime(2026, 6, 18, 9, 44, 2, 922513, tzinfo=datetime.timezone.utc),)
+2026-06-18 15:14:03,500 - main - INFO - Cleaned up 0 expired OTPs.
+2026-06-18 15:14:03,501 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 15:14:03,528 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 15:14:03,529 - sqlalchemy.engine.Engine - INFO - [cached since 0.09533s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 15:14:03,532 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 15:14:03,532 - sqlalchemy.engine.Engine - INFO - [cached since 0.09863s ago] ('tasks', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 15:14:03,535 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 15:14:03,536 - sqlalchemy.engine.Engine - INFO - [cached since 0.1019s ago] ('comments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 15:14:03,538 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 15:14:03,539 - sqlalchemy.engine.Engine - INFO - [cached since 0.1053s ago] ('activity_logs', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 15:14:03,541 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 15:14:03,542 - sqlalchemy.engine.Engine - INFO - [cached since 0.1086s ago] ('notifications', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 15:14:03,545 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 15:14:03,546 - sqlalchemy.engine.Engine - INFO - [cached since 0.1125s ago] ('project_members', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 15:14:03,548 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 15:14:03,549 - sqlalchemy.engine.Engine - INFO - [cached since 0.1154s ago] ('refresh_tokens', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 15:14:03,551 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 15:14:03,552 - sqlalchemy.engine.Engine - INFO - [cached since 0.1183s ago] ('password_reset_otps', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 15:14:03,554 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 15:14:03,555 - sqlalchemy.engine.Engine - INFO - [cached since 0.1213s ago] ('forgot_password_rate_limits', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 15:14:03,557 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 15:14:03,559 - main - INFO - Database tables created successfully
+2026-06-18 15:22:37,742 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:22:37,749 - sqlalchemy.engine.Engine - INFO - SELECT count(forgot_password_rate_limits.id) AS count_1 
+FROM forgot_password_rate_limits 
+WHERE forgot_password_rate_limits.email = $1::VARCHAR AND forgot_password_rate_limits.created_at >= $2::TIMESTAMP WITH TIME ZONE
+2026-06-18 15:22:37,750 - sqlalchemy.engine.Engine - INFO - [generated in 0.00100s] ('kinneracholan.aws@gmail.com', datetime.datetime(2026, 6, 18, 9, 37, 37, 741371, tzinfo=datetime.timezone.utc))
+2026-06-18 15:22:37,800 - sqlalchemy.engine.Engine - INFO - SELECT count(forgot_password_rate_limits.id) AS count_1 
+FROM forgot_password_rate_limits 
+WHERE forgot_password_rate_limits.ip_address = $1::VARCHAR AND forgot_password_rate_limits.created_at >= $2::TIMESTAMP WITH TIME ZONE
+2026-06-18 15:22:37,801 - sqlalchemy.engine.Engine - INFO - [generated in 0.00117s] ('127.0.0.1', datetime.datetime(2026, 6, 18, 8, 52, 37, 798112, tzinfo=datetime.timezone.utc))
+2026-06-18 15:22:37,806 - sqlalchemy.engine.Engine - INFO - INSERT INTO forgot_password_rate_limits (ip_address, email, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::TIMESTAMP WITH TIME ZONE) RETURNING forgot_password_rate_limits.id
+2026-06-18 15:22:37,807 - sqlalchemy.engine.Engine - INFO - [generated in 0.00094s] ('127.0.0.1', 'kinneracholan.aws@gmail.com', datetime.datetime(2026, 6, 18, 9, 52, 37, 806681, tzinfo=datetime.timezone.utc))
+2026-06-18 15:22:37,834 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 15:22:37,838 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:22:37,841 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:22:37,844 - sqlalchemy.engine.Engine - INFO - [generated in 0.00321s] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:22:37,880 - sqlalchemy.engine.Engine - INFO - UPDATE password_reset_otps SET used=$1::BOOLEAN WHERE password_reset_otps.email = $2::VARCHAR AND password_reset_otps.used = false
+2026-06-18 15:22:37,881 - sqlalchemy.engine.Engine - INFO - [generated in 0.00100s] (True, 'kinneracholan.aws@gmail.com')
+2026-06-18 15:22:37,893 - sqlalchemy.engine.Engine - INFO - INSERT INTO password_reset_otps (email, otp_hash, expires_at, used, attempts, created_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::TIMESTAMP WITH TIME ZONE, $4::BOOLEAN, $5::INTEGER, $6::TIMESTAMP WITH TIME ZONE) RETURNING password_reset_otps.id
+2026-06-18 15:22:37,894 - sqlalchemy.engine.Engine - INFO - [generated in 0.00142s] ('kinneracholan.aws@gmail.com', '2b6ce0a0253c6fc2cebdb539be9a65e358d7299403f9465f7be6fbf7f5fbf2b1', datetime.datetime(2026, 6, 18, 9, 57, 37, 890883, tzinfo=datetime.timezone.utc), False, 0, datetime.datetime(2026, 6, 18, 9, 52, 37, 893094, tzinfo=datetime.timezone.utc))
+2026-06-18 15:22:37,905 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 15:22:37,909 - services.auth_service - INFO - Generated password reset OTP for kinneracholan.aws@gmail.com: 806235
+2026-06-18 15:22:42,254 - services.email - INFO - Password reset OTP email successfully sent to kinneracholan.aws@gmail.com via AWS SES.
+2026-06-18 15:23:08,704 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:23:08,707 - sqlalchemy.engine.Engine - INFO - SELECT password_reset_otps.id, password_reset_otps.email, password_reset_otps.otp_hash, password_reset_otps.expires_at, password_reset_otps.used, password_reset_otps.attempts, password_reset_otps.created_at 
+FROM password_reset_otps 
+WHERE password_reset_otps.email = $1::VARCHAR AND password_reset_otps.used = false AND password_reset_otps.expires_at > $2::TIMESTAMP WITH TIME ZONE
+2026-06-18 15:23:08,708 - sqlalchemy.engine.Engine - INFO - [generated in 0.00096s] ('kinneracholan.aws@gmail.com', datetime.datetime(2026, 6, 18, 9, 53, 8, 704140, tzinfo=datetime.timezone.utc))
+2026-06-18 15:23:08,716 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:23:45,676 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:23:45,677 - sqlalchemy.engine.Engine - INFO - SELECT password_reset_otps.id, password_reset_otps.email, password_reset_otps.otp_hash, password_reset_otps.expires_at, password_reset_otps.used, password_reset_otps.attempts, password_reset_otps.created_at 
+FROM password_reset_otps 
+WHERE password_reset_otps.email = $1::VARCHAR AND password_reset_otps.used = false AND password_reset_otps.expires_at > $2::TIMESTAMP WITH TIME ZONE
+2026-06-18 15:23:45,677 - sqlalchemy.engine.Engine - INFO - [cached since 36.97s ago] ('kinneracholan.aws@gmail.com', datetime.datetime(2026, 6, 18, 9, 53, 45, 675686, tzinfo=datetime.timezone.utc))
+2026-06-18 15:23:45,749 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:23:45,750 - sqlalchemy.engine.Engine - INFO - [cached since 67.91s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:23:46,291 - sqlalchemy.engine.Engine - INFO - UPDATE password_reset_otps SET used=$1::BOOLEAN WHERE password_reset_otps.id = $2::INTEGER
+2026-06-18 15:23:46,292 - sqlalchemy.engine.Engine - INFO - [generated in 0.00143s] (True, 6)
+2026-06-18 15:23:46,351 - sqlalchemy.engine.Engine - INFO - UPDATE users SET password=$1::VARCHAR, updated_at=$2::TIMESTAMP WITH TIME ZONE WHERE users.id = $3::INTEGER
+2026-06-18 15:23:46,352 - sqlalchemy.engine.Engine - INFO - [generated in 0.00100s] ('$2b$12$rC1NVkQ.THGUPMFCezC3s.AxJl7QXTX5BGmUO31rUQl8lnhnXDcpC', datetime.datetime(2026, 6, 18, 9, 53, 46, 351070, tzinfo=datetime.timezone.utc), 43)
+2026-06-18 15:23:46,362 - sqlalchemy.engine.Engine - INFO - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-18 15:23:46,363 - sqlalchemy.engine.Engine - INFO - [generated in 0.00098s] (43, 'PASSWORD_RESET', 'user', 43, '{"user_id": 43, "email": "kinneracholan.aws@gmail.com"}', datetime.datetime(2026, 6, 18, 9, 53, 46, 362832, tzinfo=datetime.timezone.utc))
+2026-06-18 15:23:46,418 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 15:23:46,422 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:23:46,425 - sqlalchemy.engine.Engine - INFO - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-18 15:23:46,426 - sqlalchemy.engine.Engine - INFO - [generated in 0.00110s] (107,)
+2026-06-18 15:23:46,439 - services.activity_service - INFO - Activity logged: action=PASSWORD_RESET entity_type=user entity_id=43 user_id=43
+2026-06-18 15:23:46,441 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:05,197 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:05,198 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:05,200 - sqlalchemy.engine.Engine - INFO - [cached since 87.36s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:05,766 - sqlalchemy.engine.Engine - INFO - INSERT INTO refresh_tokens (user_id, token_hash, expires_at, created_at, revoked) VALUES ($1::INTEGER, $2::VARCHAR, $3::TIMESTAMP WITH TIME ZONE, $4::TIMESTAMP WITH TIME ZONE, $5::BOOLEAN) RETURNING refresh_tokens.id
+2026-06-18 15:24:05,768 - sqlalchemy.engine.Engine - INFO - [generated in 0.00238s] (43, 'dce4579b993bb6a21b442f656cc5b43a0727def2467abf82f9a8904ae644d62f', datetime.datetime(2026, 6, 25, 9, 54, 5, 763057, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 18, 9, 54, 5, 766527, tzinfo=datetime.timezone.utc), False)
+2026-06-18 15:24:05,787 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 15:24:05,790 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:05,791 - sqlalchemy.engine.Engine - INFO - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-18 15:24:05,792 - sqlalchemy.engine.Engine - INFO - [cached since 19.43s ago] (43, 'LOGIN_SUCCESS', 'user', 43, '{"user_id": 43, "email": "kinneracholan.aws@gmail.com"}', datetime.datetime(2026, 6, 18, 9, 54, 5, 791863, tzinfo=datetime.timezone.utc))
+2026-06-18 15:24:05,805 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 15:24:05,808 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:05,809 - sqlalchemy.engine.Engine - INFO - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-18 15:24:05,810 - sqlalchemy.engine.Engine - INFO - [cached since 19.39s ago] (108,)
+2026-06-18 15:24:05,813 - services.activity_service - INFO - Activity logged: action=LOGIN_SUCCESS entity_type=user entity_id=43 user_id=43
+2026-06-18 15:24:05,816 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,114 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,116 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,117 - sqlalchemy.engine.Engine - INFO - [cached since 88.28s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,157 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,158 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,159 - sqlalchemy.engine.Engine - INFO - [cached since 88.32s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,214 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER AND notifications.is_read = false
+2026-06-18 15:24:06,215 - sqlalchemy.engine.Engine - INFO - [generated in 0.00152s] (43,)
+2026-06-18 15:24:06,221 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:24:06,222 - sqlalchemy.engine.Engine - INFO - [generated in 0.00103s] (43,)
+2026-06-18 15:24:06,266 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,297 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:24:06,302 - sqlalchemy.engine.Engine - INFO - [generated in 0.00456s] (43,)
+2026-06-18 15:24:06,326 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:24:06,329 - sqlalchemy.engine.Engine - INFO - [generated in 0.00273s] (43,)
+2026-06-18 15:24:06,341 - sqlalchemy.engine.Engine - INFO - SELECT tasks.status, count(*) AS cnt 
+FROM tasks 
+WHERE tasks.project_id IN ($1::INTEGER) GROUP BY tasks.status
+2026-06-18 15:24:06,345 - sqlalchemy.engine.Engine - INFO - [generated in 0.00347s] (44,)
+2026-06-18 15:24:06,366 - sqlalchemy.engine.Engine - INFO - SELECT count(distinct(project_members.user_id)) AS count_1 
+FROM project_members 
+WHERE project_members.project_id IN ($1::INTEGER)
+2026-06-18 15:24:06,367 - sqlalchemy.engine.Engine - INFO - [generated in 0.00150s] (44,)
+2026-06-18 15:24:06,379 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS total, count(*) FILTER (WHERE notifications.is_read = false) AS unread 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER
+2026-06-18 15:24:06,380 - sqlalchemy.engine.Engine - INFO - [generated in 0.00116s] (43,)
+2026-06-18 15:24:06,396 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS total_recent, count(*) FILTER (WHERE activity_logs.created_at >= $1::TIMESTAMP WITH TIME ZONE) AS last_24h, count(*) FILTER (WHERE activity_logs.created_at >= $2::TIMESTAMP WITH TIME ZONE) AS last_7d 
+FROM activity_logs 
+WHERE activity_logs.user_id = $3::INTEGER
+2026-06-18 15:24:06,397 - sqlalchemy.engine.Engine - INFO - [generated in 0.00140s] (datetime.datetime(2026, 6, 17, 9, 54, 6, 390036, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 11, 9, 54, 6, 390036, tzinfo=datetime.timezone.utc), 43)
+2026-06-18 15:24:06,406 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,414 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,417 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,418 - sqlalchemy.engine.Engine - INFO - [cached since 88.58s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,506 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:24:06,507 - sqlalchemy.engine.Engine - INFO - [cached since 0.2855s ago] (43,)
+2026-06-18 15:24:06,513 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,514 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,515 - sqlalchemy.engine.Engine - INFO - [cached since 88.67s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,518 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:24:06,519 - sqlalchemy.engine.Engine - INFO - [cached since 0.2222s ago] (43,)
+2026-06-18 15:24:06,619 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:24:06,620 - sqlalchemy.engine.Engine - INFO - [cached since 0.2942s ago] (43,)
+2026-06-18 15:24:06,622 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,623 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,624 - sqlalchemy.engine.Engine - INFO - [cached since 88.78s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,630 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT notifications.id AS id, notifications.user_id AS user_id, notifications.title AS title, notifications.message AS message, notifications.is_read AS is_read, notifications.metadata AS metadata, notifications.created_at AS created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC) AS anon_1
+2026-06-18 15:24:06,631 - sqlalchemy.engine.Engine - INFO - [generated in 0.00124s] (43,)
+2026-06-18 15:24:06,802 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,803 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,804 - sqlalchemy.engine.Engine - INFO - [cached since 88.96s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,807 - sqlalchemy.engine.Engine - INFO - SELECT tasks.status, count(*) AS cnt 
+FROM tasks 
+WHERE tasks.project_id IN ($1::INTEGER) GROUP BY tasks.status
+2026-06-18 15:24:06,808 - sqlalchemy.engine.Engine - INFO - [cached since 0.4668s ago] (44,)
+2026-06-18 15:24:06,809 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,810 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,811 - sqlalchemy.engine.Engine - INFO - [cached since 88.97s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,814 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,815 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,816 - sqlalchemy.engine.Engine - INFO - [cached since 88.97s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,821 - sqlalchemy.engine.Engine - INFO - SELECT notifications.id, notifications.user_id, notifications.title, notifications.message, notifications.is_read, notifications.metadata, notifications.created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-06-18 15:24:06,823 - sqlalchemy.engine.Engine - INFO - [generated in 0.00143s] (43, 20, 0)
+2026-06-18 15:24:06,827 - sqlalchemy.engine.Engine - INFO - SELECT count(distinct(project_members.user_id)) AS count_1 
+FROM project_members 
+WHERE project_members.project_id IN ($1::INTEGER)
+2026-06-18 15:24:06,828 - sqlalchemy.engine.Engine - INFO - [cached since 0.4618s ago] (44,)
+2026-06-18 15:24:06,835 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT DISTINCT projects.id AS id, projects.title AS title, projects.description AS description, projects.owner_id AS owner_id 
+FROM projects LEFT OUTER JOIN project_members ON projects.id = project_members.project_id 
+WHERE project_members.user_id = $1::INTEGER OR projects.owner_id = $2::INTEGER ORDER BY projects.id DESC) AS anon_1
+2026-06-18 15:24:06,836 - sqlalchemy.engine.Engine - INFO - [generated in 0.00103s] (43, 43)
+2026-06-18 15:24:06,839 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:24:06,840 - sqlalchemy.engine.Engine - INFO - [cached since 0.6188s ago] (43,)
+2026-06-18 15:24:06,843 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER AND notifications.is_read = false
+2026-06-18 15:24:06,843 - sqlalchemy.engine.Engine - INFO - [cached since 0.6299s ago] (43,)
+2026-06-18 15:24:06,846 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS total, count(*) FILTER (WHERE notifications.is_read = false) AS unread 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER
+2026-06-18 15:24:06,847 - sqlalchemy.engine.Engine - INFO - [cached since 0.4684s ago] (43,)
+2026-06-18 15:24:06,859 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,862 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:24:06,863 - sqlalchemy.engine.Engine - INFO - [cached since 0.5659s ago] (43,)
+2026-06-18 15:24:06,865 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:24:06,866 - sqlalchemy.engine.Engine - INFO - [cached since 0.645s ago] (43,)
+2026-06-18 15:24:06,870 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS total_recent, count(*) FILTER (WHERE activity_logs.created_at >= $1::TIMESTAMP WITH TIME ZONE) AS last_24h, count(*) FILTER (WHERE activity_logs.created_at >= $2::TIMESTAMP WITH TIME ZONE) AS last_7d 
+FROM activity_logs 
+WHERE activity_logs.user_id = $3::INTEGER
+2026-06-18 15:24:06,871 - sqlalchemy.engine.Engine - INFO - [cached since 0.476s ago] (datetime.datetime(2026, 6, 17, 9, 54, 6, 869856, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 11, 9, 54, 6, 869856, tzinfo=datetime.timezone.utc), 43)
+2026-06-18 15:24:06,879 - sqlalchemy.engine.Engine - INFO - SELECT DISTINCT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects LEFT OUTER JOIN project_members ON projects.id = project_members.project_id 
+WHERE project_members.user_id = $1::INTEGER OR projects.owner_id = $2::INTEGER ORDER BY projects.id DESC 
+ LIMIT $3::INTEGER OFFSET $4::INTEGER
+2026-06-18 15:24:06,880 - sqlalchemy.engine.Engine - INFO - [generated in 0.00127s] (43, 43, 20, 0)
+2026-06-18 15:24:06,882 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,885 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,886 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,887 - sqlalchemy.engine.Engine - INFO - [cached since 89.05s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,892 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT tasks.id AS id, tasks.title AS title, tasks.description AS description, tasks.status AS status, tasks.priority AS priority, tasks.due_date AS due_date, tasks.project_id AS project_id, tasks.assigned_to AS assigned_to, tasks.created_at AS created_at, tasks.updated_at AS updated_at 
+FROM tasks 
+WHERE tasks.project_id IN ($1::INTEGER) ORDER BY tasks.created_at DESC) AS anon_1
+2026-06-18 15:24:06,893 - sqlalchemy.engine.Engine - INFO - [generated in 0.00120s] (44,)
+2026-06-18 15:24:06,895 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:24:06,896 - sqlalchemy.engine.Engine - INFO - [cached since 0.5989s ago] (43,)
+2026-06-18 15:24:06,899 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,905 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,908 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT notifications.id AS id, notifications.user_id AS user_id, notifications.title AS title, notifications.message AS message, notifications.is_read AS is_read, notifications.metadata AS metadata, notifications.created_at AS created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC) AS anon_1
+2026-06-18 15:24:06,909 - sqlalchemy.engine.Engine - INFO - [cached since 0.2791s ago] (43,)
+2026-06-18 15:24:06,913 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.project_id IN ($3::INTEGER) ORDER BY tasks.created_at DESC 
+ LIMIT $1::INTEGER OFFSET $2::INTEGER
+2026-06-18 15:24:06,914 - sqlalchemy.engine.Engine - INFO - [generated in 0.00132s] (20, 0, 44)
+2026-06-18 15:24:06,923 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT activity_logs.id AS id, activity_logs.user_id AS user_id, activity_logs.action AS action, activity_logs.entity_type AS entity_type, activity_logs.entity_id AS entity_id, activity_logs.metadata AS metadata, activity_logs.created_at AS created_at 
+FROM activity_logs 
+WHERE activity_logs.user_id = $1::INTEGER OR activity_logs.entity_type = $2::VARCHAR AND activity_logs.entity_id IN ($5::INTEGER) OR activity_logs.entity_type = $3::VARCHAR AND activity_logs.user_id = $4::INTEGER ORDER BY activity_logs.created_at DESC) AS anon_1
+2026-06-18 15:24:06,924 - sqlalchemy.engine.Engine - INFO - [generated in 0.00152s] (43, 'project', 'task', 43, 44)
+2026-06-18 15:24:06,928 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,929 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,930 - sqlalchemy.engine.Engine - INFO - [cached since 89.09s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,935 - sqlalchemy.engine.Engine - INFO - SELECT notifications.id, notifications.user_id, notifications.title, notifications.message, notifications.is_read, notifications.metadata, notifications.created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-06-18 15:24:06,936 - sqlalchemy.engine.Engine - INFO - [generated in 0.00132s] (43, 20, 0)
+2026-06-18 15:24:06,940 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,945 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT DISTINCT projects.id AS id, projects.title AS title, projects.description AS description, projects.owner_id AS owner_id 
+FROM projects LEFT OUTER JOIN project_members ON projects.id = project_members.project_id 
+WHERE project_members.user_id = $1::INTEGER OR projects.owner_id = $2::INTEGER ORDER BY projects.id DESC) AS anon_1
+2026-06-18 15:24:06,946 - sqlalchemy.engine.Engine - INFO - [cached since 0.1111s ago] (43, 43)
+2026-06-18 15:24:06,950 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,955 - sqlalchemy.engine.Engine - INFO - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.user_id = $1::INTEGER OR activity_logs.entity_type = $2::VARCHAR AND activity_logs.entity_id IN ($7::INTEGER) OR activity_logs.entity_type = $3::VARCHAR AND activity_logs.user_id = $4::INTEGER ORDER BY activity_logs.created_at DESC 
+ LIMIT $5::INTEGER OFFSET $6::INTEGER
+2026-06-18 15:24:06,956 - sqlalchemy.engine.Engine - INFO - [generated in 0.00132s] (43, 'project', 'task', 43, 20, 0, 44)
+2026-06-18 15:24:06,960 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,961 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,962 - sqlalchemy.engine.Engine - INFO - [cached since 89.12s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,967 - sqlalchemy.engine.Engine - INFO - SELECT DISTINCT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects LEFT OUTER JOIN project_members ON projects.id = project_members.project_id 
+WHERE project_members.user_id = $1::INTEGER OR projects.owner_id = $2::INTEGER ORDER BY projects.id DESC 
+ LIMIT $3::INTEGER OFFSET $4::INTEGER
+2026-06-18 15:24:06,968 - sqlalchemy.engine.Engine - INFO - [generated in 0.00125s] (43, 43, 20, 0)
+2026-06-18 15:24:06,971 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:24:06,972 - sqlalchemy.engine.Engine - INFO - [cached since 0.7506s ago] (43,)
+2026-06-18 15:24:06,976 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,982 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:06,986 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:06,987 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:06,988 - sqlalchemy.engine.Engine - INFO - [cached since 89.15s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:06,993 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:24:06,994 - sqlalchemy.engine.Engine - INFO - [cached since 0.6968s ago] (43,)
+2026-06-18 15:24:06,996 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:24:06,997 - sqlalchemy.engine.Engine - INFO - [cached since 0.7761s ago] (43,)
+2026-06-18 15:24:07,007 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:07,007 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:07,008 - sqlalchemy.engine.Engine - INFO - [cached since 89.17s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:07,011 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:24:07,012 - sqlalchemy.engine.Engine - INFO - [cached since 0.7146s ago] (43,)
+2026-06-18 15:24:07,015 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT activity_logs.id AS id, activity_logs.user_id AS user_id, activity_logs.action AS action, activity_logs.entity_type AS entity_type, activity_logs.entity_id AS entity_id, activity_logs.metadata AS metadata, activity_logs.created_at AS created_at 
+FROM activity_logs 
+WHERE activity_logs.user_id = $1::INTEGER OR activity_logs.entity_type = $2::VARCHAR AND activity_logs.entity_id IN ($5::INTEGER) OR activity_logs.entity_type = $3::VARCHAR AND activity_logs.user_id = $4::INTEGER ORDER BY activity_logs.created_at DESC) AS anon_1
+2026-06-18 15:24:07,017 - sqlalchemy.engine.Engine - INFO - [cached since 0.09471s ago] (43, 'project', 'task', 43, 44)
+2026-06-18 15:24:07,021 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:07,024 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT tasks.id AS id, tasks.title AS title, tasks.description AS description, tasks.status AS status, tasks.priority AS priority, tasks.due_date AS due_date, tasks.project_id AS project_id, tasks.assigned_to AS assigned_to, tasks.created_at AS created_at, tasks.updated_at AS updated_at 
+FROM tasks 
+WHERE tasks.project_id IN ($1::INTEGER) ORDER BY tasks.created_at DESC) AS anon_1
+2026-06-18 15:24:07,025 - sqlalchemy.engine.Engine - INFO - [cached since 0.1332s ago] (44,)
+2026-06-18 15:24:07,030 - sqlalchemy.engine.Engine - INFO - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.user_id = $1::INTEGER OR activity_logs.entity_type = $2::VARCHAR AND activity_logs.entity_id IN ($7::INTEGER) OR activity_logs.entity_type = $3::VARCHAR AND activity_logs.user_id = $4::INTEGER ORDER BY activity_logs.created_at DESC 
+ LIMIT $5::INTEGER OFFSET $6::INTEGER
+2026-06-18 15:24:07,031 - sqlalchemy.engine.Engine - INFO - [generated in 0.00121s] (43, 'project', 'task', 43, 20, 0, 44)
+2026-06-18 15:24:07,038 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:07,044 - sqlalchemy.engine.Engine - INFO - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.project_id IN ($3::INTEGER) ORDER BY tasks.created_at DESC 
+ LIMIT $1::INTEGER OFFSET $2::INTEGER
+2026-06-18 15:24:07,045 - sqlalchemy.engine.Engine - INFO - [generated in 0.00120s] (20, 0, 44)
+2026-06-18 15:24:07,050 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:07,058 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:07,059 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:07,060 - sqlalchemy.engine.Engine - INFO - [cached since 89.22s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:07,066 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:07,068 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:07,069 - sqlalchemy.engine.Engine - INFO - [cached since 89.23s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:07,077 - sqlalchemy.engine.Engine - INFO - SELECT project_members.id, project_members.user_id, users.full_name, users.email, project_members.role, project_members.joined_at, project_members.invited_by 
+FROM project_members JOIN users ON project_members.user_id = users.id 
+WHERE project_members.project_id = $1::INTEGER ORDER BY project_members.joined_at ASC
+2026-06-18 15:24:07,078 - sqlalchemy.engine.Engine - INFO - [generated in 0.00131s] (44,)
+2026-06-18 15:24:07,082 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:07,087 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:24:07,100 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:24:07,102 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:24:07,102 - sqlalchemy.engine.Engine - INFO - [cached since 89.26s ago] ('kinneracholan.aws@gmail.com',)
+2026-06-18 15:24:07,106 - sqlalchemy.engine.Engine - INFO - SELECT project_members.id, project_members.user_id, users.full_name, users.email, project_members.role, project_members.joined_at, project_members.invited_by 
+FROM project_members JOIN users ON project_members.user_id = users.id 
+WHERE project_members.project_id = $1::INTEGER ORDER BY project_members.joined_at ASC
+2026-06-18 15:24:07,107 - sqlalchemy.engine.Engine - INFO - [cached since 0.03055s ago] (44,)
+2026-06-18 15:24:07,113 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:03,793 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:03,797 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.google_id = $1::VARCHAR OR users.email = $2::VARCHAR
+2026-06-18 15:40:03,798 - sqlalchemy.engine.Engine - INFO - [generated in 0.00120s] ('106922502035715144968', 'imcholan.kinnera@gmail.com')
+2026-06-18 15:40:04,273 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (full_name, email, password, role, google_id, auth_provider, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR, $7::TIMESTAMP WITH TIME ZONE, $8::TIMESTAMP WITH TIME ZONE) RETURNING users.id
+2026-06-18 15:40:04,274 - sqlalchemy.engine.Engine - INFO - [generated in 0.00122s] ('Cholan Kinnera', 'imcholan.kinnera@gmail.com', '$2b$12$83MHi6Ti.q0i9Ux66Sgf/Oo0FZU8mbRqjn0fCpz52cnXtzp6EvHHq', 'developer', '106922502035715144968', 'google', datetime.datetime(2026, 6, 18, 10, 10, 4, 273234, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 18, 10, 10, 4, 273258, tzinfo=datetime.timezone.utc))
+2026-06-18 15:40:04,335 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 15:40:04,339 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,340 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-06-18 15:40:04,341 - sqlalchemy.engine.Engine - INFO - [generated in 0.00080s] (52,)
+2026-06-18 15:40:04,346 - sqlalchemy.engine.Engine - INFO - INSERT INTO refresh_tokens (user_id, token_hash, expires_at, created_at, revoked) VALUES ($1::INTEGER, $2::VARCHAR, $3::TIMESTAMP WITH TIME ZONE, $4::TIMESTAMP WITH TIME ZONE, $5::BOOLEAN) RETURNING refresh_tokens.id
+2026-06-18 15:40:04,347 - sqlalchemy.engine.Engine - INFO - [cached since 958.6s ago] (52, '35c413015f177b982a6f9987e427e1d1df50e6814cf927a67b65d7d87892ca69', datetime.datetime(2026, 6, 25, 10, 10, 4, 346059, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 18, 10, 10, 4, 346684, tzinfo=datetime.timezone.utc), False)
+2026-06-18 15:40:04,352 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 15:40:04,355 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,356 - sqlalchemy.engine.Engine - INFO - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-18 15:40:04,357 - sqlalchemy.engine.Engine - INFO - [cached since 978s ago] (52, 'LOGIN_SUCCESS', 'user', 52, '{"user_id": 52, "email": "imcholan.kinnera@gmail.com", "provider": "google"}', datetime.datetime(2026, 6, 18, 10, 10, 4, 356569, tzinfo=datetime.timezone.utc))
+2026-06-18 15:40:04,365 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 15:40:04,368 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,369 - sqlalchemy.engine.Engine - INFO - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-18 15:40:04,370 - sqlalchemy.engine.Engine - INFO - [cached since 977.9s ago] (109,)
+2026-06-18 15:40:04,372 - services.activity_service - INFO - Activity logged: action=LOGIN_SUCCESS entity_type=user entity_id=52 user_id=52
+2026-06-18 15:40:04,375 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,552 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,553 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,553 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,563 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,563 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,564 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,570 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,570 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,571 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,574 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER AND notifications.is_read = false
+2026-06-18 15:40:04,575 - sqlalchemy.engine.Engine - INFO - [cached since 958.4s ago] (52,)
+2026-06-18 15:40:04,577 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,578 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,579 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,581 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,582 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,583 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,595 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:40:04,596 - sqlalchemy.engine.Engine - INFO - [cached since 958.4s ago] (52,)
+2026-06-18 15:40:04,601 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT notifications.id AS id, notifications.user_id AS user_id, notifications.title AS title, notifications.message AS message, notifications.is_read AS is_read, notifications.metadata AS metadata, notifications.created_at AS created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC) AS anon_1
+2026-06-18 15:40:04,602 - sqlalchemy.engine.Engine - INFO - [cached since 958s ago] (52,)
+2026-06-18 15:40:04,605 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT DISTINCT projects.id AS id, projects.title AS title, projects.description AS description, projects.owner_id AS owner_id 
+FROM projects LEFT OUTER JOIN project_members ON projects.id = project_members.project_id 
+WHERE project_members.user_id = $1::INTEGER OR projects.owner_id = $2::INTEGER ORDER BY projects.id DESC) AS anon_1
+2026-06-18 15:40:04,606 - sqlalchemy.engine.Engine - INFO - [cached since 957.8s ago] (52, 52)
+2026-06-18 15:40:04,609 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:40:04,610 - sqlalchemy.engine.Engine - INFO - [cached since 958.4s ago] (52,)
+2026-06-18 15:40:04,613 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,616 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:40:04,617 - sqlalchemy.engine.Engine - INFO - [cached since 958.3s ago] (52,)
+2026-06-18 15:40:04,620 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:40:04,621 - sqlalchemy.engine.Engine - INFO - [cached since 958.3s ago] (52,)
+2026-06-18 15:40:04,623 - sqlalchemy.engine.Engine - INFO - SELECT DISTINCT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects LEFT OUTER JOIN project_members ON projects.id = project_members.project_id 
+WHERE project_members.user_id = $1::INTEGER OR projects.owner_id = $2::INTEGER ORDER BY projects.id DESC 
+ LIMIT $3::INTEGER OFFSET $4::INTEGER
+2026-06-18 15:40:04,624 - sqlalchemy.engine.Engine - INFO - [cached since 957.7s ago] (52, 52, 20, 0)
+2026-06-18 15:40:04,630 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,631 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,632 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,634 - sqlalchemy.engine.Engine - INFO - SELECT notifications.id, notifications.user_id, notifications.title, notifications.message, notifications.is_read, notifications.metadata, notifications.created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-06-18 15:40:04,635 - sqlalchemy.engine.Engine - INFO - [cached since 957.7s ago] (52, 20, 0)
+2026-06-18 15:40:04,638 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,643 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:40:04,644 - sqlalchemy.engine.Engine - INFO - [cached since 958.3s ago] (52,)
+2026-06-18 15:40:04,655 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER AND notifications.is_read = false
+2026-06-18 15:40:04,656 - sqlalchemy.engine.Engine - INFO - [cached since 958.4s ago] (52,)
+2026-06-18 15:40:04,658 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,659 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,663 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS total, count(*) FILTER (WHERE notifications.is_read = false) AS unread 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER
+2026-06-18 15:40:04,664 - sqlalchemy.engine.Engine - INFO - [cached since 958.3s ago] (52,)
+2026-06-18 15:40:04,668 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,668 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,669 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,673 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,677 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,678 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,679 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,682 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,683 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,684 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,687 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS total_recent, count(*) FILTER (WHERE activity_logs.created_at >= $1::TIMESTAMP WITH TIME ZONE) AS last_24h, count(*) FILTER (WHERE activity_logs.created_at >= $2::TIMESTAMP WITH TIME ZONE) AS last_7d 
+FROM activity_logs 
+WHERE activity_logs.user_id = $3::INTEGER
+2026-06-18 15:40:04,688 - sqlalchemy.engine.Engine - INFO - [cached since 958.3s ago] (datetime.datetime(2026, 6, 17, 10, 10, 4, 686489, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 11, 10, 10, 4, 686489, tzinfo=datetime.timezone.utc), 52)
+2026-06-18 15:40:04,690 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:40:04,691 - sqlalchemy.engine.Engine - INFO - [cached since 958.5s ago] (52,)
+2026-06-18 15:40:04,696 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT DISTINCT projects.id AS id, projects.title AS title, projects.description AS description, projects.owner_id AS owner_id 
+FROM projects LEFT OUTER JOIN project_members ON projects.id = project_members.project_id 
+WHERE project_members.user_id = $1::INTEGER OR projects.owner_id = $2::INTEGER ORDER BY projects.id DESC) AS anon_1
+2026-06-18 15:40:04,696 - sqlalchemy.engine.Engine - INFO - [cached since 957.9s ago] (52, 52)
+2026-06-18 15:40:04,699 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:40:04,700 - sqlalchemy.engine.Engine - INFO - [cached since 958.4s ago] (52,)
+2026-06-18 15:40:04,702 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT notifications.id AS id, notifications.user_id AS user_id, notifications.title AS title, notifications.message AS message, notifications.is_read AS is_read, notifications.metadata AS metadata, notifications.created_at AS created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC) AS anon_1
+2026-06-18 15:40:04,703 - sqlalchemy.engine.Engine - INFO - [cached since 958.1s ago] (52,)
+2026-06-18 15:40:04,705 - sqlalchemy.engine.Engine - INFO - SELECT DISTINCT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects LEFT OUTER JOIN project_members ON projects.id = project_members.project_id 
+WHERE project_members.user_id = $1::INTEGER OR projects.owner_id = $2::INTEGER ORDER BY projects.id DESC 
+ LIMIT $3::INTEGER OFFSET $4::INTEGER
+2026-06-18 15:40:04,706 - sqlalchemy.engine.Engine - INFO - [cached since 957.7s ago] (52, 52, 20, 0)
+2026-06-18 15:40:04,709 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,713 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,717 - sqlalchemy.engine.Engine - INFO - SELECT notifications.id, notifications.user_id, notifications.title, notifications.message, notifications.is_read, notifications.metadata, notifications.created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-06-18 15:40:04,718 - sqlalchemy.engine.Engine - INFO - [cached since 957.8s ago] (52, 20, 0)
+2026-06-18 15:40:04,720 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,723 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,724 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,725 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,729 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,793 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:40:04,794 - sqlalchemy.engine.Engine - INFO - [cached since 958.6s ago] (52,)
+2026-06-18 15:40:04,796 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:40:04,797 - sqlalchemy.engine.Engine - INFO - [cached since 958.5s ago] (52,)
+2026-06-18 15:40:04,798 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,799 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,800 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,801 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:40:04,802 - sqlalchemy.engine.Engine - INFO - [cached since 958.5s ago] (52,)
+2026-06-18 15:40:04,805 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS total, count(*) FILTER (WHERE notifications.is_read = false) AS unread 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER
+2026-06-18 15:40:04,805 - sqlalchemy.engine.Engine - INFO - [cached since 958.4s ago] (52,)
+2026-06-18 15:40:04,808 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS total_recent, count(*) FILTER (WHERE activity_logs.created_at >= $1::TIMESTAMP WITH TIME ZONE) AS last_24h, count(*) FILTER (WHERE activity_logs.created_at >= $2::TIMESTAMP WITH TIME ZONE) AS last_7d 
+FROM activity_logs 
+WHERE activity_logs.user_id = $3::INTEGER
+2026-06-18 15:40:04,809 - sqlalchemy.engine.Engine - INFO - [cached since 958.4s ago] (datetime.datetime(2026, 6, 17, 10, 10, 4, 807960, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 11, 10, 10, 4, 807960, tzinfo=datetime.timezone.utc), 52)
+2026-06-18 15:40:04,814 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,815 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:40:04,816 - sqlalchemy.engine.Engine - INFO - [cached since 958.6s ago] (52,)
+2026-06-18 15:40:04,823 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:40:04,824 - sqlalchemy.engine.Engine - INFO - [cached since 958.5s ago] (52,)
+2026-06-18 15:40:04,831 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT activity_logs.id AS id, activity_logs.user_id AS user_id, activity_logs.action AS action, activity_logs.entity_type AS entity_type, activity_logs.entity_id AS entity_id, activity_logs.metadata AS metadata, activity_logs.created_at AS created_at 
+FROM activity_logs 
+WHERE activity_logs.user_id = $1::INTEGER OR activity_logs.entity_type = $2::VARCHAR AND activity_logs.entity_id IN (NULL) AND (1 != 1) OR activity_logs.entity_type = $3::VARCHAR AND activity_logs.user_id = $4::INTEGER ORDER BY activity_logs.created_at DESC) AS anon_1
+2026-06-18 15:40:04,832 - sqlalchemy.engine.Engine - INFO - [cached since 957.9s ago] (52, 'project', 'task', 52)
+2026-06-18 15:40:04,890 - sqlalchemy.engine.Engine - INFO - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.user_id = $1::INTEGER OR activity_logs.entity_type = $2::VARCHAR AND activity_logs.entity_id IN (NULL) AND (1 != 1) OR activity_logs.entity_type = $3::VARCHAR AND activity_logs.user_id = $4::INTEGER ORDER BY activity_logs.created_at DESC 
+ LIMIT $5::INTEGER OFFSET $6::INTEGER
+2026-06-18 15:40:04,891 - sqlalchemy.engine.Engine - INFO - [cached since 957.9s ago] (52, 'project', 'task', 52, 20, 0)
+2026-06-18 15:40:04,896 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,900 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,901 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,902 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,906 - sqlalchemy.engine.Engine - INFO - SELECT project_members.project_id 
+FROM project_members 
+WHERE project_members.user_id = $1::INTEGER
+2026-06-18 15:40:04,907 - sqlalchemy.engine.Engine - INFO - [cached since 958.7s ago] (52,)
+2026-06-18 15:40:04,911 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,912 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,913 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,915 - sqlalchemy.engine.Engine - INFO - SELECT projects.id 
+FROM projects 
+WHERE projects.owner_id = $1::INTEGER
+2026-06-18 15:40:04,916 - sqlalchemy.engine.Engine - INFO - [cached since 958.6s ago] (52,)
+2026-06-18 15:40:04,919 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT activity_logs.id AS id, activity_logs.user_id AS user_id, activity_logs.action AS action, activity_logs.entity_type AS entity_type, activity_logs.entity_id AS entity_id, activity_logs.metadata AS metadata, activity_logs.created_at AS created_at 
+FROM activity_logs 
+WHERE activity_logs.user_id = $1::INTEGER OR activity_logs.entity_type = $2::VARCHAR AND activity_logs.entity_id IN (NULL) AND (1 != 1) OR activity_logs.entity_type = $3::VARCHAR AND activity_logs.user_id = $4::INTEGER ORDER BY activity_logs.created_at DESC) AS anon_1
+2026-06-18 15:40:04,919 - sqlalchemy.engine.Engine - INFO - [cached since 958s ago] (52, 'project', 'task', 52)
+2026-06-18 15:40:04,922 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,925 - sqlalchemy.engine.Engine - INFO - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.user_id = $1::INTEGER OR activity_logs.entity_type = $2::VARCHAR AND activity_logs.entity_id IN (NULL) AND (1 != 1) OR activity_logs.entity_type = $3::VARCHAR AND activity_logs.user_id = $4::INTEGER ORDER BY activity_logs.created_at DESC 
+ LIMIT $5::INTEGER OFFSET $6::INTEGER
+2026-06-18 15:40:04,926 - sqlalchemy.engine.Engine - INFO - [cached since 957.9s ago] (52, 'project', 'task', 52, 20, 0)
+2026-06-18 15:40:04,930 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:04,943 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:04,944 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:04,945 - sqlalchemy.engine.Engine - INFO - [cached since 1047s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:04,949 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:09,572 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:09,572 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:09,573 - sqlalchemy.engine.Engine - INFO - [cached since 1052s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:09,576 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:09,577 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:09,578 - sqlalchemy.engine.Engine - INFO - [cached since 1052s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:09,580 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER AND notifications.is_read = false
+2026-06-18 15:40:09,581 - sqlalchemy.engine.Engine - INFO - [cached since 963.4s ago] (52,)
+2026-06-18 15:40:09,583 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT notifications.id AS id, notifications.user_id AS user_id, notifications.title AS title, notifications.message AS message, notifications.is_read AS is_read, notifications.metadata AS metadata, notifications.created_at AS created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC) AS anon_1
+2026-06-18 15:40:09,584 - sqlalchemy.engine.Engine - INFO - [cached since 963s ago] (52,)
+2026-06-18 15:40:09,586 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:09,589 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:09,590 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:09,590 - sqlalchemy.engine.Engine - INFO - [cached since 1052s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:09,592 - sqlalchemy.engine.Engine - INFO - SELECT notifications.id, notifications.user_id, notifications.title, notifications.message, notifications.is_read, notifications.metadata, notifications.created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-06-18 15:40:09,593 - sqlalchemy.engine.Engine - INFO - [cached since 962.7s ago] (52, 20, 0)
+2026-06-18 15:40:09,596 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER AND notifications.is_read = false
+2026-06-18 15:40:09,597 - sqlalchemy.engine.Engine - INFO - [cached since 963.4s ago] (52,)
+2026-06-18 15:40:09,600 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:09,603 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 15:40:09,606 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 15:40:09,607 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 15:40:09,608 - sqlalchemy.engine.Engine - INFO - [cached since 1052s ago] ('imcholan.kinnera@gmail.com',)
+2026-06-18 15:40:09,612 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT notifications.id AS id, notifications.user_id AS user_id, notifications.title AS title, notifications.message AS message, notifications.is_read AS is_read, notifications.metadata AS metadata, notifications.created_at AS created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC) AS anon_1
+2026-06-18 15:40:09,613 - sqlalchemy.engine.Engine - INFO - [cached since 963s ago] (52,)
+2026-06-18 15:40:09,615 - sqlalchemy.engine.Engine - INFO - SELECT notifications.id, notifications.user_id, notifications.title, notifications.message, notifications.is_read, notifications.metadata, notifications.created_at 
+FROM notifications 
+WHERE notifications.user_id = $1::INTEGER ORDER BY notifications.created_at DESC 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-06-18 15:40:09,616 - sqlalchemy.engine.Engine - INFO - [cached since 962.7s ago] (52, 20, 0)
+2026-06-18 15:40:09,619 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:06:23,596 - main - INFO - Shutting down Nexus PM API...
+2026-06-18 16:06:23,596 - main - INFO - Cleanup job cancelled.
+2026-06-18 16:06:29,560 - main - INFO - Starting up Nexus PM API...
+2026-06-18 16:06:29,566 - main - INFO - Running daily cleanup of expired password reset OTPs...
+2026-06-18 16:06:29,681 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-06-18 16:06:29,682 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:06:29,684 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-06-18 16:06:29,684 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:06:29,686 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-06-18 16:06:29,686 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:06:29,687 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:06:29,688 - sqlalchemy.engine.Engine - INFO - DELETE FROM password_reset_otps WHERE password_reset_otps.expires_at < $1::TIMESTAMP WITH TIME ZONE
+2026-06-18 16:06:29,688 - sqlalchemy.engine.Engine - INFO - [generated in 0.00029s] (datetime.datetime(2026, 6, 18, 10, 36, 29, 566628, tzinfo=datetime.timezone.utc),)
+2026-06-18 16:06:29,689 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:06:29,691 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:06:29,692 - sqlalchemy.engine.Engine - INFO - [generated in 0.00037s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:06:29,696 - main - INFO - Cleaned up 1 expired OTPs.
+2026-06-18 16:06:29,696 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:06:29,699 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:06:29,699 - sqlalchemy.engine.Engine - INFO - [cached since 0.00778s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:06:29,700 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:06:29,700 - sqlalchemy.engine.Engine - INFO - [cached since 0.008824s ago] ('tasks', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:06:29,701 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:06:29,701 - sqlalchemy.engine.Engine - INFO - [cached since 0.009857s ago] ('comments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:06:29,702 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:06:29,702 - sqlalchemy.engine.Engine - INFO - [cached since 0.0111s ago] ('activity_logs', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:06:29,703 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:06:29,703 - sqlalchemy.engine.Engine - INFO - [cached since 0.01225s ago] ('notifications', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:06:29,704 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:06:29,704 - sqlalchemy.engine.Engine - INFO - [cached since 0.01322s ago] ('project_members', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:06:29,705 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:06:29,705 - sqlalchemy.engine.Engine - INFO - [cached since 0.01395s ago] ('refresh_tokens', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:06:29,706 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:06:29,706 - sqlalchemy.engine.Engine - INFO - [cached since 0.01457s ago] ('password_reset_otps', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:06:29,706 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:06:29,706 - sqlalchemy.engine.Engine - INFO - [cached since 0.01526s ago] ('forgot_password_rate_limits', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:06:29,707 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:06:29,708 - main - INFO - Database tables created successfully
+2026-06-18 16:08:14,214 - main - INFO - Shutting down Nexus PM API...
+2026-06-18 16:08:14,215 - main - INFO - Cleanup job cancelled.
+2026-06-18 16:08:16,096 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:08:16,098 - fastapi - ERROR - Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+2026-06-18 16:09:44,038 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:09:44,041 - fastapi - ERROR - Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+2026-06-18 16:10:03,506 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:10:03,521 - httpx - INFO - HTTP Request: POST http://testserver/api/auth/login "HTTP/1.1 400 Bad Request"
+2026-06-18 16:10:13,149 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:10:13,250 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-06-18 16:10:13,250 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:10:13,254 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-06-18 16:10:13,254 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:10:13,255 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-06-18 16:10:13,255 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:10:13,256 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:10:13,270 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:10:13,270 - sqlalchemy.engine.Engine - INFO - [generated in 0.00029s] ('kinneracholan.aws@gmail.com',)
+2026-06-18 16:10:13,505 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:10:13,507 - httpx - INFO - HTTP Request: POST http://testserver/api/auth/login "HTTP/1.1 401 Unauthorized"
+2026-06-18 16:10:45,780 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:10:45,880 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-06-18 16:10:45,880 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:10:45,882 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-06-18 16:10:45,882 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:10:45,883 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-06-18 16:10:45,883 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:10:45,883 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:10:45,885 - sqlalchemy.engine.Engine - INFO - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-18 16:10:45,885 - sqlalchemy.engine.Engine - INFO - [generated in 0.00016s] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:10:46,126 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (full_name, email, password, role, google_id, auth_provider, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR, $7::TIMESTAMP WITH TIME ZONE, $8::TIMESTAMP WITH TIME ZONE) RETURNING users.id
+2026-06-18 16:10:46,126 - sqlalchemy.engine.Engine - INFO - [generated in 0.00046s] ('Temp Storage E2E User', 'temp_storage_e2e_user@example.com', '$2b$12$8iWCT2jVumozr1zP7iUgmODNReJXVvYJr.wE0KsaST37i/fRMZAfK', 'developer', None, 'local', datetime.datetime(2026, 6, 18, 10, 40, 46, 126482, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 18, 10, 40, 46, 126488, tzinfo=datetime.timezone.utc))
+2026-06-18 16:10:46,129 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:10:46,145 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:10:46,146 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:10:46,146 - sqlalchemy.engine.Engine - INFO - [generated in 0.00017s] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:10:46,149 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:10:46,150 - httpx - INFO - HTTP Request: POST http://testserver/api/auth/login "HTTP/1.1 500 Internal Server Error"
+2026-06-18 16:10:46,151 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:10:46,151 - sqlalchemy.engine.Engine - INFO - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-18 16:10:46,151 - sqlalchemy.engine.Engine - INFO - [cached since 0.2669s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:10:46,152 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:01,260 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:11:01,355 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-06-18 16:11:01,355 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:11:01,357 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-06-18 16:11:01,357 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:11:01,358 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-06-18 16:11:01,359 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:11:01,359 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:01,361 - sqlalchemy.engine.Engine - INFO - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:01,361 - sqlalchemy.engine.Engine - INFO - [generated in 0.00018s] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:01,614 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (full_name, email, password, role, google_id, auth_provider, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR, $7::TIMESTAMP WITH TIME ZONE, $8::TIMESTAMP WITH TIME ZONE) RETURNING users.id
+2026-06-18 16:11:01,614 - sqlalchemy.engine.Engine - INFO - [generated in 0.00032s] ('Temp Storage E2E User', 'temp_storage_e2e_user@example.com', '$2b$12$qNIKJ8Ow54NLAFm/lcez..7jbMoDtdqUcodWiqjMt1jYe86zsXwA6', 'developer', None, 'local', datetime.datetime(2026, 6, 18, 10, 41, 1, 614204, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 18, 10, 41, 1, 614208, tzinfo=datetime.timezone.utc))
+2026-06-18 16:11:01,615 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:11:01,617 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:01,617 - sqlalchemy.engine.Engine - INFO - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:01,618 - sqlalchemy.engine.Engine - INFO - [cached since 0.257s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:01,619 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:11:10,252 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:11:10,349 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-06-18 16:11:10,349 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:11:10,350 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-06-18 16:11:10,350 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:11:10,351 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-06-18 16:11:10,352 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:11:10,352 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:10,353 - sqlalchemy.engine.Engine - INFO - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:10,354 - sqlalchemy.engine.Engine - INFO - [generated in 0.00016s] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:10,588 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (full_name, email, password, role, google_id, auth_provider, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR, $7::TIMESTAMP WITH TIME ZONE, $8::TIMESTAMP WITH TIME ZONE) RETURNING users.id
+2026-06-18 16:11:10,588 - sqlalchemy.engine.Engine - INFO - [generated in 0.00029s] ('Temp Storage E2E User', 'temp_storage_e2e_user@example.com', '$2b$12$AXCnlT6Xk5535j3ov.2uFeJZ3PcpazcwUpiFP00TFB/w8FKjcqBw.', 'developer', None, 'local', datetime.datetime(2026, 6, 18, 10, 41, 10, 588631, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 18, 10, 41, 10, 588635, tzinfo=datetime.timezone.utc))
+2026-06-18 16:11:10,590 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:11:10,600 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:10,601 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:10,601 - sqlalchemy.engine.Engine - INFO - [generated in 0.00017s] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:10,844 - sqlalchemy.engine.Engine - INFO - INSERT INTO refresh_tokens (user_id, token_hash, expires_at, created_at, revoked) VALUES ($1::INTEGER, $2::VARCHAR, $3::TIMESTAMP WITH TIME ZONE, $4::TIMESTAMP WITH TIME ZONE, $5::BOOLEAN) RETURNING refresh_tokens.id
+2026-06-18 16:11:10,844 - sqlalchemy.engine.Engine - INFO - [generated in 0.00026s] (55, '29a9d2da4b32e4d5bdecf5f5d039e9cf40bfe46e258faf74cb930042b31ca992', datetime.datetime(2026, 6, 25, 10, 41, 10, 842667, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 18, 10, 41, 10, 843975, tzinfo=datetime.timezone.utc), False)
+2026-06-18 16:11:10,847 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:11:10,847 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:10,848 - sqlalchemy.engine.Engine - INFO - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-18 16:11:10,849 - sqlalchemy.engine.Engine - INFO - [generated in 0.00020s] (55, 'LOGIN_SUCCESS', 'user', 55, '{"user_id": 55, "email": "temp_storage_e2e_user@example.com"}', datetime.datetime(2026, 6, 18, 10, 41, 10, 848933, tzinfo=datetime.timezone.utc))
+2026-06-18 16:11:10,851 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:11:10,852 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:10,853 - sqlalchemy.engine.Engine - INFO - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-18 16:11:10,853 - sqlalchemy.engine.Engine - INFO - [generated in 0.00016s] (110,)
+2026-06-18 16:11:10,855 - services.activity_service - INFO - Activity logged: action=LOGIN_SUCCESS entity_type=user entity_id=55 user_id=55
+2026-06-18 16:11:10,857 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:10,858 - httpx - INFO - HTTP Request: POST http://testserver/api/auth/login "HTTP/1.1 200 OK"
+2026-06-18 16:11:10,861 - httpx - INFO - HTTP Request: POST http://testserver/api/storage/upload "HTTP/1.1 401 Unauthorized"
+2026-06-18 16:11:10,863 - httpx - INFO - HTTP Request: DELETE http://testserver/api/storage/delete/some_key "HTTP/1.1 401 Unauthorized"
+2026-06-18 16:11:10,865 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:10,865 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:10,865 - sqlalchemy.engine.Engine - INFO - [cached since 0.2645s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:10,866 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:10,867 - httpx - INFO - HTTP Request: POST http://testserver/api/storage/upload "HTTP/1.1 400 Bad Request"
+2026-06-18 16:11:10,885 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:10,886 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:10,886 - sqlalchemy.engine.Engine - INFO - [cached since 0.2846s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:10,891 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:10,893 - httpx - INFO - HTTP Request: POST http://testserver/api/storage/upload "HTTP/1.1 400 Bad Request"
+2026-06-18 16:11:10,896 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:10,896 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:10,896 - sqlalchemy.engine.Engine - INFO - [cached since 0.295s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:10,997 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:10,998 - httpx - INFO - HTTP Request: POST http://testserver/api/storage/upload "HTTP/1.1 201 Created"
+2026-06-18 16:11:11,006 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:11,007 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:11,007 - sqlalchemy.engine.Engine - INFO - [cached since 0.4057s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:11,015 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:11,016 - httpx - INFO - HTTP Request: DELETE http://testserver/api/storage/delete/13c52f431ce443eeaaed20e7b93a8fb6.txt "HTTP/1.1 200 OK"
+2026-06-18 16:11:11,018 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:11,018 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:11,018 - sqlalchemy.engine.Engine - INFO - [cached since 0.4173s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:11,025 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:11,026 - httpx - INFO - HTTP Request: DELETE http://testserver/api/storage/delete/non_existent_key_12345.txt "HTTP/1.1 400 Bad Request"
+2026-06-18 16:11:11,027 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:11,027 - sqlalchemy.engine.Engine - INFO - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:11,027 - sqlalchemy.engine.Engine - INFO - [cached since 0.6737s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:11,036 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:11:19,357 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:11:19,360 - fastapi - ERROR - Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+2026-06-18 16:11:24,457 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:11:24,552 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-06-18 16:11:24,552 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:11:24,554 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-06-18 16:11:24,554 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:11:24,555 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-06-18 16:11:24,555 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:11:24,556 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:24,557 - sqlalchemy.engine.Engine - INFO - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:24,557 - sqlalchemy.engine.Engine - INFO - [generated in 0.00018s] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:24,788 - sqlalchemy.engine.Engine - INFO - INSERT INTO users (full_name, email, password, role, google_id, auth_provider, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR, $7::TIMESTAMP WITH TIME ZONE, $8::TIMESTAMP WITH TIME ZONE) RETURNING users.id
+2026-06-18 16:11:24,788 - sqlalchemy.engine.Engine - INFO - [generated in 0.00030s] ('Temp Storage E2E User', 'temp_storage_e2e_user@example.com', '$2b$12$34m2NUToGWhqWGLki1A.N.YxevkwRXi0HlL.H8JWxDHI/1OjrRyZq', 'developer', None, 'local', datetime.datetime(2026, 6, 18, 10, 41, 24, 788415, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 18, 10, 41, 24, 788418, tzinfo=datetime.timezone.utc))
+2026-06-18 16:11:24,790 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:11:24,798 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:24,799 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:24,800 - sqlalchemy.engine.Engine - INFO - [generated in 0.00018s] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:25,028 - sqlalchemy.engine.Engine - INFO - INSERT INTO refresh_tokens (user_id, token_hash, expires_at, created_at, revoked) VALUES ($1::INTEGER, $2::VARCHAR, $3::TIMESTAMP WITH TIME ZONE, $4::TIMESTAMP WITH TIME ZONE, $5::BOOLEAN) RETURNING refresh_tokens.id
+2026-06-18 16:11:25,029 - sqlalchemy.engine.Engine - INFO - [generated in 0.00026s] (56, 'ad2b688825b699417cf1f5fc0796cd0d50cd5323cbf45a7e8d1b7ab57595b0dd', datetime.datetime(2026, 6, 25, 10, 41, 25, 27645, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 18, 10, 41, 25, 28879, tzinfo=datetime.timezone.utc), False)
+2026-06-18 16:11:25,031 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:11:25,033 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:25,034 - sqlalchemy.engine.Engine - INFO - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-18 16:11:25,034 - sqlalchemy.engine.Engine - INFO - [generated in 0.00022s] (56, 'LOGIN_SUCCESS', 'user', 56, '{"user_id": 56, "email": "temp_storage_e2e_user@example.com"}', datetime.datetime(2026, 6, 18, 10, 41, 25, 34622, tzinfo=datetime.timezone.utc))
+2026-06-18 16:11:25,036 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:11:25,037 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:25,039 - sqlalchemy.engine.Engine - INFO - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-18 16:11:25,039 - sqlalchemy.engine.Engine - INFO - [generated in 0.00017s] (111,)
+2026-06-18 16:11:25,041 - services.activity_service - INFO - Activity logged: action=LOGIN_SUCCESS entity_type=user entity_id=56 user_id=56
+2026-06-18 16:11:25,042 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:25,042 - httpx - INFO - HTTP Request: POST http://testserver/api/auth/login "HTTP/1.1 200 OK"
+2026-06-18 16:11:25,046 - httpx - INFO - HTTP Request: POST http://testserver/api/storage/upload "HTTP/1.1 401 Unauthorized"
+2026-06-18 16:11:25,047 - httpx - INFO - HTTP Request: DELETE http://testserver/api/storage/delete/some_key "HTTP/1.1 401 Unauthorized"
+2026-06-18 16:11:25,050 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:25,050 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:25,050 - sqlalchemy.engine.Engine - INFO - [cached since 0.2505s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:25,051 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:25,051 - httpx - INFO - HTTP Request: POST http://testserver/api/storage/upload "HTTP/1.1 400 Bad Request"
+2026-06-18 16:11:25,076 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:25,076 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:25,076 - sqlalchemy.engine.Engine - INFO - [cached since 0.2768s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:25,082 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:25,084 - httpx - INFO - HTTP Request: POST http://testserver/api/storage/upload "HTTP/1.1 400 Bad Request"
+2026-06-18 16:11:25,087 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:25,087 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:25,087 - sqlalchemy.engine.Engine - INFO - [cached since 0.2876s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:25,089 - services.storage_service - INFO - [R2 SIMULATOR] Uploaded file to local storage: c:\NEXUS PM 1\local_storage_uploads\cd3df8b3382a4a1a9e88659427398597.txt
+2026-06-18 16:11:25,089 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:25,089 - httpx - INFO - HTTP Request: POST http://testserver/api/storage/upload "HTTP/1.1 201 Created"
+2026-06-18 16:11:25,094 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:25,094 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:25,094 - sqlalchemy.engine.Engine - INFO - [cached since 0.295s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:25,096 - services.storage_service - INFO - [R2 SIMULATOR] Deleted file from local storage: c:\NEXUS PM 1\local_storage_uploads\cd3df8b3382a4a1a9e88659427398597.txt
+2026-06-18 16:11:25,096 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:25,097 - httpx - INFO - HTTP Request: DELETE http://testserver/api/storage/delete/cd3df8b3382a4a1a9e88659427398597.txt "HTTP/1.1 200 OK"
+2026-06-18 16:11:25,100 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:25,100 - sqlalchemy.engine.Engine - INFO - SELECT users.id, users.full_name, users.email, users.password, users.role, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:25,100 - sqlalchemy.engine.Engine - INFO - [cached since 0.3007s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:25,101 - services.storage_service - WARNING - [R2 SIMULATOR] File key not found for deletion: non_existent_key_12345.txt
+2026-06-18 16:11:25,101 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2026-06-18 16:11:25,102 - httpx - INFO - HTTP Request: DELETE http://testserver/api/storage/delete/non_existent_key_12345.txt "HTTP/1.1 400 Bad Request"
+2026-06-18 16:11:25,102 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:11:25,103 - sqlalchemy.engine.Engine - INFO - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-18 16:11:25,103 - sqlalchemy.engine.Engine - INFO - [cached since 0.5458s ago] ('temp_storage_e2e_user@example.com',)
+2026-06-18 16:11:25,113 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:13:58,797 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:13:58,799 - fastapi - ERROR - Form data requires "python-multipart" to be installed. 
+You can install "python-multipart" with: 
+
+pip install python-multipart
+
+2026-06-18 16:14:37,246 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:14:38,847 - services.storage_service - WARNING - Cloudflare R2 environment variables are not fully configured. Storage service will run in local simulation mode.
+2026-06-18 16:14:38,982 - main - INFO - Starting up Nexus PM API...
+2026-06-18 16:14:38,988 - main - INFO - Running daily cleanup of expired password reset OTPs...
+2026-06-18 16:14:39,154 - sqlalchemy.engine.Engine - INFO - select pg_catalog.version()
+2026-06-18 16:14:39,166 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:14:39,170 - sqlalchemy.engine.Engine - INFO - select current_schema()
+2026-06-18 16:14:39,171 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:14:39,173 - sqlalchemy.engine.Engine - INFO - show standard_conforming_strings
+2026-06-18 16:14:39,174 - sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2026-06-18 16:14:39,175 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:14:39,177 - sqlalchemy.engine.Engine - INFO - DELETE FROM password_reset_otps WHERE password_reset_otps.expires_at < $1::TIMESTAMP WITH TIME ZONE
+2026-06-18 16:14:39,178 - sqlalchemy.engine.Engine - INFO - [generated in 0.00053s] (datetime.datetime(2026, 6, 18, 10, 44, 38, 988958, tzinfo=datetime.timezone.utc),)
+2026-06-18 16:14:39,179 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2026-06-18 16:14:39,182 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:14:39,183 - sqlalchemy.engine.Engine - INFO - [generated in 0.00057s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:14:39,188 - main - INFO - Cleaned up 0 expired OTPs.
+2026-06-18 16:14:39,189 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:14:39,192 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:14:39,193 - sqlalchemy.engine.Engine - INFO - [cached since 0.0105s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:14:39,194 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:14:39,195 - sqlalchemy.engine.Engine - INFO - [cached since 0.01291s ago] ('tasks', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:14:39,197 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:14:39,197 - sqlalchemy.engine.Engine - INFO - [cached since 0.01495s ago] ('comments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:14:39,198 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:14:39,198 - sqlalchemy.engine.Engine - INFO - [cached since 0.01637s ago] ('activity_logs', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:14:39,200 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:14:39,200 - sqlalchemy.engine.Engine - INFO - [cached since 0.01809s ago] ('notifications', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:14:39,201 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:14:39,202 - sqlalchemy.engine.Engine - INFO - [cached since 0.01998s ago] ('project_members', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:14:39,203 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:14:39,203 - sqlalchemy.engine.Engine - INFO - [cached since 0.02133s ago] ('refresh_tokens', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:14:39,204 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:14:39,205 - sqlalchemy.engine.Engine - INFO - [cached since 0.02258s ago] ('password_reset_otps', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:14:39,206 - sqlalchemy.engine.Engine - INFO - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-18 16:14:39,206 - sqlalchemy.engine.Engine - INFO - [cached since 0.02396s ago] ('forgot_password_rate_limits', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-18 16:14:39,207 - sqlalchemy.engine.Engine - INFO - COMMIT
+2026-06-18 16:14:39,209 - main - INFO - Database tables created successfully
