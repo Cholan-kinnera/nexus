@@ -43,6 +43,22 @@ class TaskUpdate(BaseModel):
     assigned_to: Optional[int] = Field(default=None)
 
 
+from schemas.user import UserResponse
+
+class TaskAttachmentResponse(BaseModel):
+    id: int
+    task_id: int
+    user_id: Optional[int] = None
+    file_name: str
+    file_key: str
+    file_size: int
+    mime_type: str
+    file_url: str
+    created_at: datetime
+    user: Optional[UserResponse] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
 class TaskResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -54,3 +70,4 @@ class TaskResponse(BaseModel):
     due_date: Optional[datetime]
     project_id: int
     assigned_to: Optional[int]
+    attachments: list[TaskAttachmentResponse] = []

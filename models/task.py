@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from models.comment import Comment
+    from models.task_attachment import TaskAttachment
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -61,7 +62,14 @@ class Task(Base):
     assignee = relationship("User")
 
     comments: Mapped[list["Comment"]] = relationship(
-    "Comment",
-    back_populates="task",
-    cascade="all, delete-orphan"
-)
+        "Comment",
+        back_populates="task",
+        cascade="all, delete-orphan"
+    )
+
+    attachments: Mapped[list["TaskAttachment"]] = relationship(
+        "TaskAttachment",
+        back_populates="task",
+        cascade="all, delete-orphan",
+        lazy="selectin"
+    )

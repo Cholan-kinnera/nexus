@@ -4,6 +4,10 @@ import {
   createTask,
   deleteTask,
   updateTask,
+  getTaskAttachments,
+  uploadTaskAttachment,
+  deleteTaskAttachment,
+  TaskAttachment
 } from "../services/taskService";
 import { getComments, createComment } from "../services/commentService";
 import { getProjects } from "../services/projectService";
@@ -27,7 +31,16 @@ import {
   ClipboardList,
   Clock,
   MessageSquare,
-  ArrowUpRight
+  ArrowUpRight,
+  Paperclip,
+  FileText,
+  FileSpreadsheet,
+  FileArchive,
+  Image,
+  File,
+  Download,
+  Trash2,
+  Loader2
 } from "lucide-react";
 
 // Mock helper to fetch task hours
@@ -274,6 +287,14 @@ function TaskModal({
   const [projectMembers, setProjectMembers] = useState<any[]>([]);
   const [currentUser, setCurrentUser] = useState<any>(null);
 
+  // Attachments State
+  const [attachments, setAttachments] = useState<TaskAttachment[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (!isOpen || !task) return;
 
@@ -307,6 +328,116 @@ function TaskModal({
 
     fetchComments();
   }, [isOpen, task]);
+
+  useEffect(() => {
+    if (!isOpen || !task) return;
+
+    const fetchAttachments = async () => {
+      try {
+        const data = await getTaskAttachments(task.id);
+        setAttachments(data ?? []);
+      } catch (err) {
+        console.error("Failed to load task attachments:", err);
+      }
+    };
+
+    fetchAttachments();
+  }, [isOpen, task]);
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+  };
+
+  const getFileIcon = (mimeType: string, filename: string) => {
+    const ext = filename.split(".").pop()?.toLowerCase();
+    if (mimeType.startsWith("image/") || ["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(ext || "")) {
+      return <Image size={15} className="text-violet-400" />;
+    }
+    if (mimeType === "application/pdf" || ext === "pdf") {
+      return <FileText size={15} className="text-red-400" />;
+    }
+    if (
+      mimeType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+      mimeType === "text/csv" ||
+      ["xlsx", "csv", "xls"].includes(ext || "")
+    ) {
+      return <FileSpreadsheet size={15} className="text-emerald-400" />;
+    }
+    if (
+      mimeType === "application/zip" ||
+      mimeType === "application/x-zip-compressed" ||
+      ext === "zip"
+    ) {
+      return <FileArchive size={15} className="text-amber-400" />;
+    }
+    return <File size={15} className="text-zinc-400" />;
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    const file = files[0];
+
+    // Reset states
+    setUploadError(null);
+    setUploadSuccess(false);
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    // Front-end size validation (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError("File size exceeds the limit of 10 MB.");
+      setIsUploading(false);
+      return;
+    }
+
+    // Front-end extension validation
+    const allowedExtensions = ["pdf", "png", "jpg", "jpeg", "gif", "webp", "svg", "zip", "docx", "txt", "xlsx", "csv"];
+    const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
+    if (!allowedExtensions.includes(fileExt)) {
+      setUploadError(`File extension '.${fileExt}' is not supported.`);
+      setIsUploading(false);
+      return;
+    }
+
+    try {
+      await uploadTaskAttachment(task.id, file, (progressEvent: any) => {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        setUploadProgress(percentCompleted);
+      });
+      setUploadSuccess(true);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      // Reload attachments list
+      const updated = await getTaskAttachments(task.id);
+      setAttachments(updated ?? []);
+    } catch (err: any) {
+      console.error("Upload failed:", err);
+      const errMsg = err.response?.data?.detail || "Failed to upload file. Please try again.";
+      setUploadError(errMsg);
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(null);
+    }
+  };
+
+  const handleAttachmentDelete = async (attachmentId: number) => {
+    if (!window.confirm("Are you sure you want to delete this attachment?")) return;
+
+    try {
+      await deleteTaskAttachment(attachmentId);
+      // Reload attachments list
+      const updated = await getTaskAttachments(task.id);
+      setAttachments(updated ?? []);
+    } catch (err: any) {
+      console.error("Delete failed:", err);
+      const errMsg = err.response?.data?.detail || "Failed to delete attachment.";
+      alert(errMsg);
+    }
+  };
 
   if (!isOpen || !task) return null;
 
@@ -422,6 +553,123 @@ function TaskModal({
               <p className="text-zinc-400 text-xs leading-relaxed whitespace-pre-wrap">
                 {task.description || "No description provided."}
               </p>
+            </div>
+
+            {/* Attachments Panel */}
+            <div className="mt-6 pt-4 border-t border-zinc-850">
+              <h4 className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-3 flex items-center gap-1.5 font-bold">
+                <Paperclip size={12} className="text-zinc-500" />
+                Attachments ({attachments.length})
+              </h4>
+
+              {attachments.length > 0 ? (
+                <div className="grid grid-cols-1 gap-2 mb-4">
+                  {attachments.map((att) => {
+                    const timeStr = new Date(att.created_at).toLocaleDateString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric"
+                    });
+                    const isUploader = att.user_id === currentUser?.id;
+                    const canDelete = isUploader || !isViewer;
+
+                    return (
+                      <div key={att.id} className="flex items-center justify-between bg-zinc-950/40 border border-zinc-800/60 p-3 rounded-xl gap-3 text-xs hover:border-zinc-750 transition duration-150">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="shrink-0 p-2 bg-zinc-900 border border-zinc-800 rounded-lg">
+                            {getFileIcon(att.mime_type, att.file_name)}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-semibold text-zinc-300 truncate max-w-[220px]" title={att.file_name}>
+                              {att.file_name}
+                            </p>
+                            <p className="text-[10px] text-zinc-500 font-mono mt-0.5 flex items-center gap-1.5 flex-wrap">
+                              <span>{formatFileSize(att.file_size)}</span>
+                              <span className="w-1 h-1 rounded-full bg-zinc-800" />
+                              <span className="text-zinc-400">{att.user?.full_name || att.user?.email || "System"}</span>
+                              <span className="w-1 h-1 rounded-full bg-zinc-800" />
+                              <span>{timeStr}</span>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <a
+                            href={att.file_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Download file"
+                            className="text-zinc-400 hover:text-zinc-200 transition-colors p-1.5 rounded-lg hover:bg-zinc-800 cursor-pointer"
+                          >
+                            <Download size={14} />
+                          </a>
+                          {canDelete && (
+                            <button
+                              onClick={() => handleAttachmentDelete(att.id)}
+                              title="Delete attachment"
+                              className="text-red-400 hover:text-red-300 transition-colors p-1.5 rounded-lg hover:bg-red-500/10 cursor-pointer"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-[10px] text-zinc-550 italic font-mono py-2 bg-zinc-950/20 border border-dashed border-zinc-850 rounded-xl text-center p-4">
+                  No attachments uploaded yet
+                </div>
+              )}
+
+              {!isViewer && (
+                <div className="mt-3">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.svg,.zip,.docx,.txt,.xlsx,.csv"
+                  />
+                  
+                  {isUploading ? (
+                    <div className="space-y-2 bg-zinc-950/40 border border-zinc-850 p-3 rounded-xl">
+                      <div className="flex items-center justify-between text-3xs font-mono text-zinc-450">
+                        <span className="flex items-center gap-1.5">
+                          <Loader2 size={12} className="animate-spin text-violet-400" />
+                          Uploading attachment...
+                        </span>
+                        <span>{uploadProgress}%</span>
+                      </div>
+                      <div className="w-full h-1 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
+                        <div
+                          className="h-full bg-violet-500 transition-all duration-150"
+                          style={{ width: `${uploadProgress}%` }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full border border-dashed border-zinc-800 hover:border-zinc-700/80 bg-zinc-950/20 hover:bg-zinc-900/10 text-zinc-450 hover:text-zinc-300 py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all duration-200 text-xs font-mono"
+                    >
+                      <Paperclip size={13} className="text-zinc-500" />
+                      Attach File
+                    </button>
+                  )}
+
+                  {uploadError && (
+                    <p className="text-3xs text-red-400 font-mono mt-2 bg-red-950/10 border border-red-900/30 px-2.5 py-1.5 rounded-lg">
+                      ⚠️ {uploadError}
+                    </p>
+                  )}
+                  {uploadSuccess && (
+                    <p className="text-3xs text-emerald-400 font-mono mt-2 bg-emerald-950/10 border border-emerald-900/30 px-2.5 py-1.5 rounded-lg">
+                      ✓ File attached successfully.
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

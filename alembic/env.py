@@ -29,6 +29,7 @@ from models.project_member import ProjectMember
 from models.refresh_token import RefreshToken
 from models.password_reset_otp import PasswordResetOTP
 from models.forgot_password_rate_limit import ForgotPasswordRateLimit
+from models.task_attachment import TaskAttachment
 
 target_metadata = Base.metadata
 

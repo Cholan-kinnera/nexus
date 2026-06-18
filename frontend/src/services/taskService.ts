@@ -47,3 +47,47 @@ export const getTasksByProject = async (
 
   return response.data;
 };
+
+export interface TaskAttachment {
+  id: number;
+  task_id: number;
+  user_id: number | null;
+  file_name: string;
+  file_key: string;
+  file_size: number;
+  mime_type: string;
+  file_url: string;
+  created_at: string;
+  user?: {
+    id: number;
+    full_name: string | null;
+    email: string;
+    avatar_url: string | null;
+  } | null;
+}
+
+export const getTaskAttachments = async (taskId: number): Promise<TaskAttachment[]> => {
+  const response = await api.get<TaskAttachment[]>(`/tasks/${taskId}/attachments`);
+  return response.data;
+};
+
+export const uploadTaskAttachment = async (
+  taskId: number,
+  file: File,
+  onUploadProgress?: (progressEvent: any) => void
+): Promise<TaskAttachment> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await api.post<TaskAttachment>(`/tasks/${taskId}/attachments`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    onUploadProgress,
+  });
+  return response.data;
+};
+
+export const deleteTaskAttachment = async (attachmentId: number): Promise<any> => {
+  const response = await api.delete(`/tasks/attachments/${attachmentId}`);
+  return response.data;
+};
