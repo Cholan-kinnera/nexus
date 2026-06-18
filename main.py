@@ -111,6 +111,11 @@ app.add_middleware(
     allowed_hosts=[host.strip() for host in ALLOWED_HOSTS],
 )
 
+from fastapi.staticfiles import StaticFiles
+# Create local storage upload dir if not exists (for simulation mode fallback)
+os.makedirs("local_storage_uploads", exist_ok=True)
+app.mount("/static/uploads", StaticFiles(directory="local_storage_uploads"), name="static_uploads")
+
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
@@ -182,6 +187,13 @@ app.include_router(
     analytics.router,
     prefix="/api/analytics",
     tags=["Analytics"],
+)
+
+from api.routes import storage
+app.include_router(
+    storage.router,
+    prefix="/api/storage",
+    tags=["Storage"],
 )
 
 
