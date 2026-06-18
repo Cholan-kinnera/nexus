@@ -10,6 +10,7 @@ import {
   Moon,
   Settings,
   LogOut,
+  User,
 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
@@ -177,6 +178,16 @@ export default function Sidebar() {
               <button
                 onClick={() => {
                   setMenuOpen(false);
+                  navigate("/profile");
+                }}
+                className="w-full flex items-center gap-2 p-2.5 rounded-lg text-sm hover:bg-zinc-800/10 dark:hover:bg-zinc-800/40 hover:text-zinc-100 dark:hover:text-zinc-100 transition-colors cursor-pointer"
+              >
+                <User size={16} />
+                <span>Profile</span>
+              </button>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
                   navigate("/settings");
                 }}
                 className="w-full flex items-center gap-2 p-2.5 rounded-lg text-sm hover:bg-zinc-800/10 dark:hover:bg-zinc-800/40 hover:text-zinc-100 dark:hover:text-zinc-100 transition-colors cursor-pointer"
@@ -199,8 +210,12 @@ export default function Sidebar() {
             onClick={() => setMenuOpen(!menuOpen)}
             className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-zinc-800/10 dark:hover:bg-zinc-900/30 hover:border-zinc-800 border border-transparent text-left transition-all duration-200 cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-full bg-zinc-900 dark:bg-zinc-950 border border-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-sm select-none shadow-sm">
-              {userName ? userName.split(" ").map((n) => n[0]).join("").toUpperCase() : "U"}
+            <div className="w-10 h-10 rounded-full bg-zinc-900 dark:bg-zinc-950 border border-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-sm select-none shadow-sm overflow-hidden flex-shrink-0">
+              {user?.avatar_url ? (
+                <img src={user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                userName ? userName.split(" ").map((n) => n[0]).join("").toUpperCase() : "U"
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-zinc-100 truncate">

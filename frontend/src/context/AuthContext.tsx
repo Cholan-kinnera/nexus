@@ -7,11 +7,15 @@ import {
 } from "react";
 
 import type { ReactNode } from "react";
+import api from "../api/client";
 
 export interface User {
+  id?: number;
   full_name: string | null;
+  name?: string | null;
   email: string;
   role?: string | null;
+  avatar_url?: string | null;
 }
 
 interface AuthContextType {
@@ -21,6 +25,7 @@ interface AuthContextType {
   setHasBooted: (val: boolean) => void;
   login: (token: string, user: User) => void;
   logout: () => void;
+  updateUser: (updates: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(
@@ -72,6 +77,35 @@ export function AuthProvider({
     setUser(null);
   }, []);
 
+  const updateUser = useCallback((updates: Partial<User>) => {
+    setUser((prev) => {
+      if (!prev) return null;
+      const updated = { ...prev, ...updates };
+      localStorage.setItem("user", JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  // Automatic profile hydration on token changes or page refresh
+  useEffect(() => {
+    const hydrateUserProfile = async () => {
+      if (!token) return;
+      try {
+        const response = await api.get("/users/me");
+        const freshUser = response.data;
+        setUser(freshUser);
+        localStorage.setItem("user", JSON.stringify(freshUser));
+      } catch (err: any) {
+        console.error("Failed to automatically hydrate user profile:", err);
+        if (err.response?.status === 401) {
+          logout();
+        }
+      }
+    };
+
+    hydrateUserProfile();
+  }, [token, logout]);
+
   // 15-minute auto-logout inactivity tracker
   useEffect(() => {
     if (!token) return;
@@ -113,6 +147,7 @@ export function AuthProvider({
         setHasBooted,
         login,
         logout,
+        updateUser,
       }}
     >
       {children}

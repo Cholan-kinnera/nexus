@@ -9,6 +9,7 @@ import Landing3D from "../pages/Landing3D";
 import SettingsPage from "../pages/SettingsPage";
 import StoragePage from "../pages/StoragePage";
 import SecurityLogsPage from "../pages/SecurityLogsPage";
+import ProfilePage from "../pages/ProfilePage";
 
 export function AppRoutes() {
   return (
@@ -39,6 +40,14 @@ export function AppRoutes() {
         element={
           <ProtectedRoute>
             <TasksPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         }
       />

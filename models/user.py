@@ -1,6 +1,6 @@
 from datetime import datetime, UTC
 
-from sqlalchemy import Column, DateTime, Integer, String, func
+from sqlalchemy import Column, DateTime, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, relationship
 
 from db.database import Base
@@ -18,6 +18,7 @@ class User(Base):
     email = Column(String(255), unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     role = Column(String(255), nullable=True)
+    avatar_url = Column(Text, nullable=True)
     google_id = Column(String(255), nullable=True, unique=True)
     auth_provider = Column(String(50), nullable=False, default="local", server_default="local")
     created_at = Column(

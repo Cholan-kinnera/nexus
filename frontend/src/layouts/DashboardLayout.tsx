@@ -226,8 +226,12 @@ export default function DashboardLayout({ children }: Props) {
 
               {/* Simple profile indicator */}
               <div className="flex items-center gap-2.5 pl-1.5 border-l border-zinc-800/80 pr-1">
-                <div className="w-6.5 h-6.5 rounded-full bg-zinc-900 border border-zinc-850 text-zinc-400 flex items-center justify-center font-bold text-[9px] select-none font-mono">
-                  {user?.full_name ? user.full_name.split(" ").map((n: string) => n[0]).join("").toUpperCase() : "U"}
+                <div className="w-6.5 h-6.5 rounded-full bg-zinc-900 border border-zinc-850 text-zinc-400 flex items-center justify-center font-bold text-[9px] select-none font-mono overflow-hidden flex-shrink-0">
+                  {user?.avatar_url ? (
+                    <img src={user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                  ) : (
+                    user?.full_name ? user.full_name.split(" ").map((n: string) => n[0]).join("").toUpperCase() : "U"
+                  )}
                 </div>
                 <span className="hidden md:inline text-[10px] font-medium text-zinc-400 font-mono max-w-[100px] truncate">
                   {user?.full_name?.split(" ")[0]}
