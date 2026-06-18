@@ -158,7 +158,7 @@ export default function MembersTab({ projectId }: Props) {
       </div>
 
       {/* Table Container */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-card">
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl shadow-card">
         {isLoading ? (
           <div className="p-12 text-center text-zinc-500 font-mono text-xs">
             <span className="inline-block animate-pulse">Fetching members list...</span>
@@ -167,14 +167,14 @@ export default function MembersTab({ projectId }: Props) {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-zinc-800 text-[10px] font-mono text-zinc-500 uppercase tracking-wider bg-zinc-850">
-                <th className="py-3 px-6 font-semibold">User</th>
+                <th className="py-3 px-6 font-semibold rounded-tl-xl">User</th>
                 <th className="py-3 px-6 font-semibold">Project Role</th>
                 <th className="py-3 px-6 font-semibold">Joined At</th>
-                <th className="py-3 px-6 font-semibold text-right">Actions</th>
+                <th className="py-3 px-6 font-semibold text-right rounded-tr-xl">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800 text-xs">
-              {members.map((member) => {
+              {members.map((member, idx) => {
                 const isMe = member.email === user?.email;
                 const displayName = isMe
                   ? `${member.full_name || "Unknown User"} (You)`
@@ -188,11 +188,12 @@ export default function MembersTab({ projectId }: Props) {
 
                 const editable = canUpdateRoleOf(member);
                 const removable = canRemoveMember(member);
+                const isLast = idx === members.length - 1;
 
                 return (
-                  <tr key={member.id} className="hover:bg-zinc-850 transition-colors">
+                  <tr key={member.id} className="group transition-colors">
                     {/* User info */}
-                    <td className="py-3 px-6 flex items-center gap-3">
+                    <td className={`py-3 px-6 flex items-center gap-3 transition-colors group-hover:bg-zinc-850 ${isLast ? "rounded-bl-xl" : ""}`}>
                       <div className="w-8 h-8 rounded-full bg-zinc-950 border border-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-xs select-none shadow-inner">
                         {getInitials(member.full_name, member.email)}
                       </div>
@@ -203,7 +204,7 @@ export default function MembersTab({ projectId }: Props) {
                     </td>
 
                     {/* Role badge or dropdown */}
-                    <td className="py-3 px-6">
+                    <td className="py-3 px-6 transition-colors group-hover:bg-zinc-850">
                       <div
                         title={!editable ? (member.role === "owner" ? "The project owner role cannot be demoted" : "Requires Manager or Owner permissions") : ""}
                         className="relative inline-block"
@@ -267,7 +268,7 @@ export default function MembersTab({ projectId }: Props) {
                     </td>
 
                     {/* Joined Date */}
-                    <td className="py-3 px-6 font-mono text-[10px] text-zinc-500">
+                    <td className="py-3 px-6 font-mono text-[10px] text-zinc-500 transition-colors group-hover:bg-zinc-850">
                       {new Date(member.joined_at).toLocaleDateString(undefined, {
                         month: "short",
                         day: "numeric",
@@ -276,7 +277,7 @@ export default function MembersTab({ projectId }: Props) {
                     </td>
 
                     {/* Actions */}
-                    <td className="py-3 px-6 text-right">
+                    <td className={`py-3 px-6 text-right transition-colors group-hover:bg-zinc-850 ${isLast ? "rounded-br-xl" : ""}`}>
                       <div
                         title={!removable ? (member.role === "owner" ? "The project owner cannot be removed" : "Requires Manager or Owner permissions") : ""}
                         className="inline-block"

@@ -27,7 +27,7 @@ export const getNotifications = async (
   const response = await api.get("/notifications", {
     params: { limit, offset },
   });
-  return response.data;
+  return response.data.items ?? [];
 };
 
 export const getUnreadNotifications = async (
@@ -37,7 +37,7 @@ export const getUnreadNotifications = async (
   const response = await api.get("/notifications/unread", {
     params: { limit, offset },
   });
-  return response.data;
+  return response.data.items ?? [];
 };
 
 export const getUnreadCount = async (): Promise<NotificationCountResponse> => {

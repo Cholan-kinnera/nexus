@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import api from "../api/client";
 import ParticleBackground from "../components/auth/ParticleBackground";
 import { GoogleLogin } from "@react-oauth/google";
@@ -138,7 +139,7 @@ export default function AuthPage() {
 
         <LeftPanel activeTab={activeTab} />
 
-        <div className="flex-1 bg-zinc-900/80 flex flex-col p-8 min-h-[600px] relative z-10 w-full sm:w-[480px]">
+        <div className="flex-1 bg-zinc-900/80 flex flex-col px-10 py-8 min-h-[600px] relative z-10 w-full sm:w-[480px]">
           {/* Tabs */}
           <div className="flex border-b border-zinc-800 mb-8 font-mono">
             {(["login", "signup"] as const).map((tab) => (
@@ -299,6 +300,7 @@ function LoginForm({ onSwitch, onSuccess }: {
   onSuccess: () => void;
 }) {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [form, setForm] = useState<LoginForm>({ email: "", password: "", remember: false });
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -360,13 +362,17 @@ function LoginForm({ onSwitch, onSuccess }: {
             className="accent-zinc-400" />
           Remember me
         </label>
-        <button type="button" className="text-zinc-400 hover:text-white transition-colors cursor-pointer">
+        <button
+          type="button"
+          onClick={() => navigate("/forgot-password")}
+          className="text-zinc-450 hover:text-white transition-colors cursor-pointer"
+        >
           Forgot password?
         </button>
       </div>
 
       <button ref={btnRef} type="submit" disabled={loading}
-        className="magnetic-btn w-full py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-bold font-mono rounded-lg flex items-center justify-center gap-2 mb-5 transition-all duration-200 cursor-pointer">
+        className="magnetic-btn w-full py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-bold font-mono rounded-lg flex items-center justify-center gap-2 mb-5 cursor-pointer">
         {loading ? <Spinner /> : <>Login &rarr;</>}
       </button>
 
@@ -598,7 +604,7 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
       </Field>
 
       <button ref={btnRef} type="submit" disabled={loading}
-        className="magnetic-btn w-full py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-bold font-mono rounded-lg flex items-center justify-center gap-2 mb-5 transition-all duration-200 cursor-pointer">
+        className="magnetic-btn w-full py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-bold font-mono rounded-lg flex items-center justify-center gap-2 mb-5 cursor-pointer">
         {loading ? <Spinner /> : <>Create account &rarr;</>}
       </button>
 
@@ -717,6 +723,18 @@ function SocialButtons({
 }) {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { resolvedTheme } = useTheme();
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(380);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const clampedWidth = Math.max(200, Math.min(400, Math.floor(rect.width)));
+      setWidth(clampedWidth);
+    }
+  }, []);
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     setError("");
@@ -754,17 +772,15 @@ function SocialButtons({
   };
 
   return (
-    <div className="flex flex-col gap-3 items-center justify-center w-full">
-      <div className="w-full flex justify-center">
-        <GoogleLogin
-          onSuccess={handleGoogleSuccess}
-          onError={handleGoogleError}
-          theme="filled_black"
-          shape="rectangular"
-          text="continue_with"
-          width="380"
-        />
-      </div>
+    <div ref={containerRef} className="w-full flex justify-center">
+      <GoogleLogin
+        onSuccess={handleGoogleSuccess}
+        onError={handleGoogleError}
+        theme={resolvedTheme === "light" ? "outline" : "filled_black"}
+        shape="rectangular"
+        text="continue_with"
+        width={width.toString()}
+      />
     </div>
   );
 }

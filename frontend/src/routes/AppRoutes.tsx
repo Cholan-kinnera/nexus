@@ -4,6 +4,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import ProjectsPage from "../pages/ProjectsPage";
 import { TasksPage } from "../pages/TasksPage";
 import AuthPage from "../pages/AuthPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import Landing3D from "../pages/Landing3D";
 import SettingsPage from "../pages/SettingsPage";
 import StoragePage from "../pages/StoragePage";
@@ -13,6 +14,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path="/auth" element={<AuthPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/login" element={<Navigate to="/auth" replace />} />
       <Route path="/signup" element={<Navigate to="/auth?tab=signup" replace />} />
 

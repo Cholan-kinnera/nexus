@@ -101,7 +101,7 @@ export default function InviteMemberModal({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.96, opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="bg-zinc-900/90 backdrop-blur-lg border border-zinc-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl relative z-10 p-6 text-zinc-200"
+          className="bg-zinc-900/90 backdrop-blur-lg border border-zinc-800 rounded-2xl w-full max-w-md shadow-2xl relative z-10 p-6 text-zinc-200"
         >
           {/* Close button */}
           <button

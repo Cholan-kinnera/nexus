@@ -14,7 +14,7 @@ const parseDescription = (rawDesc: string | undefined) => {
   if (!rawDesc) {
     return {
       description: "",
-      category: "Cloud Infrastructure",
+      category: "",
       priority: "MEDIUM",
       deadline: "",
     };
@@ -23,14 +23,14 @@ const parseDescription = (rawDesc: string | undefined) => {
     const data = JSON.parse(rawDesc);
     return {
       description: data.desc || "",
-      category: data.category || "Cloud Infrastructure",
+      category: data.category || "",
       priority: data.priority || "MEDIUM",
       deadline: data.deadline || "",
     };
   } catch (e) {
     return {
       description: rawDesc,
-      category: "Cloud Infrastructure",
+      category: "",
       priority: "MEDIUM",
       deadline: "",
     };
@@ -44,9 +44,12 @@ export default function ProjectsPage() {
   const [description, setDescription] = useState("");
 
   // Advanced configuration states
-  const [category, setCategory] = useState("Cloud Infrastructure");
+  const [category, setCategory] = useState("");
   const [priority, setPriority] = useState("MEDIUM");
   const [deadline, setDeadline] = useState("");
+
+  const [isPriorityOpen, setIsPriorityOpen] = useState(false);
+  const priorityRef = useRef<HTMLDivElement>(null);
 
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState<string>("overview");
@@ -79,6 +82,18 @@ export default function ProjectsPage() {
     loadProjects();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (priorityRef.current && !priorityRef.current.contains(event.target as Node)) {
+        setIsPriorityOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleCreate = async () => {
     if (!title.trim()) {
       alert("Project title is required");
@@ -101,7 +116,7 @@ export default function ProjectsPage() {
 
     setTitle("");
     setDescription("");
-    setCategory("Cloud Infrastructure");
+    setCategory("");
     setPriority("MEDIUM");
     setDeadline("");
 
@@ -154,7 +169,7 @@ export default function ProjectsPage() {
               <h1 className="text-3xl font-bold text-zinc-150">{selectedProject.title}</h1>
               <div className="flex gap-2 font-mono text-[10px]">
                 <span className="px-2 py-0.5 rounded border border-zinc-800 bg-zinc-950 text-zinc-400 uppercase">
-                  {parsed.category || "Cloud Infrastructure"}
+                  {parsed.category || "General"}
                 </span>
                 <span className="px-2 py-0.5 rounded border border-zinc-850 bg-zinc-950 text-amber-400 uppercase tracking-wider font-mono">
                   {parsed.priority || "MEDIUM"}
@@ -201,7 +216,7 @@ export default function ProjectsPage() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 font-mono text-[10px]">
                   <div className="bg-zinc-950/40 p-3 rounded-lg border border-zinc-850">
                     <div className="text-zinc-500 mb-1">CATEGORY</div>
-                    <div className="text-zinc-300 uppercase">{parsed.category}</div>
+                    <div className="text-zinc-300 uppercase">{parsed.category || "General"}</div>
                   </div>
                   <div className="bg-zinc-950/40 p-3 rounded-lg border border-zinc-850">
                     <div className="text-zinc-500 mb-1">PRIORITY</div>
@@ -302,32 +317,71 @@ export default function ProjectsPage() {
               </div>
 
               {/* Priority Selector */}
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-450 mb-1.5">
+              <div className="relative" ref={priorityRef}>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-450 mb-1.5 font-mono">
                   Priority
                 </label>
-                <select
-                  value={priority}
-                  onChange={(e) => setPriority(e.target.value)}
-                  className="w-full bg-zinc-950/60 border border-zinc-800 rounded-lg p-3 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs"
+                <button
+                  type="button"
+                  onClick={() => setIsPriorityOpen(!isPriorityOpen)}
+                  className="w-full bg-zinc-950/60 border border-zinc-800 rounded-lg p-3 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs flex justify-between items-center text-left h-[42px]"
                 >
-                  <option value="LOW">Low</option>
-                  <option value="MEDIUM">Medium</option>
-                  <option value="HIGH">High</option>
-                </select>
+                  <span>
+                    {priority === "LOW" && "Low"}
+                    {priority === "MEDIUM" && "Medium"}
+                    {priority === "HIGH" && "High"}
+                  </span>
+                  <svg
+                    className={`w-4 h-4 text-zinc-500 transition-transform duration-200 ${isPriorityOpen ? "rotate-180" : ""}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {isPriorityOpen && (
+                  <div className="absolute z-50 mt-1 w-full bg-zinc-950 border border-zinc-800 rounded-lg shadow-xl overflow-hidden py-1">
+                    {[
+                      { value: "LOW", label: "Low" },
+                      { value: "MEDIUM", label: "Medium" },
+                      { value: "HIGH", label: "High" }
+                    ].map((item) => (
+                      <button
+                        key={item.value}
+                        type="button"
+                        onClick={() => {
+                          setPriority(item.value);
+                          setIsPriorityOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2.5 text-xs transition-colors duration-150 ${
+                          priority === item.value
+                            ? "bg-violet-600/10 text-violet-600 dark:bg-violet-600/20 dark:text-violet-400 font-semibold"
+                            : "text-zinc-300 hover:bg-zinc-800"
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Completion Date */}
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-450 mb-1.5">
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-450 mb-1.5 font-mono">
                   Target Completion Date
                 </label>
-                <input
-                  type="date"
-                  value={deadline}
-                  onChange={(e) => setDeadline(e.target.value)}
-                  className="w-full bg-zinc-950/60 border border-zinc-800 rounded-lg p-3 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs"
-                />
+                <div className="relative">
+                  <input
+                    type="date"
+                    value={deadline}
+                    onChange={(e) => setDeadline(e.target.value)}
+                    className="w-full bg-zinc-950/60 border border-zinc-800 rounded-lg p-3 pr-10 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs h-[42px] relative z-10"
+                  />
+                  <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none z-0" />
+                </div>
               </div>
             </div>
 
@@ -392,7 +446,7 @@ export default function ProjectsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {projects.map((project) => {
               const parsed = parseDescription(project.description);
-              const projCategory = parsed.category || "Cloud Infrastructure";
+              const projCategory = parsed.category || "General";
               const projPriority = parsed.priority || "MEDIUM";
               const projDeadline = parsed.deadline;
               const projDescription = parsed.description;
