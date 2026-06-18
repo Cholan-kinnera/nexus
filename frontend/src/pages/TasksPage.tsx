@@ -7,8 +7,8 @@ import {
   getTaskAttachments,
   uploadTaskAttachment,
   deleteTaskAttachment,
-  TaskAttachment
 } from "../services/taskService";
+import type { TaskAttachment } from "../services/taskService";
 import { getComments, createComment } from "../services/commentService";
 import { getProjects } from "../services/projectService";
 import DashboardLayout from "../layouts/DashboardLayout";
