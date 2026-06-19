@@ -14,7 +14,6 @@ from services.project_service import (
 )
 from schemas.project import ProjectCreate, ProjectResponse, ProjectUpdate
 
-
 router = APIRouter()
 
 

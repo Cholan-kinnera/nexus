@@ -1,7 +1,7 @@
 """add comments table
 
 Revision ID: a91cf22f2031
-Revises: 
+Revises:
 Create Date: 2026-05-26 16:26:59.264164
 
 """
@@ -10,7 +10,6 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-
 
 # revision identifiers, used by Alembic.
 revision: str = "a91cf22f2031"

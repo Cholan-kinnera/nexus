@@ -12,7 +12,6 @@ from alembic import op
 import sqlalchemy as sa
 from datetime import datetime, timezone
 
-
 # revision identifiers, used by Alembic.
 revision: str = "b3f1a7d92e01"
 down_revision: Union[str, Sequence[str], None] = "028abf637114"
@@ -29,9 +28,7 @@ def upgrade() -> None:
     conn = op.get_bind()
 
     # Find all projects whose owner is missing from project_members
-    missing_owners = conn.execute(
-        sa.text(
-            """
+    missing_owners = conn.execute(sa.text("""
             SELECT p.id AS project_id, p.owner_id
             FROM projects p
             WHERE p.owner_id IS NOT NULL
@@ -41,9 +38,7 @@ def upgrade() -> None:
                   WHERE pm.project_id = p.id
                     AND pm.user_id = p.owner_id
               )
-        """
-        )
-    ).fetchall()
+        """)).fetchall()
 
     if not missing_owners:
         print("No projects missing owner membership — nothing to backfill.")
@@ -56,13 +51,11 @@ def upgrade() -> None:
         project_id = row[0]
         owner_id = row[1]
         conn.execute(
-            sa.text(
-                """
+            sa.text("""
                 INSERT INTO project_members (project_id, user_id, role, invited_by, joined_at)
                 VALUES (:project_id, :user_id, 'owner', NULL, :joined_at)
                 ON CONFLICT ON CONSTRAINT uq_project_member DO NOTHING
-            """
-            ),
+            """),
             {
                 "project_id": project_id,
                 "user_id": owner_id,
@@ -81,16 +74,12 @@ def downgrade() -> None:
     """
     conn = op.get_bind()
 
-    conn.execute(
-        sa.text(
-            """
+    conn.execute(sa.text("""
             DELETE FROM project_members pm
             USING projects p
             WHERE pm.project_id = p.id
               AND pm.user_id = p.owner_id
               AND pm.role = 'owner'
               AND pm.invited_by IS NULL
-        """
-        )
-    )
+        """))
     print("Downgrade complete: backfilled owner memberships removed.")
