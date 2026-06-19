@@ -160,12 +160,16 @@ jobs:
           pip install httpx
 
       - name: Validate Python Syntax & Imports
+      env:
+        DATABASE_URL: postgresql+asyncpg://postgres:ci_postgres_password@localhost:5432/nexus_pm
+        SECRET_KEY: ci_secret_key_123_signature_verification_jwt
         run: |
           python -m compileall -q .
           python -c "import main"
 
       - name: Run Backend Tests
-        env:
+
+      env:
           DATABASE_URL: postgresql+asyncpg://postgres:ci_postgres_password@localhost:5432/nexus_pm
           SECRET_KEY: ci_secret_key_123_signature_verification_jwt
         run: |
