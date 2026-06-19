@@ -6,6 +6,7 @@ from core.config import settings
 
 logger = logging.getLogger(__name__)
 
+
 class RedisService:
     def __init__(self):
         self.redis_url = settings.REDIS_URL
@@ -20,7 +21,7 @@ class RedisService:
                 self.redis_url,
                 decode_responses=True,
                 socket_timeout=5.0,
-                socket_connect_timeout=5.0
+                socket_connect_timeout=5.0,
             )
             # Send initial ping to check connectivity
             await self.client.ping()
@@ -45,7 +46,7 @@ class RedisService:
                     self.redis_url,
                     decode_responses=True,
                     socket_timeout=5.0,
-                    socket_connect_timeout=5.0
+                    socket_connect_timeout=5.0,
                 )
                 await self.client.ping()
                 self.is_connected = True
@@ -75,7 +76,9 @@ class RedisService:
             asyncio.create_task(self._reconnect_loop())
             return False
 
-    async def set_cache(self, key: str, value: str, expire_seconds: Optional[int] = None) -> bool:
+    async def set_cache(
+        self, key: str, value: str, expire_seconds: Optional[int] = None
+    ) -> bool:
         """Write key to Redis with an optional expiry window."""
         if not self.is_connected or not self.client:
             logger.warning(f"Redis not connected. Skipped caching key: {key}")
@@ -122,6 +125,7 @@ class RedisService:
         except Exception as exc:
             logger.error(f"Failed to verify existence of key '{key}': {exc}")
             return False
+
 
 # Singleton instance of the Redis Service
 redis_service = RedisService()

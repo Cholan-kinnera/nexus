@@ -29,9 +29,7 @@ async def get_project_member_role(
         return role
 
     # 2. Fallback to Project owner_id check
-    result = await db.execute(
-        select(Project.owner_id).where(Project.id == project_id)
-    )
+    result = await db.execute(select(Project.owner_id).where(Project.id == project_id))
     owner_id = result.scalar_one_or_none()
     if owner_id == user_id:
         return "owner"
@@ -68,9 +66,7 @@ async def add_project_member(
     Manager can invite: developer, viewer only.
     """
     # 1. Verify project exists
-    proj_result = await db.execute(
-        select(Project).where(Project.id == project_id)
-    )
+    proj_result = await db.execute(select(Project).where(Project.id == project_id))
     project = proj_result.scalar_one_or_none()
     if not project:
         raise HTTPException(
@@ -312,9 +308,7 @@ async def update_project_member_role(
             owner_member.role = "manager"
 
         # Update Project.owner_id fallback reference
-        proj_result = await db.execute(
-            select(Project).where(Project.id == project_id)
-        )
+        proj_result = await db.execute(select(Project).where(Project.id == project_id))
         project = proj_result.scalar_one_or_none()
         if project:
             project.owner_id = user_id
@@ -343,13 +337,12 @@ async def update_project_member_role(
             },
         )
     except Exception as e:
-        logger.error(
-            f"Failed to log MEMBER_ROLE_UPDATED event: {e}", exc_info=True
-        )
+        logger.error(f"Failed to log MEMBER_ROLE_UPDATED event: {e}", exc_info=True)
 
     # 8. Create notification for target user safely
     try:
         from services.notification_service import create_notification
+
         proj_result = await db.execute(
             select(Project.title).where(Project.id == project_id)
         )
@@ -367,9 +360,7 @@ async def update_project_member_role(
             },
         )
     except Exception as e:
-        logger.error(
-            f"Failed to notify user of role update: {e}", exc_info=True
-        )
+        logger.error(f"Failed to notify user of role update: {e}", exc_info=True)
 
     return member
 

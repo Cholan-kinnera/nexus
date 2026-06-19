@@ -28,8 +28,7 @@ async def create_comment(
 
     # Role-based check: Owner, Manager, Developer can create comments
     await require_project_role(
-        db, task.project_id, user_id,
-        ["owner", "manager", "developer"]
+        db, task.project_id, user_id, ["owner", "manager", "developer"]
     )
 
     # Create comment
@@ -49,24 +48,26 @@ async def create_comment(
             metadata={
                 "comment_id": comment.id,
                 "task_id": task_id,
-                "project_id": task.project_id
-            }
+                "project_id": task.project_id,
+            },
         )
 
-        project_result = await db.execute(select(Project).where(Project.id == task.project_id))
+        project_result = await db.execute(
+            select(Project).where(Project.id == task.project_id)
+        )
         project = project_result.scalar_one()
 
         # Notify project members (Owner, Manager, Developer) excluding commenter
         member_result = await db.execute(
             select(ProjectMember.user_id).where(
                 ProjectMember.project_id == task.project_id,
-                ProjectMember.role.in_(["owner", "manager", "developer"])
+                ProjectMember.role.in_(["owner", "manager", "developer"]),
             )
         )
         notify_users = {row[0] for row in member_result.fetchall()}
         if task.assigned_to:
             notify_users.add(task.assigned_to)
-        
+
         # Include project owner in comment notifications
         notify_users.add(project.owner_id)
 
@@ -82,19 +83,19 @@ async def create_comment(
                     "comment_id": comment.id,
                     "task_id": task_id,
                     "project_id": task.project_id,
-                    "task_title": task.title
-                }
+                    "task_title": task.title,
+                },
             )
     except Exception as e:
-        logger.error(f"Failed to generate comment events/notifications: {e}", exc_info=True)
+        logger.error(
+            f"Failed to generate comment events/notifications: {e}", exc_info=True
+        )
 
     return CommentResponse.model_validate(comment)
 
 
 async def get_comments_by_task(
-    db: AsyncSession,
-    task_id: int,
-    params: PaginationParams
+    db: AsyncSession, task_id: int, params: PaginationParams
 ) -> dict:
     # Validate task exists
     stmt = select(Task).where(Task.id == task_id)
@@ -107,11 +108,7 @@ async def get_comments_by_task(
     query = select(Comment).where(Comment.task_id == task_id)
 
     return await paginate(
-        db=db,
-        query=query,
-        model=Comment,
-        params=params,
-        search_fields=["content"]
+        db=db, query=query, model=Comment, params=params, search_fields=["content"]
     )
 
 
@@ -125,7 +122,9 @@ async def delete_comment(db: AsyncSession, comment_id: int, user_id: int) -> Non
 
     # Validate ownership
     if comment.user_id != user_id:
-        raise HTTPException(status_code=403, detail="Not authorized to delete this comment")
+        raise HTTPException(
+            status_code=403, detail="Not authorized to delete this comment"
+        )
 
     # Delete
     await db.delete(comment)

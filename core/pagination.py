@@ -8,9 +8,10 @@ from fastapi import Query
 
 T = TypeVar("T")
 
+
 class PaginationParams:
     """FastAPI query parameter dependency for pagination, searching, and sorting."""
-    
+
     def __init__(
         self,
         page: int = Query(1, ge=1, description="Page number"),
@@ -30,6 +31,7 @@ class PaginationParams:
 
 class PaginatedResponse(BaseModel, Generic[T]):
     """Generic pagination response envelope."""
+
     items: List[T]
     total: int
     page: int

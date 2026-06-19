@@ -1,39 +1,26 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import (
-    BaseModel,
-    ConfigDict,
-    Field
-)
+from pydantic import BaseModel, ConfigDict, Field
+
 
 class TaskCreate(BaseModel):
 
-    title: str = Field(
-        ...,
-        min_length=3,
-        max_length=100,
-        description="Task title"
-    )
+    title: str = Field(..., min_length=3, max_length=100, description="Task title")
 
     description: Optional[str] = Field(
-        default=None,
-        max_length=500,
-        description="Task description"
+        default=None, max_length=500, description="Task description"
     )
 
-    priority: str = Field(
-        default="MEDIUM",
-        description="Task priority"
-    )
+    priority: str = Field(default="MEDIUM", description="Task priority")
 
     due_date: Optional[datetime] = None
 
     project_id: int
     assigned_to: Optional[int] = Field(
-        default=None,
-        description="ID of the user assigned to this task"
+        default=None, description="ID of the user assigned to this task"
     )
+
 
 class TaskUpdate(BaseModel):
     title: Optional[str] = Field(default=None, min_length=3, max_length=100)
@@ -44,6 +31,7 @@ class TaskUpdate(BaseModel):
 
 
 from schemas.user import UserResponse
+
 
 class TaskAttachmentResponse(BaseModel):
     id: int
@@ -58,6 +46,7 @@ class TaskAttachmentResponse(BaseModel):
     user: Optional[UserResponse] = None
 
     model_config = ConfigDict(from_attributes=True)
+
 
 class TaskResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)

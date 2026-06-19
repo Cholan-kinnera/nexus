@@ -29,9 +29,11 @@ async def get_current_user_info(
             id=current_user.id,
             email=current_user.email,
             role=current_user.role,
-            created_at=current_user.created_at if hasattr(current_user, "created_at") else None,
+            created_at=(
+                current_user.created_at if hasattr(current_user, "created_at") else None
+            ),
             full_name=current_user.full_name,
-            avatar_url=current_user.avatar_url
+            avatar_url=current_user.avatar_url,
         )
     except Exception as exc:
         logger.error(f"Error retrieving user info: {exc}")
@@ -61,7 +63,7 @@ async def update_current_user_info(
                 if result.scalar_one_or_none():
                     raise HTTPException(
                         status_code=status.HTTP_409_CONFLICT,
-                        detail="Email already in use"
+                        detail="Email already in use",
                     )
             current_user.email = data.email
         if data.role is not None:
@@ -76,8 +78,10 @@ async def update_current_user_info(
             email=current_user.email,
             full_name=current_user.full_name,
             role=current_user.role,
-            created_at=current_user.created_at if hasattr(current_user, "created_at") else None,
-            avatar_url=current_user.avatar_url
+            created_at=(
+                current_user.created_at if hasattr(current_user, "created_at") else None
+            ),
+            avatar_url=current_user.avatar_url,
         )
     except HTTPException:
         raise
@@ -103,30 +107,34 @@ async def upload_profile_avatar(
     """
     try:
         # Validate format extension
-        ext = file.filename.split(".")[-1].lower() if file.filename and "." in file.filename else ""
+        ext = (
+            file.filename.split(".")[-1].lower()
+            if file.filename and "." in file.filename
+            else ""
+        )
         if ext not in ALLOWED_AVATAR_EXTENSIONS:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"File extension '.{ext}' is not supported."
+                detail=f"File extension '.{ext}' is not supported.",
             )
-            
+
         # Validate MIME type
         if file.content_type and file.content_type not in ALLOWED_AVATAR_MIMES:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Mime type '{file.content_type}' is not supported."
+                detail=f"Mime type '{file.content_type}' is not supported.",
             )
 
         # Read file content
         file_data = await file.read()
-        
+
         # Validate size boundary
         if len(file_data) > MAX_AVATAR_SIZE:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"File size exceeds the limit of {MAX_AVATAR_SIZE / (1024 * 1024)} MB."
+                detail=f"File size exceeds the limit of {MAX_AVATAR_SIZE / (1024 * 1024)} MB.",
             )
-            
+
         # Delete old avatar file from storage if present
         if current_user.avatar_url:
             try:
@@ -134,44 +142,44 @@ async def upload_profile_avatar(
                 storage_service.delete_file(old_key)
                 logger.info(f"Deleted old user avatar: {old_key}")
             except Exception as e:
-                logger.warning(f"Failed to delete old avatar file '{current_user.avatar_url}': {e}")
-                
+                logger.warning(
+                    f"Failed to delete old avatar file '{current_user.avatar_url}': {e}"
+                )
+
         # Upload new avatar
         new_key = storage_service.upload_file(
             file_data=file_data,
             file_name=file.filename or "avatar.png",
-            content_type=file.content_type
+            content_type=file.content_type,
         )
-        
+
         # Save new retrieval URL to the user record
         avatar_url = storage_service.generate_file_url(new_key)
         current_user.avatar_url = avatar_url
-        
+
         db.add(current_user)
         await db.commit()
         await db.refresh(current_user)
-        
+
         return AvatarResponse(avatar_url=avatar_url)
     except HTTPException:
         raise
     except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception as e:
         logger.error(f"Error occurred during avatar upload: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Avatar upload failed: {str(e)}"
+            detail=f"Avatar upload failed: {str(e)}",
         )
+
 
 @router.get("/me/projects", response_model=List[ProjectResponse], tags=["Users"])
 async def get_my_projects(
-    current_user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db)
+    current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)
 ):
     from services.project_member_service import get_user_projects
+
     projects = await get_user_projects(db, current_user.id)
     return projects
 
@@ -180,7 +188,7 @@ async def get_my_projects(
 async def lookup_user_by_email(
     email: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ) -> UserResponse:
     """Lookup a user by email address."""
     try:
@@ -189,14 +197,14 @@ async def lookup_user_by_email(
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found with this email"
+                detail="User not found with this email",
             )
         return UserResponse(
             id=user.id,
             email=user.email,
             full_name=user.full_name,
             role=user.role,
-            created_at=user.created_at if hasattr(user, "created_at") else None
+            created_at=user.created_at if hasattr(user, "created_at") else None,
         )
     except HTTPException:
         raise
@@ -204,14 +212,13 @@ async def lookup_user_by_email(
         logger.error(f"Error looking up user by email {email}: {exc}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error looking up user"
+            detail="Error looking up user",
         )
 
 
 @router.delete("/me", status_code=status.HTTP_204_NO_CONTENT, tags=["Users"])
 async def delete_current_user_account(
-    current_user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db)
+    current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)
 ):
     """Delete current authenticated user account and all owned resources."""
     try:
@@ -243,9 +250,7 @@ async def delete_current_user_account(
 
         for proj in owned_projects:
             # Delete tasks in the project
-            await db.execute(
-                delete(Task).where(Task.project_id == proj.id)
-            )
+            await db.execute(delete(Task).where(Task.project_id == proj.id))
             # Delete project
             await db.delete(proj)
 
@@ -259,5 +264,3 @@ async def delete_current_user_account(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error deleting user account",
         )
-
-

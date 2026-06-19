@@ -43,6 +43,7 @@ target_metadata = Base.metadata
 import asyncio
 import os
 
+
 def get_url() -> str:
     """Retrieve database URL from environment variable or fallback to alembic.ini."""
     url = os.getenv("DATABASE_URL")
@@ -81,9 +82,7 @@ def run_migrations_offline() -> None:
 
 def do_run_migrations(connection) -> None:
     """Helper method to run migrations synchronously on a connection."""
-    context.configure(
-        connection=connection, target_metadata=target_metadata
-    )
+    context.configure(connection=connection, target_metadata=target_metadata)
 
     with context.begin_transaction():
         context.run_migrations()
@@ -116,6 +115,7 @@ def run_migrations_online() -> None:
     else:
         # Fallback to standard synchronous engine (e.g. psycopg2)
         from sqlalchemy import create_engine
+
         connectable = create_engine(
             url,
             poolclass=pool.NullPool,

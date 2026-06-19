@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Boolean
 
 from db.database import Base
 
+
 class PasswordResetOTP(Base):
     """PasswordResetOTP model for storing hashed OTP codes used to reset passwords."""
 
@@ -14,7 +15,9 @@ class PasswordResetOTP(Base):
     expires_at = Column(DateTime(timezone=True), nullable=False)
     used = Column(Boolean, default=False, nullable=False)
     attempts = Column(Integer, default=0, nullable=False)
-    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False)
+    created_at = Column(
+        DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False
+    )
 
     def __repr__(self) -> str:
         return f"<PasswordResetOTP(id={self.id}, email={self.email}, used={self.used})>"

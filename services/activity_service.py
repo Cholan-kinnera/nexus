@@ -10,6 +10,7 @@ Supported actions:
     COMMENT_ADDED
     LOGIN_SUCCESS
 """
+
 import logging
 from typing import Any, Optional
 
@@ -91,10 +92,9 @@ async def get_activity_logs(
     try:
         # Get project IDs the user is a member of (via project_members table)
         from models.project_member import ProjectMember
+
         member_result = await db.execute(
-            select(ProjectMember.project_id).where(
-                ProjectMember.user_id == user_id
-            )
+            select(ProjectMember.project_id).where(ProjectMember.user_id == user_id)
         )
         member_project_ids = [row[0] for row in member_result.fetchall()]
 
@@ -107,27 +107,17 @@ async def get_activity_logs(
         accessible_project_ids = list(set(member_project_ids + owner_project_ids))
 
         # Build query: logs by this user OR logs referencing their projects
-        query = (
-            select(ActivityLog)
-            .where(
-                (ActivityLog.user_id == user_id)
-                | (
-                    (ActivityLog.entity_type == "project")
-                    & (ActivityLog.entity_id.in_(accessible_project_ids))
-                )
-                | (
-                    (ActivityLog.entity_type == "task")
-                    & (ActivityLog.user_id == user_id)
-                )
+        query = select(ActivityLog).where(
+            (ActivityLog.user_id == user_id)
+            | (
+                (ActivityLog.entity_type == "project")
+                & (ActivityLog.entity_id.in_(accessible_project_ids))
             )
+            | ((ActivityLog.entity_type == "task") & (ActivityLog.user_id == user_id))
         )
 
         return await paginate(
-            db=db,
-            query=query,
-            model=ActivityLog,
-            params=params,
-            search_fields=None
+            db=db, query=query, model=ActivityLog, params=params, search_fields=None
         )
 
     except Exception as e:

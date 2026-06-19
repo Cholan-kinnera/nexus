@@ -8,6 +8,8 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from models.comment import Comment
+
+
 class User(Base):
     """User model for storing user information."""
 
@@ -20,9 +22,14 @@ class User(Base):
     role = Column(String(255), nullable=True)
     avatar_url = Column(Text, nullable=True)
     google_id = Column(String(255), nullable=True, unique=True)
-    auth_provider = Column(String(50), nullable=False, default="local", server_default="local")
+    auth_provider = Column(
+        String(50), nullable=False, default="local", server_default="local"
+    )
     created_at = Column(
-        DateTime(timezone=True), nullable=False, default=lambda: datetime.now(UTC), server_default=func.now()
+        DateTime(timezone=True),
+        nullable=False,
+        default=lambda: datetime.now(UTC),
+        server_default=func.now(),
     )
     updated_at = Column(
         DateTime(timezone=True),
@@ -36,7 +43,5 @@ class User(Base):
         return f"<User(id={self.id}, email={self.email})>"
 
     comments: Mapped[list["Comment"]] = relationship(
-    "Comment",
-    back_populates="user",
-    cascade="all, delete-orphan"
-)
+        "Comment", back_populates="user", cascade="all, delete-orphan"
+    )

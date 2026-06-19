@@ -15,17 +15,23 @@ from services.comment_service import (
 router = APIRouter(tags=["comments"])
 
 
-@router.post("/api/tasks/{task_id}/comments", response_model=CommentResponse, status_code=201)
+@router.post(
+    "/api/tasks/{task_id}/comments", response_model=CommentResponse, status_code=201
+)
 async def create_task_comment(
     task_id: int,
     data: CommentCreate,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> CommentResponse:
-    return await create_comment(db=db, task_id=task_id, user_id=current_user.id, data=data)
+    return await create_comment(
+        db=db, task_id=task_id, user_id=current_user.id, data=data
+    )
 
 
-@router.get("/api/tasks/{task_id}/comments", response_model=PaginatedResponse[CommentResponse])
+@router.get(
+    "/api/tasks/{task_id}/comments", response_model=PaginatedResponse[CommentResponse]
+)
 async def get_task_comments(
     task_id: int,
     params: PaginationParams = Depends(),

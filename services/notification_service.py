@@ -6,6 +6,7 @@ Provides functions for creating, querying, and managing user notifications.
 Supported notification triggers:
     TASK_ASSIGNED, TASK_UPDATED, COMMENT_ADDED, PROJECT_UPDATED
 """
+
 import logging
 from typing import Any, Optional
 
@@ -51,9 +52,7 @@ async def create_notification(
         await db.commit()
         await db.refresh(notification)
 
-        logger.info(
-            f"Notification created: user_id={user_id} title='{title}'"
-        )
+        logger.info(f"Notification created: user_id={user_id} title='{title}'")
         return notification
 
     except Exception as e:
@@ -83,20 +82,13 @@ async def get_user_notifications(
         Dict matching PaginatedResponse structure.
     """
     try:
-        query = (
-            select(Notification)
-            .where(Notification.user_id == user_id)
-        )
+        query = select(Notification).where(Notification.user_id == user_id)
 
         if unread_only:
             query = query.where(Notification.is_read == False)
 
         return await paginate(
-            db=db,
-            query=query,
-            model=Notification,
-            params=params,
-            search_fields=None
+            db=db, query=query, model=Notification, params=params, search_fields=None
         )
 
     except Exception as e:
@@ -177,10 +169,7 @@ async def mark_all_notifications_read(
     try:
         stmt = (
             update(Notification)
-            .where(
-                (Notification.user_id == user_id)
-                & (Notification.is_read == False)
-            )
+            .where((Notification.user_id == user_id) & (Notification.is_read == False))
             .values(is_read=True)
         )
 

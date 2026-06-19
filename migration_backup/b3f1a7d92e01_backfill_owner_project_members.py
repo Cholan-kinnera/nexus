@@ -5,6 +5,7 @@ Revises: 028abf637114
 Create Date: 2026-06-13 12:45:00.000000
 
 """
+
 from typing import Sequence, Union
 
 from alembic import op
@@ -13,8 +14,8 @@ from datetime import datetime, timezone
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'b3f1a7d92e01'
-down_revision: Union[str, Sequence[str], None] = '028abf637114'
+revision: str = "b3f1a7d92e01"
+down_revision: Union[str, Sequence[str], None] = "028abf637114"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -29,7 +30,8 @@ def upgrade() -> None:
 
     # Find all projects whose owner is missing from project_members
     missing_owners = conn.execute(
-        sa.text("""
+        sa.text(
+            """
             SELECT p.id AS project_id, p.owner_id
             FROM projects p
             WHERE p.owner_id IS NOT NULL
@@ -39,7 +41,8 @@ def upgrade() -> None:
                   WHERE pm.project_id = p.id
                     AND pm.user_id = p.owner_id
               )
-        """)
+        """
+        )
     ).fetchall()
 
     if not missing_owners:
@@ -53,11 +56,13 @@ def upgrade() -> None:
         project_id = row[0]
         owner_id = row[1]
         conn.execute(
-            sa.text("""
+            sa.text(
+                """
                 INSERT INTO project_members (project_id, user_id, role, invited_by, joined_at)
                 VALUES (:project_id, :user_id, 'owner', NULL, :joined_at)
                 ON CONFLICT ON CONSTRAINT uq_project_member DO NOTHING
-            """),
+            """
+            ),
             {
                 "project_id": project_id,
                 "user_id": owner_id,
@@ -77,13 +82,15 @@ def downgrade() -> None:
     conn = op.get_bind()
 
     conn.execute(
-        sa.text("""
+        sa.text(
+            """
             DELETE FROM project_members pm
             USING projects p
             WHERE pm.project_id = p.id
               AND pm.user_id = p.owner_id
               AND pm.role = 'owner'
               AND pm.invited_by IS NULL
-        """)
+        """
+        )
     )
     print("Downgrade complete: backfilled owner memberships removed.")

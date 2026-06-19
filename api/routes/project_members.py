@@ -8,30 +8,35 @@ from models.user import User
 from schemas.project_member import (
     ProjectMemberCreate,
     ProjectMemberUpdate,
-    ProjectMemberResponse
+    ProjectMemberResponse,
 )
 from services.project_member_service import (
     add_project_member,
     get_project_members,
     update_project_member_role,
-    remove_project_member
+    remove_project_member,
 )
 
 router = APIRouter()
 
-@router.post("/{project_id}/members", response_model=ProjectMemberResponse, status_code=status.HTTP_201_CREATED)
+
+@router.post(
+    "/{project_id}/members",
+    response_model=ProjectMemberResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_project_member(
     project_id: int,
     member_data: ProjectMemberCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     member = await add_project_member(
         db=db,
         project_id=project_id,
         user_id=member_data.user_id,
         role=member_data.role,
-        current_user_id=current_user.id
+        current_user_id=current_user.id,
     )
     # The return from add_project_member is a ProjectMember model instance.
     # To match ProjectMemberResponse, it lacks full_name and email which are populated in get_project_members.
@@ -44,7 +49,7 @@ async def create_project_member(
 async def list_project_members(
     project_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     # Depending on requirements, we could enforce that only members of the project can view members.
     # But the instruction just says "JWT protected".
@@ -58,14 +63,14 @@ async def update_member_role(
     user_id: int,
     member_data: ProjectMemberUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     member = await update_project_member_role(
         db=db,
         project_id=project_id,
         user_id=user_id,
         new_role=member_data.role,
-        current_user_id=current_user.id
+        current_user_id=current_user.id,
     )
     return member
 
@@ -75,12 +80,9 @@ async def remove_member(
     project_id: int,
     user_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     await remove_project_member(
-        db=db,
-        project_id=project_id,
-        user_id=user_id,
-        current_user_id=current_user.id
+        db=db, project_id=project_id, user_id=user_id, current_user_id=current_user.id
     )
     return {"message": "Member removed successfully"}

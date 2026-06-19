@@ -7,7 +7,7 @@ class UserResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    full_name: str  | None = None 
+    full_name: str | None = None
     email: EmailStr
     role: Optional[str] = None
     created_at: Optional[datetime] = None
@@ -38,6 +38,3 @@ class UserUpdate(BaseModel):
 
 class AvatarResponse(BaseModel):
     avatar_url: str
-
-
-

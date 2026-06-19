@@ -11,6 +11,7 @@ from models.task_attachment import TaskAttachment
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
+
 @router.post("/upload", status_code=status.HTTP_201_CREATED)
 async def upload_file(
     file: UploadFile = File(...),
@@ -22,35 +23,33 @@ async def upload_file(
     """
     try:
         file_data = await file.read()
-        
+
         # Validate and upload
         file_key = storage_service.upload_file(
             file_data=file_data,
             file_name=file.filename or "uploaded_file",
-            content_type=file.content_type
+            content_type=file.content_type,
         )
-        
+
         # Generate retrieval URL
         file_url = storage_service.generate_file_url(file_key)
-        
+
         return {
             "file_key": file_key,
             "url": file_url,
             "filename": file.filename,
-            "content_type": file.content_type
+            "content_type": file.content_type,
         }
     except ValueError as e:
         # Catch validation errors (size/type)
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception as e:
         logger.error(f"Error occurred during file upload: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Upload failed: {str(e)}"
+            detail=f"Upload failed: {str(e)}",
         )
+
 
 @router.delete("/delete/{file_key}")
 async def delete_file(
@@ -75,12 +74,13 @@ async def delete_file(
     if not success:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Failed to delete file. The key '{file_key}' may not exist."
+            detail=f"Failed to delete file. The key '{file_key}' may not exist.",
         )
     return {
         "success": True,
-        "message": f"File key '{file_key}' was deleted successfully from database and storage."
+        "message": f"File key '{file_key}' was deleted successfully from database and storage.",
     }
+
 
 @router.get("", status_code=status.HTTP_200_OK)
 async def list_files(
@@ -95,5 +95,5 @@ async def list_files(
         logger.error(f"Error occurred during file listing: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to list files: {str(e)}"
+            detail=f"Failed to list files: {str(e)}",
         )

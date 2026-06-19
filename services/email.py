@@ -5,6 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 async def send_otp_email(email: str, otp: str) -> bool:
     """
     Sends a 6-digit OTP code to the specified email using AWS SES.
@@ -15,7 +16,9 @@ async def send_otp_email(email: str, otp: str) -> bool:
     sender_email = os.getenv("SES_SENDER_EMAIL")
 
     if not aws_access_key or not aws_secret_key or not sender_email:
-        logger.warning("AWS SES credentials or sender email are not configured. Email will be printed to terminal instead.")
+        logger.warning(
+            "AWS SES credentials or sender email are not configured. Email will be printed to terminal instead."
+        )
         logger.info(f"🔑 [AWS SES SIMULATOR] Your security verification code is: {otp}")
         print(f"\n==================================================")
         print(f"📧 [AWS SES SIMULATOR] Sending email to: {email}")
@@ -30,12 +33,12 @@ async def send_otp_email(email: str, otp: str) -> bool:
             "ses",
             aws_access_key_id=aws_access_key,
             aws_secret_access_key=aws_secret_key,
-            region_name=aws_region
+            region_name=aws_region,
         )
 
         subject = "Nexus PM Security Verification"
         body_text = f"Your Nexus PM security verification code is: {otp}. This code expires in 5 minutes."
-        
+
         body_html = f"""
         <html>
         <head></head>
@@ -59,11 +62,8 @@ async def send_otp_email(email: str, otp: str) -> bool:
             Destination={"ToAddresses": [email]},
             Message={
                 "Subject": {"Data": subject},
-                "Body": {
-                    "Text": {"Data": body_text},
-                    "Html": {"Data": body_html}
-                }
-            }
+                "Body": {"Text": {"Data": body_text}, "Html": {"Data": body_html}},
+            },
         )
         logger.info(f"OTP email successfully sent to {email} via AWS SES.")
         return True
@@ -88,7 +88,9 @@ async def send_password_reset_email(email: str, otp: str) -> bool:
     sender_email = os.getenv("SES_SENDER_EMAIL")
 
     if not aws_access_key or not aws_secret_key or not sender_email:
-        logger.warning("AWS SES credentials or sender email are not configured. Email will be printed to terminal instead.")
+        logger.warning(
+            "AWS SES credentials or sender email are not configured. Email will be printed to terminal instead."
+        )
         logger.info(f"🔑 [AWS SES SIMULATOR] Your password reset code is: {otp}")
         print(f"\n==================================================")
         print(f"📧 [AWS SES SIMULATOR] Sending password reset email to: {email}")
@@ -103,12 +105,12 @@ async def send_password_reset_email(email: str, otp: str) -> bool:
             "ses",
             aws_access_key_id=aws_access_key,
             aws_secret_access_key=aws_secret_key,
-            region_name=aws_region
+            region_name=aws_region,
         )
 
         subject = "Nexus PM Password Reset Request"
         body_text = f"Your Nexus PM password reset verification code is: {otp}. This code expires in 5 minutes. If you did not request a password reset, please ignore this email."
-        
+
         body_html = f"""
         <html>
         <head></head>
@@ -133,13 +135,12 @@ async def send_password_reset_email(email: str, otp: str) -> bool:
             Destination={"ToAddresses": [email]},
             Message={
                 "Subject": {"Data": subject},
-                "Body": {
-                    "Text": {"Data": body_text},
-                    "Html": {"Data": body_html}
-                }
-            }
+                "Body": {"Text": {"Data": body_text}, "Html": {"Data": body_html}},
+            },
         )
-        logger.info(f"Password reset OTP email successfully sent to {email} via AWS SES.")
+        logger.info(
+            f"Password reset OTP email successfully sent to {email} via AWS SES."
+        )
         return True
     except (BotoCoreError, ClientError) as e:
         logger.error(f"Failed to send password reset email via AWS SES: {e}")

@@ -2,14 +2,18 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
+
 class ProjectMemberBase(BaseModel):
     role: str
+
 
 class ProjectMemberCreate(ProjectMemberBase):
     user_id: int
 
+
 class ProjectMemberUpdate(ProjectMemberBase):
     pass
+
 
 class ProjectMemberResponse(BaseModel):
     id: int

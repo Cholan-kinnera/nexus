@@ -21,7 +21,9 @@ from services.notification_service import (
 router = APIRouter(tags=["Notifications"])
 
 
-@router.get("/api/notifications", response_model=PaginatedResponse[NotificationResponse])
+@router.get(
+    "/api/notifications", response_model=PaginatedResponse[NotificationResponse]
+)
 async def read_notifications(
     params: PaginationParams = Depends(),
     db: AsyncSession = Depends(get_db),
@@ -36,7 +38,9 @@ async def read_notifications(
     )
 
 
-@router.get("/api/notifications/unread", response_model=PaginatedResponse[NotificationResponse])
+@router.get(
+    "/api/notifications/unread", response_model=PaginatedResponse[NotificationResponse]
+)
 async def read_unread_notifications(
     params: PaginationParams = Depends(),
     db: AsyncSession = Depends(get_db),
@@ -83,7 +87,9 @@ async def read_all_notifications(
     )
 
 
-@router.put("/api/notifications/{notification_id}/read", response_model=NotificationResponse)
+@router.put(
+    "/api/notifications/{notification_id}/read", response_model=NotificationResponse
+)
 async def read_single_notification(
     notification_id: int,
     db: AsyncSession = Depends(get_db),

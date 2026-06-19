@@ -21,9 +21,6 @@ from api.routes import notifications
 import models
 
 
-
-
-
 from core.request_id_middleware import RequestIDFilter, RequestIDMiddleware
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
@@ -56,7 +53,9 @@ async def cleanup_expired_otps_job():
             logger.info("Running daily cleanup of expired password reset OTPs...")
             async with AsyncSessionLocal() as session:
                 async with session.begin():
-                    stmt = delete(PasswordResetOTP).where(PasswordResetOTP.expires_at < datetime.now(UTC))
+                    stmt = delete(PasswordResetOTP).where(
+                        PasswordResetOTP.expires_at < datetime.now(UTC)
+                    )
                     res = await session.execute(stmt)
                     logger.info(f"Cleaned up {res.rowcount} expired OTPs.")
             # Sleep for 24 hours
@@ -74,13 +73,13 @@ async def lifespan(app: FastAPI):
     """Application lifespan manager for startup and shutdown events."""
     import asyncio
     from services.redis_service import redis_service
-    
+
     cleanup_task = asyncio.create_task(cleanup_expired_otps_job())
     try:
         logger.info("Starting up Nexus PM API...")
         # 1. Initialize Redis connection
         await redis_service.connect()
-        
+
         # 2. Sync database schema
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
@@ -99,11 +98,10 @@ async def lifespan(app: FastAPI):
 
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
-    "http://localhost,http://127.0.0.1,http://localhost:80,http://127.0.0.1:80,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174"
+    "http://localhost,http://127.0.0.1,http://localhost:80,http://127.0.0.1:80,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174",
 ).split(",")
 ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS",
-    "localhost,127.0.0.1,backend,*.yourdomain.com"
+    "ALLOWED_HOSTS", "localhost,127.0.0.1,backend,*.yourdomain.com"
 ).split(",")
 
 app = FastAPI(
@@ -132,9 +130,14 @@ app.add_middleware(
 app.add_middleware(RequestIDMiddleware)
 
 from fastapi.staticfiles import StaticFiles
+
 # Create local storage upload dir if not exists (for simulation mode fallback)
 os.makedirs("local_storage_uploads", exist_ok=True)
-app.mount("/static/uploads", StaticFiles(directory="local_storage_uploads"), name="static_uploads")
+app.mount(
+    "/static/uploads",
+    StaticFiles(directory="local_storage_uploads"),
+    name="static_uploads",
+)
 
 
 @app.exception_handler(Exception)
@@ -157,9 +160,7 @@ async def health_check() -> Dict[str, str]:
 
 
 @app.get("/health/detailed", tags=["Health"])
-async def detailed_health_check(
-    db: AsyncSession = Depends(get_db)
-) -> Dict[str, Any]:
+async def detailed_health_check(db: AsyncSession = Depends(get_db)) -> Dict[str, Any]:
     """
     Detailed health check tracking Postgres connectivity, Redis caching, and R2 connection integrity.
     Allows degraded state if R2 or Redis is unresponsive but database is healthy.
@@ -167,11 +168,11 @@ async def detailed_health_check(
     from datetime import datetime, UTC
     from sqlalchemy import text
     from services.redis_service import redis_service
-    
+
     db_status = "healthy"
     storage_status = "healthy"
     redis_status = "healthy"
-    
+
     # 1. Check Database
     try:
         await db.execute(text("SELECT 1"))
@@ -219,16 +220,13 @@ async def detailed_health_check(
         "database": db_status,
         "storage": storage_status,
         "redis": redis_status,
-        "timestamp": datetime.now(UTC).isoformat()
+        "timestamp": datetime.now(UTC).isoformat(),
     }
 
     if overall_status == "unhealthy":
         # Raise HTTPException for load balancers expecting a non-2xx code on failure
-        raise HTTPException(
-            status_code=status_code,
-            detail=response_data
-        )
-        
+        raise HTTPException(status_code=status_code, detail=response_data)
+
     return response_data
 
 
@@ -279,6 +277,7 @@ app.include_router(activity_logs.router)
 app.include_router(notifications.router)
 
 from api.routes import analytics
+
 app.include_router(
     analytics.router,
     prefix="/api/analytics",
@@ -286,14 +285,12 @@ app.include_router(
 )
 
 from api.routes import storage
+
 app.include_router(
     storage.router,
     prefix="/api/storage",
     tags=["Storage"],
 )
-
-
-
 
 
 if __name__ == "__main__":

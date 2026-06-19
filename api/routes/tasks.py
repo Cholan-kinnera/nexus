@@ -1,69 +1,43 @@
 from typing import List
-from fastapi import (
-    APIRouter,
-    Depends,
-    UploadFile,
-    File
-)
+from fastapi import APIRouter, Depends, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.database import get_db
 from dependencies.auth import get_current_user
 from models.user import User
 from core.pagination import PaginationParams, PaginatedResponse
-from schemas.task import (
-    TaskCreate,
-    TaskResponse,
-    TaskUpdate,
-    TaskAttachmentResponse
-)
+from schemas.task import TaskCreate, TaskResponse, TaskUpdate, TaskAttachmentResponse
 from services.task_service import (
     create_task_service,
     get_tasks_service,
     update_task_service,
     delete_task_service,
     get_task_service,
-    get_tasks_by_project_service
+    get_tasks_by_project_service,
 )
 import services.task_attachment_service as task_attachment_service
-
 
 
 router = APIRouter()
 
 
-@router.post(
-    "/",
-    response_model=TaskResponse
-)
+@router.post("/", response_model=TaskResponse)
 async def create_task(
     task: TaskCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
 
-    return await create_task_service(
-        task,
-        current_user.id,
-        db
-    )
+    return await create_task_service(task, current_user.id, db)
 
 
-@router.get(
-    "/",
-    response_model=PaginatedResponse[TaskResponse]
-)
+@router.get("/", response_model=PaginatedResponse[TaskResponse])
 async def get_tasks(
     params: PaginationParams = Depends(),
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
 
-    return await get_tasks_service(
-        db,
-        current_user.id,
-        params
-    )
-
+    return await get_tasks_service(db, current_user.id, params)
 
 
 @router.put("/{task_id}", response_model=TaskResponse)
@@ -71,103 +45,83 @@ async def update_task(
     task_id: int,
     task_data: TaskUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user=Depends(get_current_user)
+    current_user=Depends(get_current_user),
 ):
-    return await update_task_service(
-        task_id,
-        task_data,
-        current_user,
-        db
-    )
+    return await update_task_service(task_id, task_data, current_user, db)
+
 
 @router.delete("/{task_id}")
 async def delete_task(
     task_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user=Depends(get_current_user)
+    current_user=Depends(get_current_user),
 ):
-    return await delete_task_service(
-        task_id,
-        current_user,
-        db
-    )
+    return await delete_task_service(task_id, current_user, db)
 
 
 @router.get("/{task_id}", response_model=TaskResponse)
 async def get_task(
     task_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
-    return await get_task_service(
-        task_id,
-        current_user,
-        db
-    )
+    return await get_task_service(task_id, current_user, db)
+
 
 @router.get("/project/{project_id}", response_model=PaginatedResponse[TaskResponse])
 async def get_project_tasks(
     project_id: int,
     params: PaginationParams = Depends(),
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
-    return await get_tasks_by_project_service(
-        project_id,
-        current_user,
-        db,
-        params
-    )
+    return await get_tasks_by_project_service(project_id, current_user, db, params)
+
 
 @router.post(
     "/{task_id}/attachments",
     response_model=TaskAttachmentResponse,
     status_code=201,
     summary="Upload a task attachment",
-    description="Upload a binary file (PDF, Images, ZIP, DOCX, TXT, XLSX, CSV; max 10MB) to storage and associate with task."
+    description="Upload a binary file (PDF, Images, ZIP, DOCX, TXT, XLSX, CSV; max 10MB) to storage and associate with task.",
 )
 async def upload_task_attachment(
     task_id: int,
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     return await task_attachment_service.create_attachment(
-        db=db,
-        task_id=task_id,
-        file=file,
-        current_user=current_user
+        db=db, task_id=task_id, file=file, current_user=current_user
     )
+
 
 @router.get(
     "/{task_id}/attachments",
     response_model=List[TaskAttachmentResponse],
     summary="Get task attachments",
-    description="Retrieve all metadata records of files attached to a task."
+    description="Retrieve all metadata records of files attached to a task.",
 )
 async def get_task_attachments(
     task_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     return await task_attachment_service.get_attachments_by_task(
-        db=db,
-        task_id=task_id,
-        current_user=current_user
+        db=db, task_id=task_id, current_user=current_user
     )
+
 
 @router.delete(
     "/attachments/{attachment_id}",
     summary="Delete task attachment",
-    description="Delete attachment record from database and clean up R2 file storage object."
+    description="Delete attachment record from database and clean up R2 file storage object.",
 )
 async def delete_task_attachment(
     attachment_id: int,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     return await task_attachment_service.delete_attachment(
-        db=db,
-        attachment_id=attachment_id,
-        current_user=current_user
+        db=db, attachment_id=attachment_id, current_user=current_user
     )

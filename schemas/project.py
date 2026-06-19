@@ -1,17 +1,11 @@
 from pydantic import BaseModel, ConfigDict, Field
-from typing import  Optional
+from typing import Optional
+
 
 class ProjectCreate(BaseModel):
-    title: str = Field(
-        ...,
-        min_length=3,
-        max_length=100,
-        description="Project title"
-    )
+    title: str = Field(..., min_length=3, max_length=100, description="Project title")
     description: Optional[str] = Field(
-        default=None,
-        max_length=500,
-        description="Project description"
+        default=None, max_length=500, description="Project description"
     )
 
 
@@ -22,7 +16,7 @@ class ProjectUpdate(BaseModel):
 
 class ProjectResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-    
+
     id: int
     title: str
     description: Optional[str] = None

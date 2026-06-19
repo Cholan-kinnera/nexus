@@ -5,7 +5,6 @@ from passlib.context import CryptContext
 from core.config import settings
 
 
-
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
@@ -51,6 +50,7 @@ def create_access_token(
         Encoded JWT token
     """
     import uuid
+
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -59,11 +59,7 @@ def create_access_token(
             minutes=ACCESS_TOKEN_EXPIRE_MINUTES
         )
 
-    to_encode.update({
-        "exp": expire,
-        "type": "access",
-        "jti": str(uuid.uuid4())
-    })
+    to_encode.update({"exp": expire, "type": "access", "jti": str(uuid.uuid4())})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
     return encoded_jwt
@@ -72,6 +68,7 @@ def create_access_token(
 import hashlib
 
 REFRESH_SECRET_KEY = settings.REFRESH_SECRET_KEY
+
 
 def hash_token(token: str) -> str:
     """Hash a token using SHA-256 for secure database storage.
@@ -98,18 +95,14 @@ def create_refresh_token(
         Encoded JWT token
     """
     import uuid
+
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(days=7)
 
-    to_encode.update({
-        "exp": expire,
-        "type": "refresh",
-        "jti": str(uuid.uuid4())
-    })
+    to_encode.update({"exp": expire, "type": "refresh", "jti": str(uuid.uuid4())})
     encoded_jwt = jwt.encode(to_encode, REFRESH_SECRET_KEY, algorithm=ALGORITHM)
 
     return encoded_jwt
-

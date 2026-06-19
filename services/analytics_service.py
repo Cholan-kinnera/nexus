@@ -4,6 +4,7 @@ Analytics Service
 Provides aggregate dashboard metrics using PostgreSQL COUNT/GROUP BY queries.
 Scoped to the current user's accessible projects via project membership.
 """
+
 import logging
 from datetime import datetime, timedelta, timezone
 
@@ -19,14 +20,10 @@ from models.notification import Notification
 logger = logging.getLogger(__name__)
 
 
-async def _get_accessible_project_ids(
-    db: AsyncSession, user_id: int
-) -> list[int]:
+async def _get_accessible_project_ids(db: AsyncSession, user_id: int) -> list[int]:
     """Return all project IDs the user can access (member + legacy owner)."""
     member_result = await db.execute(
-        select(ProjectMember.project_id).where(
-            ProjectMember.user_id == user_id
-        )
+        select(ProjectMember.project_id).where(ProjectMember.user_id == user_id)
     )
     member_ids = {row[0] for row in member_result.fetchall()}
 
@@ -38,18 +35,14 @@ async def _get_accessible_project_ids(
     return list(member_ids | owner_ids)
 
 
-async def get_dashboard_metrics(
-    db: AsyncSession, user_id: int
-) -> dict:
+async def get_dashboard_metrics(db: AsyncSession, user_id: int) -> dict:
     """Return all dashboard metrics in a single call using aggregate queries."""
 
     project_ids = await _get_accessible_project_ids(db, user_id)
 
     # ---- Project Analytics ----
     projects_owned = await db.execute(
-        select(func.count()).select_from(Project).where(
-            Project.owner_id == user_id
-        )
+        select(func.count()).select_from(Project).where(Project.owner_id == user_id)
     )
     owned_count = projects_owned.scalar() or 0
 
@@ -72,7 +65,9 @@ async def get_dashboard_metrics(
         for row in task_result.fetchall():
             status_key = row[0] or "TODO"
             count = row[1]
-            task_status_counts[status_key] = task_status_counts.get(status_key, 0) + count
+            task_status_counts[status_key] = (
+                task_status_counts.get(status_key, 0) + count
+            )
             total_tasks += count
 
     # ---- Member Analytics ----

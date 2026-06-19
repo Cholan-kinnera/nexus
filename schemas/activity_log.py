@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict
 
 class ActivityLogResponse(BaseModel):
     """Response schema for activity log entries."""
+
     model_config = ConfigDict(from_attributes=True)
 
     id: int
@@ -19,6 +20,7 @@ class ActivityLogResponse(BaseModel):
 
 class NotificationResponse(BaseModel):
     """Response schema for notification entries."""
+
     model_config = ConfigDict(from_attributes=True)
 
     id: int
@@ -32,6 +34,7 @@ class NotificationResponse(BaseModel):
 
 class NotificationReadResponse(BaseModel):
     """Response schema after marking notification(s) as read."""
+
     success: bool
     message: str
     updated_count: int = 0
