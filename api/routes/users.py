@@ -207,3 +207,57 @@ async def lookup_user_by_email(
             detail="Error looking up user"
         )
 
+
+@router.delete("/me", status_code=status.HTTP_204_NO_CONTENT, tags=["Users"])
+async def delete_current_user_account(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Delete current authenticated user account and all owned resources."""
+    try:
+        from sqlalchemy import update, delete
+        from models.project import Project
+        from models.task import Task
+
+        # 1. Delete user avatar file from R2 if present
+        if current_user.avatar_url:
+            try:
+                old_key = current_user.avatar_url.split("/")[-1]
+                storage_service.delete_file(old_key)
+                logger.info(f"Deleted user avatar on account deletion: {old_key}")
+            except Exception as e:
+                logger.warning(f"Failed to delete avatar file on account deletion: {e}")
+
+        # 2. Update all tasks assigned to this user to NULL
+        await db.execute(
+            update(Task)
+            .where(Task.assigned_to == current_user.id)
+            .values(assigned_to=None)
+        )
+
+        # 3. Find projects owned by this user
+        result = await db.execute(
+            select(Project).where(Project.owner_id == current_user.id)
+        )
+        owned_projects = result.scalars().all()
+
+        for proj in owned_projects:
+            # Delete tasks in the project
+            await db.execute(
+                delete(Task).where(Task.project_id == proj.id)
+            )
+            # Delete project
+            await db.delete(proj)
+
+        # 4. Delete the user
+        await db.delete(current_user)
+        await db.commit()
+        return None
+    except Exception as exc:
+        logger.error(f"Error deleting user account: {exc}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error deleting user account",
+        )
+
+

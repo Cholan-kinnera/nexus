@@ -5,6 +5,7 @@ export interface ProjectMemberResponse {
   user_id: number;
   full_name: string | null;
   email: string | null;
+  avatar_url?: string | null;
   role: string;
   joined_at: string;
   invited_by: number | null;

@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/client";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { PremiumButton } from "../components/ui/PremiumButton";
+import { PremiumCard } from "../components/ui/PremiumCard";
 import {
   Terminal,
   Key,
@@ -21,14 +24,36 @@ import {
 } from "lucide-react";
 
 export default function SettingsPage() {
+  const shouldReduceMotion = useReducedMotion();
+  const navigate = useNavigate();
   const { theme, setTheme, themeLogs, clearThemeLogs } = useTheme();
-  const { user, login, token } = useAuth();
+  const { user, login, token, logout } = useAuth();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Danger Zone States
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    if (confirmEmail !== user?.email) return;
+    setIsDeletingAccount(true);
+    try {
+      await api.delete("/users/me");
+      logout();
+      navigate("/auth");
+    } catch (err) {
+      console.error("Failed to delete account", err);
+      alert("Failed to delete account. Please try again.");
+    } finally {
+      setIsDeletingAccount(false);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -133,9 +158,9 @@ export default function SettingsPage() {
   return (
     <DashboardLayout>
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.28, ease: "easeOut" }}
         className="max-w-5xl mx-auto"
       >
         {/* Page Header */}
@@ -171,11 +196,10 @@ export default function SettingsPage() {
             </div>
           </div>
         ) : (
-          // ── ACTUAL SETTINGS PANEL ────────────────────────────────────────
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column: User Info Form */}
             <div className="lg:col-span-1 space-y-6">
-              <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md">
+              <PremiumCard hoverable={false}>
                 <h2 className="text-sm font-bold text-zinc-150 mb-4 flex items-center gap-2 font-mono uppercase tracking-wider">
                   <User size={16} className="text-zinc-400" />
                   User Profile
@@ -183,7 +207,7 @@ export default function SettingsPage() {
 
                 <form onSubmit={handleSaveProfile} className="space-y-4">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-450 mb-1.5 font-mono">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-455 mb-1.5 font-mono">
                       Full Name
                     </label>
                     <div className="relative">
@@ -199,7 +223,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-450 mb-1.5 font-mono">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-455 mb-1.5 font-mono">
                       Email Address
                     </label>
                     <div className="relative">
@@ -215,7 +239,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-450 mb-1.5 font-mono">
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-455 mb-1.5 font-mono">
                       Professional Role
                     </label>
                     <div className="relative">
@@ -230,17 +254,18 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  <button
+                  <PremiumButton
                     type="submit"
-                    className="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-xs font-mono py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+                    variant="primary"
+                    className="w-full font-mono text-xs font-bold py-2.5 h-[38px]"
                   >
                     {isSaved ? "Saved Successfully!" : "Save Profile Details"}
-                  </button>
+                  </PremiumButton>
                 </form>
-              </div>
+              </PremiumCard>
 
               {/* Profile Avatar Card */}
-              <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md flex flex-col items-center text-center">
+              <PremiumCard hoverable={false} className="flex flex-col items-center text-center">
                 <div className="w-16 h-16 rounded-full bg-zinc-950 border border-zinc-800 text-zinc-300 flex items-center justify-center font-bold text-xl mb-3 shadow-inner">
                   {user?.full_name ? user.full_name.split(" ").map(n => n[0]).join("").toUpperCase() : "U"}
                 </div>
@@ -249,13 +274,69 @@ export default function SettingsPage() {
                 <div className="mt-4 px-3 py-1 rounded border border-zinc-800 bg-zinc-950 text-[10px] font-mono font-semibold tracking-wider text-zinc-450 uppercase">
                   Active Session
                 </div>
-              </div>
+              </PremiumCard>
+
+              {/* Danger Zone Card */}
+              <PremiumCard hoverable={false} className="border-red-900/30 bg-red-950/5">
+                <h2 className="text-sm font-bold text-red-400 mb-2 flex items-center gap-2 font-mono uppercase tracking-wider">
+                  <ShieldAlert size={16} className="text-red-400" />
+                  Danger Zone
+                </h2>
+                <p className="text-2xs text-zinc-400 font-sans mb-4 leading-relaxed">
+                  Permanently delete your user account and all owned projects, tasks, and stored vault files. This action is irreversible.
+                </p>
+
+                {!confirmDelete ? (
+                  <PremiumButton
+                    onClick={() => setConfirmDelete(true)}
+                    variant="danger"
+                    className="w-full text-xs font-mono py-2 h-[38px]"
+                  >
+                    Delete Account
+                  </PremiumButton>
+                ) : (
+                  <div className="space-y-3 p-3 bg-red-950/20 border border-red-900/30 rounded-lg">
+                    <p className="text-[10px] text-red-300 font-mono">
+                      ⚠️ WARNING: Enter your email to confirm deletion.
+                    </p>
+                    <input
+                      type="text"
+                      placeholder={user?.email || "Confirm your email"}
+                      className="w-full bg-zinc-950/60 border border-red-900/40 rounded-lg py-2 px-3 text-xs text-zinc-150 outline-none focus:border-red-600 transition-colors font-mono"
+                      value={confirmEmail}
+                      onChange={(e) => setConfirmEmail(e.target.value)}
+                    />
+                    <div className="flex gap-2">
+                      <PremiumButton
+                        onClick={handleDeleteAccount}
+                        variant="danger"
+                        disabled={confirmEmail !== user?.email || isDeletingAccount}
+                        isLoading={isDeletingAccount}
+                        className="flex-1 text-2xs font-mono py-1.5 h-8"
+                      >
+                        Confirm Delete
+                      </PremiumButton>
+                      <PremiumButton
+                        onClick={() => {
+                          setConfirmDelete(false);
+                          setConfirmEmail("");
+                        }}
+                        variant="secondary"
+                        disabled={isDeletingAccount}
+                        className="flex-1 text-2xs font-mono py-1.5 h-8"
+                      >
+                        Cancel
+                      </PremiumButton>
+                    </div>
+                  </div>
+                )}
+              </PremiumCard>
             </div>
 
             {/* Right Column: API Keys + Logs */}
             <div className="lg:col-span-2 space-y-6">
               {/* Terminal Box (Generate API Keys) */}
-              <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md">
+              <PremiumCard hoverable={false}>
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h2 className="text-sm font-bold text-zinc-150 flex items-center gap-2 font-mono uppercase tracking-wider">
@@ -266,16 +347,15 @@ export default function SettingsPage() {
                       Generate access keys for backend pipeline integrations.
                     </p>
                   </div>
-                  <button
+                  <PremiumButton
                     onClick={handleGenerateKey}
                     disabled={isGenerating}
-                    className={`px-4 py-2 text-xs font-semibold font-mono rounded-lg text-white shadow-sm transition-all duration-200 ${isGenerating
-                      ? "bg-zinc-800 border border-zinc-700 text-zinc-500 cursor-not-allowed"
-                      : "bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 hover:shadow-md cursor-pointer"
-                      }`}
+                    variant={isGenerating ? "ghost" : "primary"}
+                    size="sm"
+                    className="font-mono text-2xs"
                   >
                     {isGenerating ? "Generating..." : "Generate API Key"}
-                  </button>
+                  </PremiumButton>
                 </div>
 
                 {/* Developer Terminal Console */}
@@ -320,35 +400,37 @@ export default function SettingsPage() {
                 {generatedKey && (
                   <div className="mt-3 flex items-center justify-between bg-zinc-950 border border-zinc-800 rounded-lg p-3">
                     <div className="truncate mr-4">
-                      <span className="text-[10px] text-zinc-450 uppercase tracking-wider font-semibold font-mono">
+                      <span className="text-[10px] text-zinc-455 uppercase tracking-wider font-semibold font-mono">
                         Copy API Key
                       </span>
                       <p className="text-xs font-mono text-zinc-200 mt-0.5 truncate max-w-md">
                         {generatedKey}
                       </p>
                     </div>
-                    <button
+                    <PremiumButton
                       onClick={handleCopyKey}
-                      className="p-2 rounded bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-850 hover:text-white transition-all flex items-center gap-1.5 text-xs font-medium cursor-pointer"
+                      variant="secondary"
+                      size="sm"
+                      className="font-mono text-2xs"
                     >
                       {hasCopied ? (
                         <>
-                          <Check size={14} className="text-green-500" />
-                          <span className="font-mono text-2xs">Copied!</span>
+                          <Check size={14} className="text-green-500 mr-1" />
+                          <span>Copied!</span>
                         </>
                       ) : (
                         <>
-                          <Copy size={14} />
-                          <span className="font-mono text-2xs">Copy</span>
+                          <Copy size={14} className="mr-1" />
+                          <span>Copy</span>
                         </>
                       )}
-                    </button>
+                    </PremiumButton>
                   </div>
                 )}
-              </div>
+              </PremiumCard>
 
               {/* Preferences / Theme Selector Card */}
-              <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md">
+              <PremiumCard hoverable={false}>
                 <h2 className="text-sm font-bold text-zinc-150 mb-4 flex items-center gap-2 font-mono uppercase tracking-wider">
                   <Eye size={16} className="text-zinc-400" />
                   Preferences
@@ -356,7 +438,7 @@ export default function SettingsPage() {
 
                 <div className="space-y-4">
                   <div>
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-zinc-450 mb-1.5 font-mono">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-zinc-455 mb-1.5 font-mono">
                       Appearance Theme
                     </span>
                     <p className="text-2xs text-zinc-500 font-mono mb-3">
@@ -401,10 +483,10 @@ export default function SettingsPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </PremiumCard>
 
               {/* Theme Toggle Persistence Log */}
-              <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md">
+              <PremiumCard hoverable={false}>
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h2 className="text-sm font-bold text-zinc-150 flex items-center gap-2 font-mono uppercase tracking-wider">
@@ -415,13 +497,15 @@ export default function SettingsPage() {
                       Real-time local state logging tracking light/dark mode storage changes.
                     </p>
                   </div>
-                  <button
+                  <PremiumButton
                     onClick={clearThemeLogs}
-                    className="text-red-400 hover:text-red-300 p-2 rounded-lg hover:bg-red-950/20 transition-all flex items-center gap-1.5 text-xs font-semibold font-mono cursor-pointer"
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-400 hover:text-red-300 font-semibold font-mono text-2xs"
                   >
-                    <Trash2 size={14} />
+                    <Trash2 size={12} className="mr-1 inline" />
                     Clear Logs
-                  </button>
+                  </PremiumButton>
                 </div>
 
                 <div className="bg-zinc-950 border border-zinc-850 rounded-lg p-4 font-mono text-[10px] text-zinc-500 space-y-1 h-36 overflow-y-auto">
@@ -434,7 +518,7 @@ export default function SettingsPage() {
                     <div className="text-zinc-650 italic text-center py-4">No audit logs available.</div>
                   )}
                 </div>
-              </div>
+              </PremiumCard>
             </div>
           </div>
         )}

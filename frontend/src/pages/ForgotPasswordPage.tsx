@@ -269,13 +269,13 @@ export default function ForgotPasswordPage() {
                 <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z" fill="#09090b" opacity="0.9" />
               </svg>
             </div>
-            <span className="text-white font-bold text-base tracking-wide font-mono">
+            <span className="text-zinc-50 font-bold text-base tracking-wide font-mono">
               NEXUS <span className="text-zinc-500">PM</span>
             </span>
           </div>
 
           <div className="relative z-10">
-            <h2 className="text-white text-3xl font-semibold leading-tight mb-3">
+            <h2 className="text-zinc-50 text-3xl font-semibold leading-tight mb-3">
               Reset<br /><span className="text-zinc-400">Password.</span>
             </h2>
             <p className="text-zinc-500 text-xs leading-relaxed mb-6">
@@ -290,7 +290,7 @@ export default function ForgotPasswordPage() {
           {/* Back Button */}
           <button
             onClick={() => navigate("/auth")}
-            className="flex items-center gap-1.5 text-zinc-400 hover:text-white text-2xs font-mono mb-8 self-start transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-zinc-400 hover:text-zinc-50 text-2xs font-mono mb-8 self-start transition-colors cursor-pointer"
           >
             <ArrowLeft size={12} />
             Back to Login
@@ -314,7 +314,7 @@ export default function ForgotPasswordPage() {
           {step === 1 && (
             <form onSubmit={handleRequestOtp} className="flex flex-col justify-between flex-1 text-zinc-200">
               <div>
-                <p className="text-white text-lg font-bold mb-1">Forgot Password?</p>
+                <p className="text-zinc-50 text-lg font-bold mb-1">Forgot Password?</p>
                 <p className="text-zinc-500 text-xs mb-6 font-mono">
                   Enter your email address and we'll send you a 6-digit verification code.
                 </p>
@@ -354,7 +354,7 @@ export default function ForgotPasswordPage() {
           {step === 2 && (
             <form onSubmit={handleVerifyOtp} className="flex flex-col justify-between flex-1 text-zinc-200">
               <div>
-                <p className="text-white text-lg font-bold mb-1">Verify Reset Code</p>
+                <p className="text-zinc-50 text-lg font-bold mb-1">Verify Reset Code</p>
                 <p className="text-zinc-500 text-xs mb-6 font-mono leading-relaxed">
                   Enter the secure 6-digit verification code sent to: <span className="font-semibold text-zinc-300">{email}</span>
                 </p>
@@ -383,7 +383,7 @@ export default function ForgotPasswordPage() {
                     <button
                       type="button"
                       onClick={handleResendOtp}
-                      className="text-[10px] font-semibold font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                      className="text-[10px] font-semibold font-mono text-zinc-300 hover:text-zinc-50 transition-colors cursor-pointer"
                     >
                       Resend Code
                     </button>
@@ -407,7 +407,7 @@ export default function ForgotPasswordPage() {
             <form onSubmit={handleResetPassword} className="flex flex-col justify-between flex-1 text-zinc-200">
               <div className="space-y-4">
                 <div>
-                  <p className="text-white text-lg font-bold mb-1">Set New Password</p>
+                  <p className="text-zinc-50 text-lg font-bold mb-1">Set New Password</p>
                   <p className="text-zinc-500 text-xs mb-4 font-mono">
                     Please secure your account with a strong password combination.
                   </p>

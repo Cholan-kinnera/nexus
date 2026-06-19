@@ -1,15 +1,39 @@
 import { useState, useEffect, useRef } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
-import { motion, AnimatePresence } from "framer-motion";
-import { Database, PlusCircle, CheckCircle2, Trash2, FileText, HardDrive, Loader2, Download } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { Database, PlusCircle, CheckCircle2, Trash2, FileText, HardDrive, Loader2, Download, Image, FileSpreadsheet, FileArchive, File } from "lucide-react";
 import { getFiles, uploadFile, deleteFile } from "../services/storageService";
 import type { StorageFile } from "../services/storageService";
-
+import { PremiumButton } from "../components/ui/PremiumButton";
+import { PremiumCard } from "../components/ui/PremiumCard";
+import { EmptyState } from "../components/ui/EmptyState";
+ 
 export default function StoragePage() {
+  const shouldReduceMotion = useReducedMotion();
   const [isSuccess, setIsSuccess] = useState(false);
   const [files, setFiles] = useState<StorageFile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.03,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 4 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring" as const, stiffness: 350, damping: 25 },
+    },
+  };
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -38,10 +62,22 @@ export default function StoragePage() {
     if (!selectedFiles || selectedFiles.length === 0) return;
     const file = selectedFiles[0];
 
+    // Front-end size validation (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError("File size exceeds the limit of 10 MB.");
+      return;
+    }
+
     setIsUploading(true);
     setUploadError(null);
+    setUploadProgress(0);
     try {
-      await uploadFile(file);
+      await uploadFile(file, (progressEvent: any) => {
+        const total = progressEvent.total || file.size;
+        const current = progressEvent.loaded;
+        const percentage = Math.round((current / total) * 100);
+        setUploadProgress(percentage);
+      });
       setIsSuccess(true);
       setTimeout(() => setIsSuccess(false), 3000);
       await loadFiles();
@@ -50,6 +86,7 @@ export default function StoragePage() {
       setUploadError(err.response?.data?.detail || "Upload failed. Check size constraints.");
     } finally {
       setIsUploading(false);
+      setUploadProgress(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
@@ -86,6 +123,23 @@ export default function StoragePage() {
     return `${ext} File`;
   };
 
+  const getFileIcon = (filename: string) => {
+    const ext = filename.split(".").pop()?.toLowerCase();
+    if (["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(ext || "")) {
+      return <Image size={14} className="text-violet-400" />;
+    }
+    if (ext === "pdf" || ext === "txt" || ext === "docx") {
+      return <FileText size={14} className="text-blue-400" />;
+    }
+    if (["xlsx", "csv", "xls"].includes(ext || "")) {
+      return <FileSpreadsheet size={14} className="text-emerald-400" />;
+    }
+    if (ext === "zip") {
+      return <FileArchive size={14} className="text-amber-400" />;
+    }
+    return <File size={14} className="text-zinc-500" />;
+  };
+
   return (
     <DashboardLayout>
       <input
@@ -105,7 +159,7 @@ export default function StoragePage() {
           {/* Ambient header glow */}
           <div className="absolute -left-20 -top-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none z-0" />
           <div className="z-10 w-full max-w-5xl">
-            <h1 className="text-4xl font-bold text-zinc-100">
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">
               Storage Vault
             </h1>
             <p className="text-zinc-300 mt-2 text-sm font-sans max-w-2xl leading-relaxed">
@@ -114,22 +168,19 @@ export default function StoragePage() {
           </div>
 
           {files.length > 0 && (
-            <button
+            <PremiumButton
+              variant="primary"
+              size="sm"
               onClick={handleUploadClick}
-              disabled={isUploading}
-              className="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 disabled:opacity-50 text-zinc-950 rounded-lg text-xs font-semibold font-mono flex items-center gap-1.5 transition-all shadow-sm cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
+              isLoading={isUploading}
+              leftIcon={<PlusCircle size={14} />}
             >
-              {isUploading ? (
-                <Loader2 size={14} className="animate-spin" />
-              ) : (
-                <PlusCircle size={14} />
-              )}
-              <span>{isUploading ? "Uploading..." : "Upload File"}</span>
-            </button>
+              Upload File
+            </PremiumButton>
           )}
         </div>
 
-        {/* Success / Error Banner */}
+        {/* Success / Error / Progress Banner */}
         <AnimatePresence>
           {isSuccess && (
             <motion.div
@@ -152,57 +203,54 @@ export default function StoragePage() {
               <span>⚠️ {uploadError}</span>
             </motion.div>
           )}
+          {isUploading && uploadProgress !== null && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="p-4 bg-zinc-900 border border-zinc-800 rounded-xl shadow-md w-full max-w-md space-y-2"
+            >
+              <div className="flex items-center justify-between text-2xs font-mono text-zinc-455 dark:text-zinc-400">
+                <span className="flex items-center gap-1.5">
+                  <Loader2 size={12} className="animate-spin text-violet-400" />
+                  Uploading asset to Cloudflare R2...
+                </span>
+                <span className="font-bold text-zinc-200">{uploadProgress}%</span>
+              </div>
+              <div className="w-full h-1 bg-zinc-950 border border-zinc-850 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-violet-600 transition-all duration-155"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
 
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 size={32} className="animate-spin text-violet-400 mb-4" />
-            <p className="text-xs text-zinc-550 font-mono">Querying vault directories...</p>
+          <div className="space-y-3 animate-pulse-slow">
+            <div className="h-10 bg-zinc-900/30 border border-zinc-800 rounded-xl shimmer-placeholder" />
+            {[1, 2, 3, 4, 5].map((k) => (
+              <div key={k} className="h-12 bg-zinc-900/20 border border-zinc-800/40 rounded-xl shimmer-placeholder" />
+            ))}
           </div>
         ) : files.length === 0 ? (
-          /* ── BEAUTIFUL EMPTY STATE ────────────────────────────────────── */
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center justify-center text-center p-12 py-20 bg-zinc-900/20 border border-dashed border-zinc-850 rounded-xl max-w-2xl mx-auto shadow-md"
-          >
-            <div className="w-16 h-16 rounded-full bg-zinc-950 border border-zinc-800/80 flex items-center justify-center text-zinc-400 mb-6 shadow-inner">
-              <Database size={22} className="text-zinc-550" />
-            </div>
-
-            <h3 className="text-lg font-bold text-zinc-200 mb-2">Storage vault is empty</h3>
-            <p className="text-xs text-zinc-300 max-w-lg leading-relaxed mb-8">
-              Upload files here to securely host build artifacts, server database backups, and media assets in Cloudflare R2 storage.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <button
-                onClick={handleUploadClick}
-                disabled={isUploading}
-                className="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 disabled:opacity-50 text-zinc-950 rounded-lg text-xs font-semibold font-mono flex items-center gap-1.5 transition-all shadow-sm cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
-              >
-                {isUploading ? (
-                  <Loader2 size={14} className="animate-spin" />
-                ) : (
-                  <PlusCircle size={14} />
-                )}
-                <span>Upload New File</span>
-              </button>
-              <button
-                onClick={loadFiles}
-                className="px-4 py-2 border border-zinc-850 hover:border-zinc-700 text-zinc-450 hover:text-white rounded-lg text-xs font-semibold font-mono flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
-              >
-                <span>Refresh Vault</span>
-              </button>
-            </div>
-          </motion.div>
+          <EmptyState
+            icon={Database}
+            title="Storage vault is empty"
+            description="Upload files here to securely host build artifacts, server database backups, and media assets in Cloudflare R2 storage."
+            primaryActionLabel={isUploading ? "Uploading..." : "Upload New File"}
+            onPrimaryAction={handleUploadClick}
+            secondaryActionLabel="Refresh Vault"
+            onSecondaryAction={loadFiles}
+          />
         ) : (
           /* ── HIGH-FIDELITY ACTIVE STORAGE VAULT LIST ────────────────────── */
-          <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl overflow-hidden shadow-md">
+          <PremiumCard hoverable={false} padding="none">
             <div className="p-5 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/20">
               <div className="flex items-center gap-2">
-                <HardDrive size={16} className="text-zinc-500" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">Active Vault Directories</h3>
+                <HardDrive size={16} className="text-zinc-550" />
+                <h3 className="text-sm font-bold text-zinc-100 uppercase tracking-wider font-mono">Active Vault Directories</h3>
               </div>
               <span className="text-[10px] font-mono text-zinc-400">
                 {files.length} Secure Assets • Total Size: {formatFileSize(files.reduce((acc, f) => acc + f.size, 0))}
@@ -221,9 +269,15 @@ export default function StoragePage() {
                     <th className="py-3 px-5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-800/40 text-xs">
+                <motion.tbody
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="divide-y divide-zinc-800/40 text-xs"
+                >
                   {files.map((file, _idx) => (
-                    <tr
+                    <motion.tr
+                      variants={itemVariants}
                       key={file.file_key}
                       className="hover:bg-zinc-900/40 transition-colors duration-150"
                     >
@@ -232,42 +286,45 @@ export default function StoragePage() {
                       </td>
                       <td className="py-3.5 px-5 font-medium text-zinc-200">
                         <div className="flex items-center gap-2">
-                          <FileText size={14} className="text-zinc-500" />
-                          <span className="truncate max-w-[200px]" title={file.filename}>{file.filename}</span>
+                          {getFileIcon(file.filename)}
+                          <span className="truncate max-w-[320px] md:max-w-[480px]" title={file.filename}>{file.filename}</span>
                         </div>
                       </td>
-                      <td className="py-3.5 px-5 text-zinc-450 font-mono text-[10px]">
+                      <td className="py-3.5 px-5 text-zinc-455 font-mono text-[10px]">
                         {getFileType(file.filename)}
                       </td>
                       <td className="py-3.5 px-5 font-mono text-zinc-300 font-medium">
                         {formatFileSize(file.size)}
                       </td>
-                      <td className="py-3.5 px-5 font-mono text-zinc-450">
+                      <td className="py-3.5 px-5 font-mono text-zinc-455">
                         {file.updated_at.replace("T", " ").substring(0, 19)}
                       </td>
-                      <td className="py-3.5 px-5 text-right flex items-center justify-end gap-1.5 mt-2">
-                        <a
-                          href={file.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title="Download file"
-                          className="p-1.5 text-zinc-400 hover:text-zinc-200 rounded-lg hover:bg-zinc-950 border border-transparent hover:border-zinc-800 transition-all inline-block"
-                        >
-                          <Download size={12} />
-                        </a>
-                        <button
-                          onClick={() => handleDelete(file.file_key)}
-                          className="p-1.5 text-zinc-550 hover:text-red-400 rounded-lg hover:bg-zinc-950 border border-transparent hover:border-zinc-800 transition-all cursor-pointer"
-                        >
-                          <Trash2 size={12} />
-                        </button>
+                      <td className="py-3.5 px-5 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <a
+                            href={file.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Download file"
+                            className="text-zinc-400 hover:text-zinc-100 transition-colors p-1.5 rounded-lg hover:bg-zinc-800/50 cursor-pointer inline-flex items-center justify-center"
+                          >
+                            <Download size={14} />
+                          </a>
+                          <button
+                            onClick={() => handleDelete(file.file_key)}
+                            title="Delete file"
+                            className="text-zinc-550 hover:text-red-400 transition-colors p-1.5 rounded-lg hover:bg-red-500/10 cursor-pointer inline-flex items-center justify-center"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))}
-                </tbody>
+                </motion.tbody>
               </table>
             </div>
-          </div>
+          </PremiumCard>
         )}
       </motion.div>
     </DashboardLayout>

@@ -9,7 +9,9 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from api.routes import projects, users
 from api.routes.auth import router as auth_router
-from db.database import Base, engine
+from db.database import Base, engine, get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+from services.storage_service import storage_service
 from dependencies.auth import get_current_user
 from core.config import settings
 from api.routes import tasks
@@ -22,14 +24,22 @@ import models
 
 
 
+from core.request_id_middleware import RequestIDFilter, RequestIDMiddleware
+
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+log_format = "%(asctime)s - %(name)s - %(levelname)s - [Request-ID: %(request_id)s] - %(message)s"
+
+file_handler = logging.FileHandler("app.log")
+stdout_handler = logging.StreamHandler(sys.stdout)
+
+req_filter = RequestIDFilter()
+file_handler.addFilter(req_filter)
+stdout_handler.addFilter(req_filter)
+
 logging.basicConfig(
     level=getattr(logging, LOG_LEVEL, logging.INFO),
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler("app.log"),
-        logging.StreamHandler(sys.stdout),
-    ],
+    format=log_format,
+    handlers=[file_handler, stdout_handler],
 )
 logger = logging.getLogger(__name__)
 
@@ -63,9 +73,15 @@ async def cleanup_expired_otps_job():
 async def lifespan(app: FastAPI):
     """Application lifespan manager for startup and shutdown events."""
     import asyncio
+    from services.redis_service import redis_service
+    
     cleanup_task = asyncio.create_task(cleanup_expired_otps_job())
     try:
         logger.info("Starting up Nexus PM API...")
+        # 1. Initialize Redis connection
+        await redis_service.connect()
+        
+        # 2. Sync database schema
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         logger.info("Database tables created successfully")
@@ -76,16 +92,18 @@ async def lifespan(app: FastAPI):
     finally:
         logger.info("Shutting down Nexus PM API...")
         cleanup_task.cancel()
+        # 3. Disconnect Redis client
+        await redis_service.disconnect()
         await engine.dispose()
 
 
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
-    "http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174"
+    "http://localhost,http://127.0.0.1,http://localhost:80,http://127.0.0.1:80,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174"
 ).split(",")
 ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS",
-    "localhost,127.0.0.1,*.yourdomain.com"
+    "localhost,127.0.0.1,backend,*.yourdomain.com"
 ).split(",")
 
 app = FastAPI(
@@ -111,6 +129,8 @@ app.add_middleware(
     allowed_hosts=[host.strip() for host in ALLOWED_HOSTS],
 )
 
+app.add_middleware(RequestIDMiddleware)
+
 from fastapi.staticfiles import StaticFiles
 # Create local storage upload dir if not exists (for simulation mode fallback)
 os.makedirs("local_storage_uploads", exist_ok=True)
@@ -132,8 +152,84 @@ async def global_exception_handler(request: Request, exc: Exception) -> JSONResp
 
 @app.get("/health", tags=["Health"])
 async def health_check() -> Dict[str, str]:
-    """Health check endpoint for monitoring."""
-    return {"status": "healthy", "service": "Nexus PM API"}
+    """Simple health check endpoint returning 200 instantly if service is running."""
+    return {"status": "healthy"}
+
+
+@app.get("/health/detailed", tags=["Health"])
+async def detailed_health_check(
+    db: AsyncSession = Depends(get_db)
+) -> Dict[str, Any]:
+    """
+    Detailed health check tracking Postgres connectivity, Redis caching, and R2 connection integrity.
+    Allows degraded state if R2 or Redis is unresponsive but database is healthy.
+    """
+    from datetime import datetime, UTC
+    from sqlalchemy import text
+    from services.redis_service import redis_service
+    
+    db_status = "healthy"
+    storage_status = "healthy"
+    redis_status = "healthy"
+    
+    # 1. Check Database
+    try:
+        await db.execute(text("SELECT 1"))
+    except Exception as e:
+        logger.error(f"Database health check failed: {e}")
+        db_status = "unhealthy"
+
+    # 2. Check Storage (Cloudflare R2 or local simulator)
+    try:
+        if storage_service.use_simulator:
+            # Check local folder write access
+            if not os.path.exists(storage_service.local_storage_path):
+                storage_status = "unhealthy"
+        else:
+            # Verify R2 access
+            storage_service.s3_client.list_objects_v2(
+                Bucket=storage_service.bucket_name, MaxKeys=1
+            )
+    except Exception as e:
+        logger.error(f"Storage health check failed: {e}")
+        storage_status = "unhealthy"
+
+    # 3. Check Redis Connection
+    try:
+        is_redis_healthy = await redis_service.ping()
+        if not is_redis_healthy:
+            redis_status = "unhealthy"
+    except Exception as e:
+        logger.error(f"Redis health check failed: {e}")
+        redis_status = "unhealthy"
+
+    # 4. Determine overall status
+    if db_status == "unhealthy":
+        status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        overall_status = "unhealthy"
+    elif storage_status == "unhealthy" or redis_status == "unhealthy":
+        status_code = status.HTTP_200_OK
+        overall_status = "degraded"
+    else:
+        status_code = status.HTTP_200_OK
+        overall_status = "healthy"
+
+    response_data = {
+        "status": overall_status,
+        "database": db_status,
+        "storage": storage_status,
+        "redis": redis_status,
+        "timestamp": datetime.now(UTC).isoformat()
+    }
+
+    if overall_status == "unhealthy":
+        # Raise HTTPException for load balancers expecting a non-2xx code on failure
+        raise HTTPException(
+            status_code=status_code,
+            detail=response_data
+        )
+        
+    return response_data
 
 
 @app.get("/", tags=["Root"])

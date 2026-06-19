@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useTheme } from "../../context/ThemeContext";
 
 interface Particle {
   x: number;
@@ -20,6 +21,7 @@ interface CursorTrail {
 }
 
 export default function ParticleBackground() {
+  const { resolvedTheme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const particlesRef = useRef<Particle[]>([]);
@@ -28,6 +30,7 @@ export default function ParticleBackground() {
   const lastSpawnRef = useRef(0);
 
   useEffect(() => {
+    if (resolvedTheme === "light") return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -224,12 +227,14 @@ export default function ParticleBackground() {
       window.removeEventListener("mousemove", onMouseMove);
       cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [resolvedTheme]);
+
+  if (resolvedTheme === "light") return null;
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z10"
+      className="fixed inset-0 pointer-events-none z-10"
       style={{ mixBlendMode: "multiply" }}
     />
   );

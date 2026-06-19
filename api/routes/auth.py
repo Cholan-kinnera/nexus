@@ -1,11 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Request, Response
 from schemas.auth import (
     AuthResponse,
     UserLogin,
     UserSignup,
     VerifyOTPRequest,
-    RefreshTokenRequest,
-    LogoutRequest,
     TokenResponse,
     ForgotPasswordRequest,
     VerifyResetOTPRequest,
@@ -25,6 +23,7 @@ from services.auth_service import (
     google_login_service
 )
 from sqlalchemy.ext.asyncio import AsyncSession
+from core.config import settings
 
 from db.database import get_db
 
@@ -46,36 +45,103 @@ async def signup(
     return await signup_service(user.full_name, user.email, user.password, db)
 
 @router.post("/login", response_model=AuthResponse)
-async def login(user: UserLogin, db: AsyncSession = Depends(get_db)):
-    return await login_service(
+async def login(
+    response: Response,
+    user: UserLogin,
+    db: AsyncSession = Depends(get_db)
+):
+    res = await login_service(
         user.email,
         user.password,
         db
     )
+    refresh_token = res.pop("refresh_token", None)
+    if refresh_token:
+        # Determine SameSite string value based on config
+        samesite_val = settings.COOKIE_SAMESITE.lower()
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=settings.COOKIE_SECURE,
+            samesite=samesite_val,
+            path="/api/auth",
+            max_age=7 * 24 * 3600  # 7 days
+        )
+    return res
 
 @router.post("/verify-otp", response_model=AuthResponse)
 async def verify_otp(
-    data: VerifyOTPRequest, db: AsyncSession = Depends(get_db)
+    response: Response,
+    data: VerifyOTPRequest,
+    db: AsyncSession = Depends(get_db)
 ) -> AuthResponse:
-    """Verify OTP code to activate session and create user.
-    """
-    return await verify_otp_service(data.email, data.otp, db)
+    """Verify OTP code to activate session and create user."""
+    res = await verify_otp_service(data.email, data.otp, db)
+    refresh_token = res.pop("refresh_token", None)
+    if refresh_token:
+        samesite_val = settings.COOKIE_SAMESITE.lower()
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=settings.COOKIE_SECURE,
+            samesite=samesite_val,
+            path="/api/auth",
+            max_age=7 * 24 * 3600  # 7 days
+        )
+    return res
 
 
 @router.post("/refresh", response_model=TokenResponse)
 async def refresh_token(
-    data: RefreshTokenRequest, db: AsyncSession = Depends(get_db)
+    request: Request,
+    response: Response,
+    db: AsyncSession = Depends(get_db)
 ) -> TokenResponse:
-    """Rotate access and refresh tokens using a valid refresh token."""
-    return await refresh_token_service(data.refresh_token, db)
+    """Rotate access and refresh tokens using a valid refresh token from cookies."""
+    refresh_token = request.cookies.get("refresh_token")
+    if not refresh_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token is missing from cookies"
+        )
+    
+    res = await refresh_token_service(refresh_token, db)
+    new_refresh = res.pop("refresh_token", None)
+    if new_refresh:
+        samesite_val = settings.COOKIE_SAMESITE.lower()
+        response.set_cookie(
+            key="refresh_token",
+            value=new_refresh,
+            httponly=True,
+            secure=settings.COOKIE_SECURE,
+            samesite=samesite_val,
+            path="/api/auth",
+            max_age=7 * 24 * 3600  # 7 days
+        )
+    return res
 
 
 @router.post("/logout")
 async def logout(
-    data: LogoutRequest, db: AsyncSession = Depends(get_db)
+    request: Request,
+    response: Response,
+    db: AsyncSession = Depends(get_db)
 ):
-    """Revoke refresh token to log out the user session."""
-    return await logout_service(data.refresh_token, db)
+    """Revoke refresh token to log out the user session and clear cookies."""
+    refresh_token = request.cookies.get("refresh_token")
+    if refresh_token:
+        await logout_service(refresh_token, db)
+    
+    samesite_val = settings.COOKIE_SAMESITE.lower()
+    response.delete_cookie(
+        key="refresh_token",
+        path="/api/auth",
+        secure=settings.COOKIE_SECURE,
+        samesite=samesite_val
+    )
+    return {"message": "Logged out successfully"}
 
 
 @router.post("/forgot-password", response_model=GenericMessageResponse)
@@ -107,7 +173,22 @@ async def reset_password(
 
 @router.post("/google", response_model=AuthResponse)
 async def google_login(
-    data: GoogleLoginRequest, db: AsyncSession = Depends(get_db)
+    response: Response,
+    data: GoogleLoginRequest,
+    db: AsyncSession = Depends(get_db)
 ) -> AuthResponse:
     """Authenticates the user using Google OAuth ID token."""
-    return await google_login_service(data.credential_token, db)
+    res = await google_login_service(data.credential_token, db)
+    refresh_token = res.pop("refresh_token", None)
+    if refresh_token:
+        samesite_val = settings.COOKIE_SAMESITE.lower()
+        response.set_cookie(
+            key="refresh_token",
+            value=refresh_token,
+            httponly=True,
+            secure=settings.COOKIE_SECURE,
+            samesite=samesite_val,
+            path="/api/auth",
+            max_age=7 * 24 * 3600  # 7 days
+        )
+    return res

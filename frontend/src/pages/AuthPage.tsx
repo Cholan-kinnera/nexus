@@ -217,14 +217,14 @@ function LeftPanel({ activeTab }: { activeTab: "login" | "signup" }) {
             <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z" fill="#09090b" opacity="0.9" />
           </svg>
         </div>
-        <span className="text-white font-bold text-base tracking-wide font-mono">
+        <span className="text-zinc-50 font-bold text-base tracking-wide font-mono">
           NEXUS <span className="text-zinc-500">PM</span>
         </span>
       </div>
 
       {/* Copy */}
       <div className="relative z-10">
-        <h2 className="text-white text-3xl font-semibold leading-tight mb-3 transition-all duration-500">
+        <h2 className="text-zinc-50 text-3xl font-semibold leading-tight mb-3 transition-all duration-500">
           {activeTab === "login" ? (
             <>Welcome<br /><span className="text-zinc-400">back.</span></>
           ) : (
@@ -251,7 +251,7 @@ function LeftPanel({ activeTab }: { activeTab: "login" | "signup" }) {
               <FeatureIcon type={f.icon} />
             </div>
             <div>
-              <p className="text-zinc-200 text-xs font-semibold group-hover:text-white transition-colors duration-200">{f.label}</p>
+              <p className="text-zinc-200 text-xs font-semibold group-hover:text-zinc-50 transition-colors duration-200">{f.label}</p>
               <p className="text-zinc-500 text-[10px] font-mono mt-0.5">{f.sub}</p>
             </div>
           </div>
@@ -333,7 +333,7 @@ function LoginForm({ onSwitch, onSuccess }: {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full text-zinc-200">
-      <p className="text-white text-lg font-bold mb-1">Welcome back!</p>
+      <p className="text-zinc-50 text-lg font-bold mb-1">Welcome back!</p>
       <p className="text-zinc-500 text-xs mb-6 font-mono">Login to your account</p>
 
       {error && <ErrorBox message={error} />}
@@ -365,7 +365,7 @@ function LoginForm({ onSwitch, onSuccess }: {
         <button
           type="button"
           onClick={() => navigate("/forgot-password")}
-          className="text-zinc-450 hover:text-white transition-colors cursor-pointer"
+          className="text-zinc-450 hover:text-zinc-50 transition-colors cursor-pointer"
         >
           Forgot password?
         </button>
@@ -380,7 +380,7 @@ function LoginForm({ onSwitch, onSuccess }: {
       <SocialButtons setLoading={setLoading} setError={setError} />
       <p className="text-center text-zinc-500 text-xs mt-6 font-mono">
         Don't have an account?{" "}
-        <button type="button" onClick={onSwitch} className="text-zinc-300 font-semibold hover:text-white transition-colors cursor-pointer">
+        <button type="button" onClick={onSwitch} className="text-zinc-300 font-semibold hover:text-zinc-50 transition-colors cursor-pointer">
           Sign up
         </button>
       </p>
@@ -512,7 +512,7 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
     return (
       <form onSubmit={handleVerifyOtp} className="flex flex-col h-full justify-between animate-fade-in text-zinc-200">
         <div>
-          <p className="text-white text-lg font-bold mb-1">Verify your email</p>
+          <p className="text-zinc-50 text-lg font-bold mb-1">Verify your email</p>
           <p className="text-zinc-500 text-xs mb-6 font-mono leading-relaxed">
             We sent a secure code to: <span className="font-semibold text-zinc-300">{form.email}</span>
           </p>
@@ -545,7 +545,7 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
               <button
                 type="button"
                 onClick={handleResendCode}
-                className="text-[10px] font-semibold font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                className="text-[10px] font-semibold font-mono text-zinc-300 hover:text-zinc-50 transition-colors cursor-pointer"
               >
                 Resend Verification Code
               </button>
@@ -568,7 +568,7 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full text-zinc-200">
-      <p className="text-white text-lg font-bold mb-1">Create account</p>
+      <p className="text-zinc-50 text-lg font-bold mb-1">Create account</p>
       <p className="text-zinc-500 text-xs mb-6 font-mono">Start managing your projects today</p>
 
       {error && <ErrorBox message={error} />}
@@ -612,7 +612,7 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
       <SocialButtons setLoading={setLoading} setError={setError} />
       <p className="text-center text-zinc-500 text-xs mt-4 font-mono">
         Already have an account?{" "}
-        <button type="button" onClick={onSwitch} className="text-zinc-300 font-semibold hover:text-white transition-colors cursor-pointer">
+        <button type="button" onClick={onSwitch} className="text-zinc-300 font-semibold hover:text-zinc-50 transition-colors cursor-pointer">
           Login
         </button>
       </p>

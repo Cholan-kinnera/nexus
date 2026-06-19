@@ -13,10 +13,14 @@ import { getComments, createComment } from "../services/commentService";
 import { getProjects } from "../services/projectService";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { TasksSkeleton } from "../components/ui/SkeletonLoader";
 import { useAuth } from "../context/AuthContext";
 import { getProjectMembers } from "../services/projectMemberService";
 import api from "../api/client";
+import { PremiumButton } from "../components/ui/PremiumButton";
+import { PremiumCard } from "../components/ui/PremiumCard";
+import { EmptyState } from "../components/ui/EmptyState";
 import {
   DndContext,
   closestCenter,
@@ -32,7 +36,6 @@ import {
   ClipboardList,
   Clock,
   MessageSquare,
-  ArrowUpRight,
   Paperclip,
   FileText,
   FileSpreadsheet,
@@ -230,37 +233,43 @@ function DraggableTaskCard({
         <div className="flex items-center justify-between mt-1 pt-1">
           <div className="flex gap-2">
             {columnStatus === "TODO" && (
-              <button
+              <PremiumButton
+                variant="primary"
+                size="sm"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleStatusChange(task.id, "IN_PROGRESS");
                 }}
-                className="bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-[10px] font-bold px-2.5 py-1 rounded transition duration-200 cursor-pointer shadow-sm"
+                className="h-6 text-[10px] px-2.5 font-sans"
               >
                 Start
-              </button>
+              </PremiumButton>
             )}
             {columnStatus === "IN_PROGRESS" && (
-              <button
+              <PremiumButton
+                variant="primary"
+                size="sm"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleStatusChange(task.id, "DONE");
                 }}
-                className="bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded transition duration-200 cursor-pointer shadow-sm"
+                className="bg-emerald-600 dark:bg-emerald-600 hover:bg-emerald-500 text-white dark:text-white h-6 text-[10px] px-2.5 border-none font-sans"
               >
                 Complete
-              </button>
+              </PremiumButton>
             )}
           </div>
-          <button
+          <PremiumButton
+            variant="ghost"
+            size="sm"
             onClick={(e) => {
               e.stopPropagation();
               handleDelete(task.id);
             }}
-            className="text-red-400 hover:text-red-300 font-semibold text-[10px] hover:underline cursor-pointer font-mono"
+            className="text-red-400 hover:text-red-350 dark:hover:bg-red-500/10 h-6 px-2 font-mono text-[10px] font-semibold border-none"
           >
             Delete
-          </button>
+          </PremiumButton>
         </div>
       </div>
     </div>
@@ -282,6 +291,7 @@ function TaskModal({
   getProjectName: (id: number) => string;
 }) {
   const { user } = useAuth();
+  const shouldReduceMotion = useReducedMotion();
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -479,6 +489,7 @@ function TaskModal({
       return {
         name: member.full_name || member.email || "Unknown Member",
         initials,
+        avatar_url: member.avatar_url,
         color: "bg-zinc-950 border border-zinc-800 text-zinc-300",
       };
     }
@@ -492,6 +503,7 @@ function TaskModal({
       return {
         name: currentUser.full_name || currentUser.email || "You",
         initials,
+        avatar_url: currentUser.avatar_url,
         color: "bg-zinc-950 border border-zinc-800 text-zinc-300",
       };
     }
@@ -499,6 +511,7 @@ function TaskModal({
     return {
       name: `User #${userId}`,
       initials: `U${userId}`,
+      avatar_url: null,
       color: "bg-zinc-950 border border-zinc-800 text-zinc-300",
     };
   };
@@ -515,9 +528,9 @@ function TaskModal({
         />
 
         <motion.div
-          initial={{ scale: 0.96, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.96, opacity: 0 }}
+          initial={shouldReduceMotion ? { opacity: 0 } : { scale: 0.96, opacity: 0 }}
+          animate={shouldReduceMotion ? { opacity: 1 } : { scale: 1, opacity: 1 }}
+          exit={shouldReduceMotion ? { opacity: 0 } : { scale: 0.96, opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           className="bg-zinc-900/80 backdrop-blur-lg border border-zinc-800 rounded-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden shadow-2xl relative z-10 flex flex-col md:flex-row text-zinc-200"
         >
@@ -700,10 +713,18 @@ function TaskModal({
                 });
 
                 return (
-                  <div key={comment.id} className="flex gap-3">
-                    <div className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center font-bold text-[10px] select-none ${info.color}`}>
-                      {info.initials}
-                    </div>
+                  <div key={comment.id} className="flex gap-3 animate-fade-in">
+                    {info.avatar_url ? (
+                      <img
+                        src={info.avatar_url}
+                        alt={info.name}
+                        className="w-7 h-7 rounded-full shrink-0 object-cover border border-zinc-800"
+                      />
+                    ) : (
+                      <div className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center font-bold text-[10px] select-none ${info.color}`}>
+                        {info.initials}
+                      </div>
+                    )}
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-baseline justify-between gap-2 mb-1">
@@ -759,6 +780,7 @@ function TaskModal({
 // Main Tasks Kanban Page
 // ---------------------------------------------------------------------------
 export function TasksPage() {
+  const shouldReduceMotion = useReducedMotion();
   const [projects, setProjects] = useState<any[]>([]);
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
 
@@ -772,6 +794,25 @@ export function TasksPage() {
   const [modalOpen, setModalOpen] = useState(false);
 
   const formRef = useRef<HTMLDivElement>(null);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.03,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 6 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring" as const, stiffness: 350, damping: 25 },
+    },
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -832,31 +873,7 @@ export function TasksPage() {
     setIsLoading(false);
   };
 
-  const handleLoadSampleData = async () => {
-    if (projects.length === 0) {
-      alert("Please create at least one project first before loading sample tasks!");
-      return;
-    }
-    setIsLoading(true);
-    const targetProjectId = selectedProject || projects[0].id;
-    const samples = [
-      { title: "Integrate OAuth 2.0 Credentials", description: "Set up login and registration via GitHub and Google oauth endpoints.", priority: "HIGH" },
-      { title: "Database migration for audit logs", description: "Create table schemas, constraints, and relational indices for security storage.", priority: "MEDIUM" },
-      { title: "Configure GitHub Actions CI pipeline", description: "Automate build verification, lint checking, and image generation on push.", priority: "HIGH" },
-      { title: "Draft developer API user guide", description: "Document endpoints, header signatures, and response payloads.", priority: "LOW" }
-    ];
 
-    for (const sample of samples) {
-      await createTask({
-        title: sample.title,
-        description: sample.description,
-        priority: sample.priority,
-        project_id: targetProjectId
-      });
-    }
-    await loadTasks();
-    setIsLoading(false);
-  };
 
   const todoTasks = tasks.filter((task) => task.status === "TODO");
   const progressTasks = tasks.filter((task) => task.status === "IN_PROGRESS");
@@ -917,7 +934,7 @@ export function TasksPage() {
           {/* Ambient header glow */}
           <div className="absolute -left-20 -top-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none z-0" />
           <div className="z-10 w-full max-w-5xl">
-            <h1 className="text-4xl font-bold text-zinc-150">
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-150">
               Tasks
             </h1>
             <p className="text-zinc-300 mt-2 text-sm font-sans max-w-2xl leading-relaxed">
@@ -925,16 +942,11 @@ export function TasksPage() {
             </p>
           </div>
 
-          <button
-            onClick={handleLoadSampleData}
-            className="z-10 self-start sm:self-center px-4 py-2 border border-zinc-800 hover:border-zinc-700/80 text-zinc-300 hover:text-white rounded-lg text-xs font-semibold transition duration-200 shadow-sm font-mono cursor-pointer bg-zinc-900/50 hover:shadow-[0_0_15px_rgba(124,58,237,0.04)]"
-          >
-            Load Sample Data
-          </button>
+
         </div>
 
         {/* Create Task Form */}
-        <div ref={formRef} className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 mb-8 text-zinc-100 transition-colors duration-300">
+        <PremiumCard ref={formRef as any} hoverable={false} className="mb-8 text-zinc-100 transition-colors duration-300">
           <h2 className="text-lg font-bold text-zinc-200 mb-4 flex items-center gap-2">
             <ClipboardList size={18} className="text-zinc-450" />
             Create New Task
@@ -974,64 +986,25 @@ export function TasksPage() {
             </div>
           </div>
 
-          <button
+          <PremiumButton
+            variant="primary"
             onClick={handleCreate}
-            className="bg-zinc-100 hover:bg-zinc-200 text-zinc-950 px-5 py-2.5 rounded-lg font-medium transition duration-200 shadow-sm cursor-pointer text-xs"
           >
             Create Task
-          </button>
-        </div>
+          </PremiumButton>
+        </PremiumCard>
 
         {/* ── KANBAN VIEW PORT ─────────────────────────────────────────── */}
         {isLoading ? (
-          /* Animated columns skeletons */
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((col) => (
-              <div key={col} className="bg-zinc-900/30 border border-zinc-800/80 rounded-xl p-4 min-h-[350px] animate-pulse space-y-4">
-                <div className="h-4 bg-zinc-850 rounded w-1/3 mb-2"></div>
-                {[1, 2].map((card) => (
-                  <div key={card} className="bg-zinc-950/40 border border-zinc-850 p-5 rounded-lg space-y-3">
-                    <div className="h-3 bg-zinc-900 rounded w-1/4"></div>
-                    <div className="h-4 bg-zinc-800 rounded w-2/3"></div>
-                    <div className="h-3 bg-zinc-900 rounded w-full"></div>
-                    <div className="h-2 bg-zinc-900 rounded w-1/2"></div>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
+          <TasksSkeleton />
         ) : tasks.length === 0 ? (
-          /* ── BEAUTIFUL EMPTY STATE ────────────────────────────────────── */
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center justify-center text-center p-12 py-20 bg-zinc-900/20 border border-dashed border-zinc-850 rounded-xl max-w-2xl mx-auto"
-          >
-            <div className="w-16 h-16 rounded-full bg-zinc-950 border border-zinc-800/80 flex items-center justify-center text-zinc-400 mb-6 shadow-inner">
-              <ClipboardList size={22} className="text-zinc-550" />
-            </div>
-
-            <h3 className="text-lg font-bold text-zinc-200 mb-2">No active tasks configured</h3>
-            <p className="text-xs text-zinc-300 max-w-lg leading-relaxed mb-8">
-              Populate your active boards to organize pipelines, resolve blockers, and calculate story points.
-            </p>
-
-            <div className="flex gap-4">
-              <button
-                onClick={scrollToForm}
-                className="px-4 py-2 border border-zinc-850 hover:border-zinc-700 text-zinc-300 hover:text-white rounded-lg text-xs font-semibold font-mono flex items-center gap-1.5 transition-all shadow-sm cursor-pointer"
-              >
-                <span>Add Task</span>
-                <ArrowUpRight size={12} />
-              </button>
-              <button
-                onClick={handleLoadSampleData}
-                className="px-4 py-2 bg-zinc-900 hover:bg-zinc-850 text-zinc-300 border border-zinc-800 hover:border-zinc-700 rounded-lg text-xs font-semibold font-mono transition-all shadow-sm cursor-pointer"
-              >
-                Load Mock Tasks
-              </button>
-            </div>
-          </motion.div>
+          <EmptyState
+            icon={ClipboardList}
+            title="No active tasks configured"
+            description="Populate your active boards to organize pipelines, resolve blockers, and calculate story points."
+            primaryActionLabel="Add Task"
+            onPrimaryAction={scrollToForm}
+          />
         ) : (
           /* Kanban Board */
           <DndContext
@@ -1049,20 +1022,23 @@ export function TasksPage() {
                 totalHours={todoHours}
                 activeTask={activeTask}
               >
-                {todoTasks.map((task) => (
-                  <DraggableTaskCard
-                    key={task.id}
-                    task={task}
-                    getProjectName={getProjectName}
-                    handleDelete={handleDelete}
-                    handleStatusChange={handleStatusChange}
-                    columnStatus="TODO"
-                    onCardClick={(t) => {
-                      setSelectedModalTask(t);
-                      setModalOpen(true);
-                    }}
-                  />
-                ))}
+                <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-3">
+                  {todoTasks.map((task) => (
+                    <motion.div key={task.id} variants={itemVariants}>
+                      <DraggableTaskCard
+                        task={task}
+                        getProjectName={getProjectName}
+                        handleDelete={handleDelete}
+                        handleStatusChange={handleStatusChange}
+                        columnStatus="TODO"
+                        onCardClick={(t) => {
+                          setSelectedModalTask(t);
+                          setModalOpen(true);
+                        }}
+                      />
+                    </motion.div>
+                  ))}
+                </motion.div>
               </DroppableColumn>
 
               {/* IN PROGRESS */}
@@ -1073,20 +1049,24 @@ export function TasksPage() {
                 totalHours={progressHours}
                 activeTask={activeTask}
               >
-                {progressTasks.map((task) => (
-                  <DraggableTaskCard
-                    key={task.id}
-                    task={task}
-                    getProjectName={getProjectName}
-                    handleDelete={handleDelete}
-                    handleStatusChange={handleStatusChange}
-                    columnStatus="IN_PROGRESS"
-                    onCardClick={(t) => {
-                      setSelectedModalTask(t);
-                      setModalOpen(true);
-                    }}
-                  />
-                ))}
+                <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-3">
+                  {progressTasks.map((task) => (
+                    <motion.div key={task.id} variants={itemVariants}>
+                      <DraggableTaskCard
+                        key={task.id}
+                        task={task}
+                        getProjectName={getProjectName}
+                        handleDelete={handleDelete}
+                        handleStatusChange={handleStatusChange}
+                        columnStatus="IN_PROGRESS"
+                        onCardClick={(t) => {
+                          setSelectedModalTask(t);
+                          setModalOpen(true);
+                        }}
+                      />
+                    </motion.div>
+                  ))}
+                </motion.div>
               </DroppableColumn>
 
               {/* DONE */}
@@ -1097,20 +1077,24 @@ export function TasksPage() {
                 totalHours={doneHours}
                 activeTask={activeTask}
               >
-                {doneTasks.map((task) => (
-                  <DraggableTaskCard
-                    key={task.id}
-                    task={task}
-                    getProjectName={getProjectName}
-                    handleDelete={handleDelete}
-                    handleStatusChange={handleStatusChange}
-                    columnStatus="DONE"
-                    onCardClick={(t) => {
-                      setSelectedModalTask(t);
-                      setModalOpen(true);
-                    }}
-                  />
-                ))}
+                <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-3">
+                  {doneTasks.map((task) => (
+                    <motion.div key={task.id} variants={itemVariants}>
+                      <DraggableTaskCard
+                        key={task.id}
+                        task={task}
+                        getProjectName={getProjectName}
+                        handleDelete={handleDelete}
+                        handleStatusChange={handleStatusChange}
+                        columnStatus="DONE"
+                        onCardClick={(t) => {
+                          setSelectedModalTask(t);
+                          setModalOpen(true);
+                        }}
+                      />
+                    </motion.div>
+                  ))}
+                </motion.div>
               </DroppableColumn>
             </div>
 

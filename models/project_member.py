@@ -12,11 +12,13 @@ class ProjectMember(Base):
         Integer,
         ForeignKey("projects.id", ondelete="CASCADE"),
         nullable=False,
+        index=True,
     )
     user_id = Column(
         Integer,
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
+        index=True,
     )
     role = Column(String(50), nullable=False, default="viewer")
     invited_by = Column(

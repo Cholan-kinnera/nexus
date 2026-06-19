@@ -22,8 +22,7 @@ from services.activity_service import create_activity_log
 
 logger = logging.getLogger(__name__)
 
-# In-memory registration cache
-otp_cache = {}
+# Registration state is persisted in Redis namespace signup:<email> instead of local dict
 
 async def signup_service(
     full_name: str,
@@ -48,13 +47,21 @@ async def signup_service(
         # Generate random 6-digit OTP code
         otp_code = "".join([str(random.randint(0, 9)) for _ in range(6)])
 
-        # Cache signup details with hashed password
-        otp_cache[email] = {
+        # Cache signup details in Redis with 10-minute expiry
+        import json
+        from services.redis_service import redis_service
+        
+        signup_data = {
             "full_name": full_name,
             "email": email,
             "password": hash_password(password),
             "otp": otp_code
         }
+        await redis_service.set_cache(
+            key=f"signup:{email}",
+            value=json.dumps(signup_data),
+            expire_seconds=600  # 10 minutes
+        )
 
         # Send AWS SES verification email
         email_sent = await send_otp_email(email, otp_code)
@@ -86,8 +93,18 @@ async def verify_otp_service(
     db: AsyncSession
 ):
     try:
-        cached_data = otp_cache.get(email)
-        if not cached_data or cached_data["otp"] != otp:
+        import json
+        from services.redis_service import redis_service
+        
+        cached_json = await redis_service.get_cache(f"signup:{email}")
+        if not cached_json:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid or expired verification code"
+            )
+            
+        cached_data = json.loads(cached_json)
+        if cached_data["otp"] != otp:
             raise HTTPException(
                 status_code=400,
                 detail="Invalid or expired verification code"
@@ -116,7 +133,7 @@ async def verify_otp_service(
         await db.refresh(new_user)
 
         # Remove cache entry on successful persistence
-        otp_cache.pop(email, None)
+        await redis_service.delete_cache(f"signup:{email}")
 
         # Generate Access and Refresh Tokens
         access_token = create_access_token(
@@ -134,6 +151,14 @@ async def verify_otp_service(
         )
         db.add(db_refresh)
         await db.commit()
+
+        # Cache refresh token in Redis for 7 days
+        from services.redis_service import redis_service
+        await redis_service.set_cache(
+            key=f"refresh:{new_user.id}:{token_hash}",
+            value="active",
+            expire_seconds=7 * 24 * 3600
+        )
 
         # Create OTP_VERIFIED activity log
         try:
@@ -214,6 +239,14 @@ async def login_service(
         db.add(db_refresh)
         await db.commit()
 
+        # Cache refresh token in Redis for 7 days
+        from services.redis_service import redis_service
+        await redis_service.set_cache(
+            key=f"refresh:{user.id}:{token_hash}",
+            value="active",
+            expire_seconds=7 * 24 * 3600
+        )
+
         # Create LOGIN_SUCCESS activity log
         try:
             await create_activity_log(
@@ -274,17 +307,43 @@ async def refresh_token_service(refresh_token: str, db: AsyncSession):
     except (JWTError, ValueError):
         raise credentials_exception
 
-    # 2. Check token hash in database
+    # 2. Check token in Redis cache first (Fast Path)
     token_hash = hash_token(refresh_token)
-    stmt = select(RefreshToken).where(RefreshToken.token_hash == token_hash)
-    result = await db.execute(stmt)
-    db_token = result.scalar_one_or_none()
+    redis_key = f"refresh:{user_id}:{token_hash}"
+    from services.redis_service import redis_service
+    
+    cached_status = await redis_service.get_cache(redis_key)
+    db_token = None
+    
+    if cached_status == "active":
+        # Cache hit: Fetch from DB only to mark it revoked during rotation
+        stmt = select(RefreshToken).where(RefreshToken.token_hash == token_hash)
+        result = await db.execute(stmt)
+        db_token = result.scalar_one_or_none()
+    else:
+        # Cache miss: Query Postgres (Slow Path / Healing)
+        stmt = select(RefreshToken).where(RefreshToken.token_hash == token_hash)
+        result = await db.execute(stmt)
+        db_token = result.scalar_one_or_none()
+        
+        if not db_token or db_token.revoked or db_token.expires_at < datetime.now(UTC):
+            raise credentials_exception
+            
+        # Heal the cache
+        remaining_ttl = int((db_token.expires_at - datetime.now(UTC)).total_seconds())
+        if remaining_ttl > 0:
+            await redis_service.set_cache(
+                key=redis_key,
+                value="active",
+                expire_seconds=remaining_ttl
+            )
 
-    if not db_token or db_token.revoked or db_token.expires_at < datetime.now(UTC):
+    if not db_token:
         raise credentials_exception
 
-    # 3. Rotate Refresh Token: Revoke old token
+    # 3. Rotate Refresh Token: Revoke old token in both DB and Redis
     db_token.revoked = True
+    await redis_service.delete_cache(redis_key)
     
     # 4. Fetch the User
     user_result = await db.execute(select(User).where(User.id == user_id))
@@ -301,7 +360,7 @@ async def refresh_token_service(refresh_token: str, db: AsyncSession):
         data={"sub": str(user.id)}
     )
     
-    # Save the new refresh token
+    # Save the new refresh token in DB and cache in Redis
     new_token_hash = hash_token(new_refresh_token)
     new_db_token = RefreshToken(
         user_id=user.id,
@@ -312,6 +371,12 @@ async def refresh_token_service(refresh_token: str, db: AsyncSession):
     db.add(new_db_token)
     await db.commit()
 
+    await redis_service.set_cache(
+        key=f"refresh:{user.id}:{new_token_hash}",
+        value="active",
+        expire_seconds=7 * 24 * 3600
+    )
+
     return {
         "access_token": new_access_token,
         "refresh_token": new_refresh_token,
@@ -320,6 +385,22 @@ async def refresh_token_service(refresh_token: str, db: AsyncSession):
 
 
 async def logout_service(refresh_token: str, db: AsyncSession):
+    try:
+        # Decode token to extract sub/user_id for Redis cache deletion
+        payload = jwt.decode(
+            refresh_token,
+            settings.REFRESH_SECRET_KEY,
+            algorithms=[settings.ALGORITHM]
+        )
+        user_id = int(payload.get("sub"))
+        token_hash = hash_token(refresh_token)
+        
+        # Remove from Redis
+        from services.redis_service import redis_service
+        await redis_service.delete_cache(f"refresh:{user_id}:{token_hash}")
+    except Exception as e:
+        logger.warning(f"Failed to delete refresh token cache during logout: {e}")
+
     token_hash = hash_token(refresh_token)
     stmt = select(RefreshToken).where(RefreshToken.token_hash == token_hash)
     result = await db.execute(stmt)
@@ -688,6 +769,14 @@ async def google_login_service(credential_token: str, db: AsyncSession):
         )
         db.add(db_refresh)
         await db.commit()
+
+        # Cache refresh token in Redis for 7 days
+        from services.redis_service import redis_service
+        await redis_service.set_cache(
+            key=f"refresh:{user.id}:{token_hash}",
+            value="active",
+            expire_seconds=7 * 24 * 3600
+        )
 
         # Log activity
         try:

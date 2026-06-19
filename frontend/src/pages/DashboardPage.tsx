@@ -5,7 +5,9 @@ import { getTasks } from "../services/taskService";
 import { getProjectMembers } from "../services/projectMemberService";
 import api from "../api/client";
 import DashboardLayout from "../layouts/DashboardLayout";
-import { motion, animate } from "framer-motion";
+import { motion, animate, useReducedMotion } from "framer-motion";
+import { PremiumCard } from "../components/ui/PremiumCard";
+import { DashboardSkeleton } from "../components/ui/SkeletonLoader";
 import {
   Shield,
   LayoutGrid,
@@ -187,6 +189,7 @@ function ChartWrapper({ children }: ChartWrapperProps) {
 export default function DashboardPage() {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
+  const shouldReduceMotion = useReducedMotion();
 
   const [projects, setProjects] = useState<any[]>([]);
   const [tasks, setTasks] = useState<any[]>([]);
@@ -310,385 +313,300 @@ export default function DashboardPage() {
     { name: "Done", value: completedTasks || 0, color: "#8b5cf6" },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.04,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring" as const, stiffness: 350, damping: 25 },
+    },
+  };
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <DashboardSkeleton />
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout>
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
         className="w-full space-y-8"
       >
         {/* Top Header Card */}
-        <div className="relative flex flex-col md:flex-row md:items-center justify-between pb-2">
+        <motion.div
+          variants={itemVariants}
+          className="relative flex flex-col md:flex-row md:items-center justify-between pb-2"
+        >
           {/* Subtle ambient violet lighting behind header */}
           <div className="absolute -left-20 -top-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none z-0" />
           <div className="z-10 w-full max-w-5xl flex flex-col items-start justify-start">
-            <h1 className="text-4xl font-bold text-zinc-100">
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">
               Dashboard Overview
             </h1>
             <p className="text-sm text-zinc-400 mt-2 max-w-2xl leading-relaxed">
               Visual analytics, active tasks workflow, and live activity stream.
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* 4 Summary Stat Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Stat 1: Total Projects */}
-          <div className={`border rounded-xl p-6 shadow-md transition-all duration-200 hover:translate-y-[-2px] flex flex-col justify-between h-36 ${isLoading
-              ? "bg-zinc-900/30 border-zinc-800/80 animate-pulse"
-              : "bg-zinc-900/50 backdrop-blur-sm border-zinc-800 hover:border-zinc-700/80 hover:shadow-[0_0_15px_rgba(124,58,237,0.04)]"
-            }`}>
-            {isLoading ? (
-              <div className="flex flex-col justify-between h-full w-full">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-2.5 w-2/3">
-                    <div className="h-3 bg-zinc-850 rounded w-1/2"></div>
-                    <div className="h-6 bg-zinc-800 rounded w-1/3"></div>
-                  </div>
-                  <div className="w-10 h-10 bg-zinc-850 rounded-lg"></div>
-                </div>
-                <div className="h-3 bg-zinc-850 rounded w-1/2 mt-4"></div>
+          <PremiumCard className="flex flex-col justify-between h-36">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-2xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">Total Projects</span>
+                <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">
+                  <AnimatedCounter value={totalProjects} />
+                </p>
               </div>
-            ) : (
-              <>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="text-2xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">Total Projects</span>
-                    <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">
-                      <AnimatedCounter value={totalProjects} />
-                    </p>
-                  </div>
-                  <div className="p-2 bg-zinc-850 border border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg shadow-sm">
-                    <FolderOpen size={16} />
-                  </div>
-                </div>
-                <div className="flex items-center justify-between text-[10px] font-mono mt-4 pt-2 border-t border-zinc-850/50">
-                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">+1 active this week</span>
-                  <span className="text-zinc-500">Updated 10m ago</span>
-                </div>
-              </>
-            )}
-          </div>
+              <div className="p-2 bg-zinc-850 border border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg shadow-sm">
+                <FolderOpen size={16} />
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-[10px] font-mono mt-4 pt-2 border-t border-zinc-850/50">
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">+1 active this week</span>
+              <span className="text-zinc-500">Updated 10m ago</span>
+            </div>
+          </PremiumCard>
 
           {/* Stat 2: Total Tasks */}
-          <div className={`border rounded-xl p-6 shadow-md transition-all duration-200 hover:translate-y-[-2px] flex flex-col justify-between h-36 ${isLoading
-              ? "bg-zinc-900/30 border-zinc-800/80 animate-pulse"
-              : "bg-zinc-900/50 backdrop-blur-sm border-zinc-800 hover:border-zinc-700/80 hover:shadow-[0_0_15px_rgba(124,58,237,0.04)]"
-            }`}>
-            {isLoading ? (
-              <div className="flex flex-col justify-between h-full w-full">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-2.5 w-2/3">
-                    <div className="h-3 bg-zinc-850 rounded w-1/2"></div>
-                    <div className="h-6 bg-zinc-800 rounded w-1/3"></div>
-                  </div>
-                  <div className="w-10 h-10 bg-zinc-850 rounded-lg"></div>
-                </div>
-                <div className="h-3 bg-zinc-850 rounded w-1/2 mt-4"></div>
+          <PremiumCard className="flex flex-col justify-between h-36">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-2xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">Total Tasks</span>
+                <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">
+                  <AnimatedCounter value={totalTasks} />
+                </p>
               </div>
-            ) : (
-              <>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="text-2xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">Total Tasks</span>
-                    <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">
-                      <AnimatedCounter value={totalTasks} />
-                    </p>
-                  </div>
-                  <div className="p-2 bg-zinc-850 border border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg shadow-sm">
-                    <CheckSquare size={16} />
-                  </div>
-                </div>
-                <div className="flex items-center justify-between text-[10px] font-mono mt-4 pt-2 border-t border-zinc-850/50">
-                  <span className="text-violet-600 dark:text-violet-400 font-semibold">+7 active tasks</span>
-                  <span className="text-zinc-500">Updated 2m ago</span>
-                </div>
-              </>
-            )}
-          </div>
+              <div className="p-2 bg-zinc-850 border border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg shadow-sm">
+                <CheckSquare size={16} />
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-[10px] font-mono mt-4 pt-2 border-t border-zinc-850/50">
+              <span className="text-violet-600 dark:text-violet-400 font-semibold">+7 active tasks</span>
+              <span className="text-zinc-500">Updated 2m ago</span>
+            </div>
+          </PremiumCard>
 
           {/* Stat 3: Todo Status */}
-          <div className={`border rounded-xl p-6 shadow-md transition-all duration-200 hover:translate-y-[-2px] flex flex-col justify-between h-36 ${isLoading
-              ? "bg-zinc-900/30 border-zinc-800/80 animate-pulse"
-              : "bg-zinc-900/50 backdrop-blur-sm border-zinc-800 hover:border-zinc-700/80 hover:shadow-[0_0_15px_rgba(124,58,237,0.04)]"
-            }`}>
-            {isLoading ? (
-              <div className="flex flex-col justify-between h-full w-full">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-2.5 w-2/3">
-                    <div className="h-3 bg-zinc-850 rounded w-1/2"></div>
-                    <div className="h-6 bg-zinc-800 rounded w-1/3"></div>
-                  </div>
-                  <div className="w-10 h-10 bg-zinc-850 rounded-lg"></div>
-                </div>
-                <div className="h-3 bg-zinc-850 rounded w-1/2 mt-4"></div>
+          <PremiumCard className="flex flex-col justify-between h-36">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-2xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">Todo Status</span>
+                <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">
+                  <AnimatedCounter value={todoTasks} />
+                </p>
               </div>
-            ) : (
-              <>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="text-2xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">Todo Status</span>
-                    <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">
-                      <AnimatedCounter value={todoTasks} />
-                    </p>
-                  </div>
-                  <div className="p-2 bg-zinc-850 border border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg shadow-sm">
-                    <LayoutGrid size={16} />
-                  </div>
-                </div>
-                <div className="flex items-center justify-between text-[10px] font-mono mt-4 pt-2 border-t border-zinc-850/50">
-                  <span className="text-zinc-500 dark:text-zinc-400 font-semibold">-2 items resolved</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">Sync active</span>
-                </div>
-              </>
-            )}
-          </div>
+              <div className="p-2 bg-zinc-850 border border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg shadow-sm">
+                <LayoutGrid size={16} />
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-[10px] font-mono mt-4 pt-2 border-t border-zinc-850/50">
+              <span className="text-zinc-500 dark:text-zinc-400 font-semibold">-2 items resolved</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold">Sync active</span>
+            </div>
+          </PremiumCard>
 
           {/* Stat 4: Completed Tasks */}
-          <div className={`border rounded-xl p-6 shadow-md transition-all duration-200 hover:translate-y-[-2px] flex flex-col justify-between h-36 ${isLoading
-              ? "bg-zinc-900/30 border-zinc-800/80 animate-pulse"
-              : "bg-zinc-900/50 backdrop-blur-sm border-zinc-800 hover:border-zinc-700/80 hover:shadow-[0_0_15px_rgba(124,58,237,0.04)]"
-            }`}>
-            {isLoading ? (
-              <div className="flex flex-col justify-between h-full w-full">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-2.5 w-2/3">
-                    <div className="h-3 bg-zinc-850 rounded w-1/2"></div>
-                    <div className="h-6 bg-zinc-800 rounded w-1/3"></div>
-                  </div>
-                  <div className="w-10 h-10 bg-zinc-850 rounded-lg"></div>
-                </div>
-                <div className="h-3 bg-zinc-850 rounded w-1/2 mt-4"></div>
+          <PremiumCard className="flex flex-col justify-between h-36">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-2xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">Completed Tasks</span>
+                <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">
+                  <AnimatedCounter value={completedTasks} />
+                </p>
               </div>
-            ) : (
-              <>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <span className="text-2xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">Completed Tasks</span>
-                    <p className="text-3xl font-bold text-zinc-100 mt-1 font-mono">
-                      <AnimatedCounter value={completedTasks} />
-                    </p>
-                  </div>
-                  <div className="p-2 bg-zinc-850 border border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg shadow-sm">
-                    <CheckSquare size={16} className="text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                </div>
-                <div className="flex items-center justify-between text-[10px] font-mono mt-4 pt-2 border-t border-zinc-850/50">
-                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">+12% this week</span>
-                  <span className="text-zinc-500">Velocity optimal</span>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
+              <div className="p-2 bg-zinc-850 border border-zinc-800 text-zinc-500 dark:text-zinc-400 rounded-lg shadow-sm">
+                <CheckSquare size={16} className="text-emerald-600 dark:text-emerald-400" />
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-[10px] font-mono mt-4 pt-2 border-t border-zinc-850/50">
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">+12% this week</span>
+              <span className="text-zinc-500">Velocity optimal</span>
+            </div>
+          </PremiumCard>
+        </motion.div>
 
         {/* Recharts Analytics Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Area Chart: Task Velocity */}
-          <div className={`lg:col-span-2 border rounded-xl p-6 shadow-md transition-all duration-300 flex flex-col justify-between h-[23.5rem] ${isLoading
-              ? "bg-zinc-900/30 border-zinc-800/80 animate-pulse"
-              : "bg-zinc-900/20 backdrop-blur-md border-zinc-800/60 hover:border-zinc-700/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.04),0_10px_30px_rgba(0,0,0,0.5)]"
-            }`}>
-            {isLoading ? (
-              <div className="flex flex-col justify-between h-full">
-                <div className="space-y-2">
-                  <div className="h-4 bg-zinc-800 rounded w-1/4"></div>
-                  <div className="h-3 bg-zinc-850 rounded w-1/3"></div>
-                </div>
-                <div className="h-56 bg-zinc-950/40 rounded-xl border border-zinc-850/50"></div>
-              </div>
-            ) : (
-              <>
-                <div className="mb-4">
-                  <h3 className="text-lg font-bold text-zinc-100">Task Velocity</h3>
-                  <p className="text-xs text-zinc-500 font-mono mt-0.5">Average task completion rate across the last 7 days.</p>
-                </div>
-                <div className="h-72 w-full font-mono text-[10px]">
-                  <ChartWrapper>
-                    {(width, height) => (
-                      <AreaChart width={width} height={height} data={getVelocityData()} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <defs>
-                          <linearGradient id="colorVelocity" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.15} />
-                            <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.0} />
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
-                        <XAxis dataKey="name" stroke={axisStroke} tick={{ fill: tickFill }} fontSize={10} tickLine={false} axisLine={false} />
-                        <YAxis stroke={axisStroke} tick={{ fill: tickFill }} fontSize={10} tickLine={false} axisLine={false} />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: tooltipBg,
-                            borderColor: tooltipBorder,
-                            color: tooltipColor,
-                            borderRadius: "8px",
-                            fontSize: "11px",
-                            fontFamily: "monospace",
-                          }}
-                        />
-                        <Area
-                          type="monotone"
-                          dataKey="velocity"
-                          stroke="#8b5cf6"
-                          strokeWidth={1.5}
-                          fillOpacity={1}
-                          fill="url(#colorVelocity)"
-                        />
-                      </AreaChart>
-                    )}
-                  </ChartWrapper>
-                </div>
-              </>
-            )}
-          </div>
+          <PremiumCard hoverable={false} className="lg:col-span-2 flex flex-col justify-between h-[23.5rem]">
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-zinc-100">Task Velocity</h3>
+              <p className="text-xs text-zinc-500 font-mono mt-0.5">Average task completion rate across the last 7 days.</p>
+            </div>
+            <div className="h-72 w-full font-mono text-[10px]">
+              <ChartWrapper>
+                {(width, height) => (
+                  <AreaChart width={width} height={height} data={getVelocityData()} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorVelocity" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />
+                    <XAxis dataKey="name" stroke={axisStroke} tick={{ fill: tickFill }} fontSize={10} tickLine={false} axisLine={false} />
+                    <YAxis stroke={axisStroke} tick={{ fill: tickFill }} fontSize={10} tickLine={false} axisLine={false} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: tooltipBg,
+                        borderColor: tooltipBorder,
+                        color: tooltipColor,
+                        borderRadius: "8px",
+                        fontSize: "11px",
+                        fontFamily: "monospace",
+                      }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="velocity"
+                      stroke="#8b5cf6"
+                      strokeWidth={1.5}
+                      fillOpacity={1}
+                      fill="url(#colorVelocity)"
+                    />
+                  </AreaChart>
+                )}
+              </ChartWrapper>
+            </div>
+          </PremiumCard>
 
           {/* Donut Chart: Task Distribution */}
-          <div className={`lg:col-span-1 border rounded-xl p-6 shadow-md flex flex-col justify-between transition-all duration-300 h-[23.5rem] ${isLoading
-              ? "bg-zinc-900/30 border-zinc-800/80 animate-pulse"
-              : "bg-zinc-900/20 backdrop-blur-md border-zinc-800/60 hover:border-zinc-700/60 hover:shadow-[0_0_20px_rgba(139,92,246,0.04),0_10px_30px_rgba(0,0,0,0.5)]"
-            }`}>
-            {isLoading ? (
-              <div className="flex flex-col justify-between h-full">
-                <div className="space-y-2">
-                  <div className="h-4 bg-zinc-800 rounded w-1/3"></div>
-                  <div className="h-3 bg-zinc-850 rounded w-1/2"></div>
-                </div>
-                <div className="w-32 h-32 rounded-full border-8 border-zinc-850/60 mx-auto flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-zinc-900"></div>
-                </div>
-                <div className="h-4 bg-zinc-800 rounded w-2/3 mx-auto"></div>
-              </div>
-            ) : (
-              <>
-                <div>
-                  <h3 className="text-lg font-bold text-zinc-100">Task Distribution</h3>
-                  <p className="text-xs text-zinc-500 font-mono mt-0.5">Breakdown of current task statuses.</p>
-                </div>
-                <div className="h-48 w-full relative flex items-center justify-center my-4 font-mono">
-                  <ChartWrapper>
-                    {(width, height) => (
-                      <div className="relative w-full h-full flex items-center justify-center">
-                        <PieChart width={width} height={height}>
-                          <Tooltip
-                            contentStyle={{
-                              backgroundColor: tooltipBg,
-                              borderColor: tooltipBorder,
-                              color: tooltipColor,
-                              borderRadius: "8px",
-                              fontSize: "11px",
-                            }}
-                          />
-                          <Pie
-                            data={pieData}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={62}
-                            outerRadius={78}
-                            paddingAngle={3}
-                            dataKey="value"
-                          >
-                            {pieData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
-                          </Pie>
-                        </PieChart>
-                        <div className="absolute text-center">
-                          <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-semibold">Active</span>
-                          <p className="text-2xl font-bold text-zinc-100">{totalTasks}</p>
-                        </div>
-                      </div>
-                    )}
-                  </ChartWrapper>
-                </div>
-                {/* Custom Legends */}
-                <div className="flex justify-center gap-4 text-2xs font-mono mt-2">
-                  {pieData.map((d) => (
-                    <div key={d.name} className="flex items-center gap-1.5 text-zinc-400">
-                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }}></span>
-                      <span>{d.name} ({d.value})</span>
+          <PremiumCard hoverable={false} className="lg:col-span-1 flex flex-col justify-between h-[23.5rem]">
+            <div>
+              <h3 className="text-lg font-bold text-zinc-100">Task Distribution</h3>
+              <p className="text-xs text-zinc-500 font-mono mt-0.5">Breakdown of current task statuses.</p>
+            </div>
+            <div className="h-48 w-full relative flex items-center justify-center my-4 font-mono">
+              <ChartWrapper>
+                {(width, height) => (
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <PieChart width={width} height={height}>
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: tooltipBg,
+                          borderColor: tooltipBorder,
+                          color: tooltipColor,
+                          borderRadius: "8px",
+                          fontSize: "11px",
+                        }}
+                      />
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={62}
+                        outerRadius={78}
+                        paddingAngle={3}
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                    <div className="absolute text-center">
+                      <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-semibold">Active</span>
+                      <p className="text-2xl font-bold text-zinc-100">{totalTasks}</p>
                     </div>
-                  ))}
+                  </div>
+                )}
+              </ChartWrapper>
+            </div>
+            {/* Custom Legends */}
+            <div className="flex justify-center gap-4 text-2xs font-mono mt-2">
+              {pieData.map((d) => (
+                <div key={d.name} className="flex items-center gap-1.5 text-zinc-400">
+                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }}></span>
+                  <span>{d.name} ({d.value})</span>
                 </div>
-              </>
-            )}
-          </div>
-        </div>
+              ))}
+            </div>
+          </PremiumCard>
+        </motion.div>
 
         {/* Lower Section: Projects and Recent Team Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left: Recent Projects */}
-          <div className="lg:col-span-2">
+          <motion.div variants={itemVariants} className="lg:col-span-2">
             <h2 className="text-2xl font-bold mb-6 text-zinc-100 flex items-center gap-2">
               Recent Projects
             </h2>
 
             <div className="grid gap-5">
-              {isLoading ? (
-                [1, 2].map((k) => (
-                  <div key={k} className="bg-zinc-900/30 border border-zinc-800/80 rounded-xl p-6 h-32 animate-pulse space-y-3">
-                    <div className="h-4 bg-zinc-850 rounded w-1/3"></div>
-                    <div className="h-3 bg-zinc-800 rounded w-2/3"></div>
-                    <div className="h-3 bg-zinc-800 rounded w-1/2"></div>
-                  </div>
-                ))
-              ) : (
-                projects.map((project) => {
-                  const parsed = parseDescription(project.description);
-                  const priorityColors: Record<string, string> = {
-                    HIGH: "bg-zinc-950 text-red-400 border-zinc-850",
-                    MEDIUM: "bg-zinc-950 text-amber-400 border-zinc-850",
-                    LOW: "bg-zinc-950 text-blue-400 border-zinc-850"
-                  };
-                  return (
-                    <div
-                      key={project.id}
-                      className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 transition-all duration-200 hover:translate-y-[-2px] hover:border-zinc-700/80 hover:shadow-[0_0_15px_rgba(124,58,237,0.04)] ease-in-out"
-                    >
-                      <h3 className="text-lg font-bold text-zinc-100">
-                        {project.title}
-                      </h3>
-                      <p className="text-zinc-300 mt-2 text-sm leading-relaxed">
-                        {parsed.description || "No description provided."}
-                      </p>
-                      {(parsed.category || parsed.priority || parsed.deadline) && (
-                        <div className="flex flex-wrap gap-2 text-[9px] font-mono mt-4 pt-3 border-t border-zinc-850/50 select-none">
-                          {parsed.category && (
-                            <span className="px-2 py-0.5 rounded border border-zinc-800 bg-zinc-950 text-zinc-400 uppercase">
-                              📁 {parsed.category}
-                            </span>
-                          )}
-                          {parsed.priority && (
-                            <span className={`px-2 py-0.5 rounded border uppercase tracking-wider ${priorityColors[parsed.priority] || "bg-zinc-950 text-zinc-400 border-zinc-850"}`}>
-                              ⚡ {parsed.priority}
-                            </span>
-                          )}
-                          {parsed.deadline && (
-                            <span className="px-2 py-0.5 rounded border border-zinc-850 bg-zinc-950 text-zinc-400">
-                              📅 {new Date(parsed.deadline).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })
-              )}
-              {!isLoading && projects.length === 0 && (
+              {projects.map((project) => {
+                const parsed = parseDescription(project.description);
+                const priorityColors: Record<string, string> = {
+                  HIGH: "bg-zinc-950 text-red-400 border-zinc-850",
+                  MEDIUM: "bg-zinc-950 text-amber-400 border-zinc-850",
+                  LOW: "bg-zinc-950 text-blue-400 border-zinc-850"
+                };
+                return (
+                  <PremiumCard
+                    key={project.id}
+                    className="p-6"
+                  >
+                    <h3 className="text-lg font-bold text-zinc-100">
+                      {project.title}
+                    </h3>
+                    <p className="text-zinc-300 mt-2 text-sm leading-relaxed">
+                      {parsed.description || "No description provided."}
+                    </p>
+                    {(parsed.category || parsed.priority || parsed.deadline) && (
+                      <div className="flex flex-wrap gap-2 text-[9px] font-mono mt-4 pt-3 border-t border-zinc-850/50 select-none">
+                        {parsed.category && (
+                          <span className="px-2 py-0.5 rounded border border-zinc-800 bg-zinc-950 text-zinc-400 uppercase">
+                            📁 {parsed.category}
+                          </span>
+                        )}
+                        {parsed.priority && (
+                          <span className={`px-2 py-0.5 rounded border uppercase tracking-wider ${priorityColors[parsed.priority] || "bg-zinc-950 text-zinc-400 border-zinc-850"}`}>
+                            ⚡ {parsed.priority}
+                          </span>
+                        )}
+                        {parsed.deadline && (
+                          <span className="px-2 py-0.5 rounded border border-zinc-850 bg-zinc-950 text-zinc-400">
+                            📅 {new Date(parsed.deadline).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </PremiumCard>
+                );
+              })}
+              {projects.length === 0 && (
                 <div className="text-center py-10 bg-zinc-900/20 border border-dashed border-zinc-800 rounded-xl flex flex-col items-center justify-center p-6">
                   <p className="text-zinc-500 font-mono text-xs">No projects found. Create one to get started!</p>
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
 
           {/* Right: Live activity logs */}
-          <div className="lg:col-span-1">
+          <motion.div variants={itemVariants} className="lg:col-span-1">
             <h2 className="text-2xl font-bold mb-6 text-zinc-100 font-sans">
               Recent Team Activity
             </h2>
 
-            <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md transition-all duration-200 hover:border-zinc-700/80 hover:shadow-[0_0_15px_rgba(124,58,237,0.04)] space-y-4">
+            <PremiumCard hoverable={false} className="space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-zinc-850">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping inline-block"></span>
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500">
@@ -697,73 +615,59 @@ export default function DashboardPage() {
               </div>
 
               <div className="space-y-3.5 max-h-[24rem] overflow-y-auto pr-1">
-                {isLoading ? (
-                  <div className="space-y-4 animate-pulse">
-                    {[1, 2, 3, 4].map((k) => (
-                      <div key={k} className="flex gap-3">
-                        <div className="w-5 h-5 bg-zinc-850 rounded"></div>
-                        <div className="flex-1 space-y-2">
-                          <div className="h-3 bg-zinc-800 rounded w-5/6"></div>
-                          <div className="h-2 bg-zinc-850 rounded w-1/4"></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  activityLogs.map((log) => {
-                    const iconType = getActivityIcon(log.action);
-                    return (
-                      <div key={log.id} className="flex gap-3 text-xs leading-relaxed">
-                        {/* Icon mapping */}
-                        <div className="mt-0.5">
-                          {iconType === "project" && (
-                            <span className="p-1.5 rounded bg-zinc-900/40 border border-zinc-800 text-zinc-400 block">
-                              <FolderOpen size={12} />
-                            </span>
-                          )}
-                          {iconType === "member" && (
-                            <span className="p-1.5 rounded bg-zinc-900/40 border border-zinc-800 text-zinc-400 block">
-                              <Users size={12} />
-                            </span>
-                          )}
-                          {iconType === "task" && (
-                            <span className="p-1.5 rounded bg-zinc-900/40 border border-zinc-800 text-zinc-450 block">
-                              <CheckSquare size={12} />
-                            </span>
-                          )}
-                          {iconType === "comment" && (
-                            <span className="p-1.5 rounded bg-zinc-900/40 border border-zinc-800 text-zinc-450 block">
-                              <MessageSquare size={12} />
-                            </span>
-                          )}
-                          {iconType === "system" && (
-                            <span className="p-1.5 rounded bg-zinc-900/40 border border-zinc-800 text-zinc-450 block">
-                              <Shield size={12} />
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Message content */}
-                        <div className="flex-1">
-                          <p className="text-zinc-300 font-mono text-[10px] font-medium break-words font-sans">
-                            {formatActivityMessage(log, userMap)}
-                          </p>
-                          <span className="text-[9px] text-zinc-500 font-mono">
-                            {formatRelativeTime(log.created_at)}
+                {activityLogs.map((log) => {
+                  const iconType = getActivityIcon(log.action);
+                  return (
+                    <div key={log.id} className="flex gap-3 text-xs leading-relaxed">
+                      {/* Icon mapping */}
+                      <div className="mt-0.5">
+                        {iconType === "project" && (
+                          <span className="p-1.5 rounded bg-zinc-900/40 border border-zinc-800 text-zinc-400 block">
+                            <FolderOpen size={12} />
                           </span>
-                        </div>
+                        )}
+                        {iconType === "member" && (
+                          <span className="p-1.5 rounded bg-zinc-900/40 border border-zinc-800 text-zinc-400 block">
+                            <Users size={12} />
+                          </span>
+                        )}
+                        {iconType === "task" && (
+                          <span className="p-1.5 rounded bg-zinc-900/40 border border-zinc-800 text-zinc-450 block">
+                            <CheckSquare size={12} />
+                          </span>
+                        )}
+                        {iconType === "comment" && (
+                          <span className="p-1.5 rounded bg-zinc-900/40 border border-zinc-800 text-zinc-450 block">
+                            <MessageSquare size={12} />
+                          </span>
+                        )}
+                        {iconType === "system" && (
+                          <span className="p-1.5 rounded bg-zinc-900/40 border border-zinc-800 text-zinc-450 block">
+                            <Shield size={12} />
+                          </span>
+                        )}
                       </div>
-                    );
-                  })
-                )}
-                {!isLoading && activityLogs.length === 0 && (
+
+                      {/* Message content */}
+                      <div className="flex-1">
+                        <p className="text-zinc-300 font-mono text-[10px] font-medium break-words font-sans">
+                          {formatActivityMessage(log, userMap)}
+                        </p>
+                        <span className="text-[9px] text-zinc-500 font-mono">
+                          {formatRelativeTime(log.created_at)}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+                {activityLogs.length === 0 && (
                   <div className="text-center py-8 text-zinc-600 italic text-[11px] font-mono">
                     No team activity logged yet.
                   </div>
                 )}
               </div>
-            </div>
-          </div>
+            </PremiumCard>
+          </motion.div>
         </div>
       </motion.div>
     </DashboardLayout>

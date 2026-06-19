@@ -3,7 +3,9 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import { useAuth } from "../context/AuthContext";
 import { getMe, updateProfile, updateAvatar } from "../services/profileService";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Mail, Shield, Camera, UploadCloud, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
+import { User, Mail, Shield, Camera, UploadCloud, CheckCircle2, AlertTriangle } from "lucide-react";
+import { PremiumButton } from "../components/ui/PremiumButton";
+import { PremiumCard } from "../components/ui/PremiumCard";
 
 export default function ProfilePage() {
   const { user, updateUser } = useAuth();
@@ -189,244 +191,231 @@ export default function ProfilePage() {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-zinc-950 text-zinc-150 p-6 md:p-10 font-sans">
-        <div className="max-w-4xl mx-auto space-y-8">
-          {/* Top header introduction */}
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-zinc-100 font-mono">USER PROFILE</h1>
-            <p className="text-xs text-zinc-400 mt-1">Manage your public credentials, display details, and profile avatar.</p>
+      <div className="max-w-4xl mx-auto space-y-8 font-sans">
+        {/* Top header introduction */}
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-100 font-mono">USER PROFILE</h1>
+          <p className="text-xs text-zinc-400 mt-1">Manage your public credentials, display details, and profile avatar.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Column 1: Display Card & Photo Upload preview */}
+          <div className="md:col-span-1 space-y-6">
+            {/* Profile Overview Card */}
+            <PremiumCard hoverable={false} className="flex flex-col items-center text-center relative overflow-hidden">
+              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-violet-600 to-indigo-600" />
+              
+              {/* Big Avatar view */}
+              <div className="relative group cursor-pointer w-24 h-24 rounded-full bg-zinc-950 border border-zinc-800 flex items-center justify-center font-bold text-2xl text-zinc-400 select-none shadow-md overflow-hidden mb-4 mt-2">
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  getInitials(displayName)
+                )}
+                <div 
+                  onClick={triggerFileInput}
+                  className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                >
+                  <Camera size={20} className="text-zinc-200" />
+                </div>
+              </div>
+
+              <h3 className="font-bold text-base text-zinc-100 font-mono truncate max-w-full">
+                {displayName || "Unnamed User"}
+              </h3>
+              <p className="text-2xs font-semibold text-violet-500 uppercase tracking-widest mt-1 flex items-center gap-1 font-mono">
+                <Shield size={12} />
+                {role}
+              </p>
+              <p className="text-xs text-zinc-500 mt-2 truncate max-w-full">
+                {email}
+              </p>
+            </PremiumCard>
+
+            {/* Quick instructions or guidelines card */}
+            <PremiumCard hoverable={false} padding="sm" className="space-y-3">
+              <h4 className="font-bold text-xs text-zinc-300 font-mono uppercase tracking-wider">Avatar Specifications</h4>
+              <ul className="text-2xs text-zinc-400 space-y-1.5 list-disc list-inside">
+                <li>Supported Formats: PNG, JPG, WEBP</li>
+                <li>Maximum File Size: 5.0 MB</li>
+                <li>Old avatars are deleted automatically upon uploading a new one</li>
+              </ul>
+            </PremiumCard>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Column 1: Display Card & Photo Upload preview */}
-            <div className="md:col-span-1 space-y-6">
-              {/* Profile Overview Card */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex flex-col items-center text-center shadow-lg relative overflow-hidden backdrop-blur-lg">
-                <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-violet-600 to-indigo-600" />
-                
-                {/* Big Avatar view */}
-                <div className="relative group cursor-pointer w-24 h-24 rounded-full bg-zinc-950 border border-zinc-800 flex items-center justify-center font-bold text-2xl text-zinc-400 select-none shadow-md overflow-hidden mb-4 mt-2">
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
-                  ) : (
-                    getInitials(displayName)
-                  )}
-                  <div 
-                    onClick={triggerFileInput}
-                    className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-                  >
-                    <Camera size={20} className="text-zinc-200" />
-                  </div>
-                </div>
+          {/* Column 2: Edit Forms and Upload Dropzone */}
+          <div className="md:col-span-2 space-y-6">
+            {/* Profile Details Form */}
+            <PremiumCard hoverable={false} className="w-full">
+              <h3 className="text-sm font-bold text-zinc-100 uppercase tracking-wider font-mono border-b border-zinc-800 pb-3 mb-6">
+                Account Details
+              </h3>
 
-                <h3 className="font-bold text-base text-zinc-100 font-mono truncate max-w-full">
-                  {displayName || "Unnamed User"}
-                </h3>
-                <p className="text-2xs font-semibold text-violet-500 uppercase tracking-widest mt-1 flex items-center gap-1 font-mono">
-                  <Shield size={12} />
-                  {role}
-                </p>
-                <p className="text-xs text-zinc-500 mt-2 truncate max-w-full">
-                  {email}
-                </p>
-              </div>
-
-              {/* Quick instructions or guidelines card */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 space-y-3 shadow-md">
-                <h4 className="font-bold text-xs text-zinc-300 font-mono uppercase tracking-wider">Avatar Specifications</h4>
-                <ul className="text-2xs text-zinc-400 space-y-1.5 list-disc list-inside">
-                  <li>Supported Formats: PNG, JPG, WEBP</li>
-                  <li>Maximum File Size: 5.0 MB</li>
-                  <li>Old avatars are deleted automatically upon uploading a new one</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Column 2: Edit Forms and Upload Dropzone */}
-            <div className="md:col-span-2 space-y-6">
-              {/* Profile Details Form */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-lg">
-                <h3 className="text-sm font-bold text-zinc-100 uppercase tracking-wider font-mono border-b border-zinc-800 pb-3 mb-6">
-                  Account Details
-                </h3>
-
-                <form onSubmit={handleSaveProfile} className="space-y-5">
-                  <AnimatePresence mode="wait">
-                    {profileMessage && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
-                        className={`flex items-start gap-3 p-3.5 rounded-xl border text-xs ${
-                          profileMessage.type === "success"
-                            ? "bg-emerald-950/20 border-emerald-800/40 text-emerald-400"
-                            : "bg-red-950/20 border-red-800/40 text-red-400"
-                        }`}
-                      >
-                        {profileMessage.type === "success" ? (
-                          <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0" />
-                        ) : (
-                          <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />
-                        )}
-                        <span>{profileMessage.text}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <div className="space-y-2">
-                    <label className="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider font-mono">
-                      Display Name
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
-                      <input
-                        type="text"
-                        value={displayName}
-                        onChange={handleNameChange}
-                        className={`w-full bg-zinc-950 border ${
-                          nameError ? "border-red-800/80 focus:border-red-700" : "border-zinc-800 focus:border-zinc-700"
-                        } rounded-xl pl-11 pr-4 py-3 text-xs text-zinc-200 outline-none transition-colors placeholder-zinc-650`}
-                        placeholder="Enter display name"
-                      />
-                    </div>
-                    {nameError && (
-                      <p className="text-[10px] text-red-500 font-sans">{nameError}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider font-mono">
-                      Email Address (Read Only)
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-650" size={16} />
-                      <input
-                        type="email"
-                        value={email}
-                        readOnly
-                        disabled
-                        className="w-full bg-zinc-950/40 border border-zinc-850 rounded-xl pl-11 pr-4 py-3 text-xs text-zinc-500 outline-none cursor-not-allowed select-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end pt-2">
-                    <button
-                      type="submit"
-                      disabled={isProfileSaving}
-                      className="px-6 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800/50 text-white text-xs font-semibold font-mono tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
+              <form onSubmit={handleSaveProfile} className="space-y-5">
+                <AnimatePresence mode="wait">
+                  {profileMessage && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      className={`flex items-start gap-3 p-3.5 rounded-xl border text-xs ${
+                        profileMessage.type === "success"
+                          ? "bg-emerald-950/20 border-emerald-800/40 text-emerald-400"
+                          : "bg-red-950/20 border-red-800/40 text-red-400"
+                      }`}
                     >
-                      {isProfileSaving ? (
-                        <>
-                          <Loader2 size={14} className="animate-spin" />
-                          Saving...
-                        </>
+                      {profileMessage.type === "success" ? (
+                        <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0" />
                       ) : (
-                        "Save Profile"
+                        <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />
                       )}
-                    </button>
-                  </div>
-                </form>
-              </div>
+                      <span>{profileMessage.text}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-              {/* Avatar Upload Container */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 md:p-8 shadow-lg">
-                <h3 className="text-sm font-bold text-zinc-100 uppercase tracking-wider font-mono border-b border-zinc-800 pb-3 mb-6">
-                  Change Profile Photo
-                </h3>
-
-                <div className="space-y-5">
-                  <AnimatePresence mode="wait">
-                    {avatarMessage && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
-                        className={`flex items-start gap-3 p-3.5 rounded-xl border text-xs ${
-                          avatarMessage.type === "success"
-                            ? "bg-emerald-950/20 border-emerald-800/40 text-emerald-400"
-                            : "bg-red-950/20 border-red-800/40 text-red-400"
-                        }`}
-                      >
-                        {avatarMessage.type === "success" ? (
-                          <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0" />
-                        ) : (
-                          <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />
-                        )}
-                        <span>{avatarMessage.text}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  {/* Drag and Drop Zone */}
-                  <div
-                    onDragOver={handleDragOver}
-                    onDrop={handleDrop}
-                    onClick={triggerFileInput}
-                    className="border-2 border-dashed border-zinc-800 hover:border-zinc-700 bg-zinc-950/40 hover:bg-zinc-950/80 rounded-2xl p-8 text-center cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-3 relative"
-                  >
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider font-mono">
+                    Display Name
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
                     <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileChange}
-                      accept=".png,.jpg,.jpeg,.webp"
-                      className="hidden"
+                      type="text"
+                      value={displayName}
+                      onChange={handleNameChange}
+                      className={`w-full bg-zinc-950 border ${
+                        nameError ? "border-red-800/80 focus:border-red-700" : "border-zinc-800 focus:border-zinc-700"
+                      } rounded-xl pl-11 pr-4 py-3 text-xs text-zinc-200 outline-none transition-colors placeholder-zinc-650`}
+                      placeholder="Enter display name"
                     />
-
-                    {previewUrl ? (
-                      <div className="relative w-20 h-20 rounded-full border border-zinc-800 overflow-hidden shadow-inner select-none">
-                        <img src={previewUrl} alt="Selected preview" className="w-full h-full object-cover" />
-                      </div>
-                    ) : (
-                      <div className="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-850 flex items-center justify-center text-zinc-400">
-                        <UploadCloud size={22} />
-                      </div>
-                    )}
-
-                    <div>
-                      <p className="text-xs font-semibold text-zinc-350">
-                        {selectedFile ? selectedFile.name : "Drag & Drop avatar photo here"}
-                      </p>
-                      <p className="text-3xs text-zinc-500 mt-1 uppercase tracking-wider font-mono">
-                        {selectedFile ? `${(selectedFile.size / (1024 * 1024)).toFixed(2)} MB` : "or click to browse local files"}
-                      </p>
-                    </div>
                   </div>
-
-                  {/* Upload Actions */}
-                  {selectedFile && (
-                    <div className="flex justify-end gap-3 pt-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedFile(null);
-                          setPreviewUrl(null);
-                          setAvatarMessage(null);
-                        }}
-                        className="px-4 py-2.5 rounded-xl border border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-zinc-200 text-xs font-semibold font-mono tracking-wide transition-colors cursor-pointer"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleUploadAvatar}
-                        disabled={isAvatarUploading}
-                        className="px-6 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:bg-violet-800/50 text-white text-xs font-semibold font-mono tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
-                      >
-                        {isAvatarUploading ? (
-                          <>
-                            <Loader2 size={14} className="animate-spin" />
-                            Uploading...
-                          </>
-                        ) : (
-                          "Upload Avatar"
-                        )}
-                      </button>
-                    </div>
+                  {nameError && (
+                    <p className="text-[10px] text-red-500 font-sans">{nameError}</p>
                   )}
                 </div>
+
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider font-mono">
+                    Email Address (Read Only)
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-650" size={16} />
+                    <input
+                      type="email"
+                      value={email}
+                      readOnly
+                      disabled
+                      className="w-full bg-zinc-950/40 border border-zinc-850 rounded-xl pl-11 pr-4 py-3 text-xs text-zinc-500 outline-none cursor-not-allowed select-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-2">
+                  <PremiumButton
+                    type="submit"
+                    variant="primary"
+                    isLoading={isProfileSaving}
+                    className="font-mono text-xs font-semibold tracking-wide"
+                  >
+                    Save Profile
+                  </PremiumButton>
+                </div>
+              </form>
+            </PremiumCard>
+
+            {/* Avatar Upload Container */}
+            <PremiumCard hoverable={false} className="w-full">
+              <h3 className="text-sm font-bold text-zinc-100 uppercase tracking-wider font-mono border-b border-zinc-800 pb-3 mb-6">
+                Change Profile Photo
+              </h3>
+
+              <div className="space-y-5">
+                <AnimatePresence mode="wait">
+                  {avatarMessage && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      className={`flex items-start gap-3 p-3.5 rounded-xl border text-xs ${
+                        avatarMessage.type === "success"
+                          ? "bg-emerald-950/20 border-emerald-800/40 text-emerald-400"
+                          : "bg-red-950/20 border-red-800/40 text-red-400"
+                      }`}
+                    >
+                      {avatarMessage.type === "success" ? (
+                        <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0" />
+                      ) : (
+                        <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />
+                      )}
+                      <span>{avatarMessage.text}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Drag and Drop Zone */}
+                <div
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  onClick={triggerFileInput}
+                  className="border-2 border-dashed border-zinc-800 hover:border-zinc-700 bg-zinc-950/40 hover:bg-zinc-950/80 rounded-2xl p-8 text-center cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-3 relative"
+                >
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept=".png,.jpg,.jpeg,.webp"
+                    className="hidden"
+                  />
+
+                  {previewUrl ? (
+                    <div className="relative w-20 h-20 rounded-full border border-zinc-800 overflow-hidden shadow-inner select-none">
+                      <img src={previewUrl} alt="Selected preview" className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-850 flex items-center justify-center text-zinc-400">
+                      <UploadCloud size={22} />
+                    </div>
+                  )}
+
+                  <div>
+                    <p className="text-xs font-semibold text-zinc-350">
+                      {selectedFile ? selectedFile.name : "Drag & Drop avatar photo here"}
+                    </p>
+                    <p className="text-3xs text-zinc-500 mt-1 uppercase tracking-wider font-mono">
+                      {selectedFile ? `${(selectedFile.size / (1024 * 1024)).toFixed(2)} MB` : "or click to browse local files"}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Upload Actions */}
+                {selectedFile && (
+                  <div className="flex justify-end gap-3 pt-2">
+                    <PremiumButton
+                      type="button"
+                      variant="ghost"
+                      onClick={() => {
+                        setSelectedFile(null);
+                        setPreviewUrl(null);
+                        setAvatarMessage(null);
+                      }}
+                      className="font-mono text-xs font-semibold tracking-wide"
+                    >
+                      Cancel
+                    </PremiumButton>
+                    <PremiumButton
+                      type="button"
+                      variant="primary"
+                      onClick={handleUploadAvatar}
+                      isLoading={isAvatarUploading}
+                      className="font-mono text-xs font-semibold tracking-wide"
+                    >
+                      Upload Avatar
+                    </PremiumButton>
+                  </div>
+                )}
               </div>
-            </div>
+            </PremiumCard>
           </div>
         </div>
       </div>

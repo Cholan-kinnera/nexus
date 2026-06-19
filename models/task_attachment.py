@@ -13,8 +13,8 @@ class TaskAttachment(Base):
     __tablename__ = "task_attachments"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id", ondelete="CASCADE"), nullable=False)
-    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    task_id: Mapped[int] = mapped_column(ForeignKey("tasks.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
     file_name: Mapped[str] = mapped_column(String(255), nullable=False)
     file_key: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     file_size: Mapped[int] = mapped_column(Integer, nullable=False)

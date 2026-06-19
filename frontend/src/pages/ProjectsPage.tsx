@@ -5,9 +5,13 @@ import {
   deleteProject,
 } from "../services/projectService";
 import DashboardLayout from "../layouts/DashboardLayout";
-import { motion } from "framer-motion";
-import { FolderPlus, Trash2, Calendar, ArrowUpRight, ArrowLeft } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { FolderPlus, Trash2, Calendar, ArrowLeft, FolderKanban } from "lucide-react";
 import MembersTab from "../components/project/MembersTab";
+import { PremiumButton } from "../components/ui/PremiumButton";
+import { PremiumCard } from "../components/ui/PremiumCard";
+import { EmptyState } from "../components/ui/EmptyState";
+import { ProjectsSkeleton } from "../components/ui/SkeletonLoader";
 
 // Helper to parse description JSON safely
 const parseDescription = (rawDesc: string | undefined) => {
@@ -38,6 +42,7 @@ const parseDescription = (rawDesc: string | undefined) => {
 };
 
 export default function ProjectsPage() {
+  const shouldReduceMotion = useReducedMotion();
   const [projects, setProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
@@ -55,6 +60,25 @@ export default function ProjectsPage() {
   const [activeTab, setActiveTab] = useState<string>("overview");
 
   const formRef = useRef<HTMLDivElement>(null);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.04,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring" as const, stiffness: 350, damping: 25 },
+    },
+  };
 
   const loadProjects = async () => {
     try {
@@ -157,7 +181,7 @@ export default function ProjectsPage() {
           {/* Back Button */}
           <button
             onClick={() => setSelectedProject(null)}
-            className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-6 text-xs font-mono cursor-pointer"
+            className="flex items-center gap-2 text-zinc-400 hover:text-zinc-100 transition-colors mb-6 text-xs font-mono cursor-pointer"
           >
             <ArrowLeft size={14} />
             <span>Back to Projects</span>
@@ -256,7 +280,7 @@ export default function ProjectsPage() {
           {/* Ambient header glow */}
           <div className="absolute -left-20 -top-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none z-0" />
           <div className="z-10 w-full max-w-5xl">
-            <h1 className="text-4xl font-bold text-zinc-150">
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-150">
               Projects
             </h1>
             <p className="text-zinc-300 mt-2 text-sm font-sans max-w-2xl leading-relaxed">
@@ -266,7 +290,7 @@ export default function ProjectsPage() {
         </div>
 
         {/* Create Project Form Container */}
-        <div ref={formRef} className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 mb-8 text-zinc-100 transition-colors duration-300">
+        <PremiumCard ref={formRef as any} hoverable={false} className="mb-8 text-zinc-100 transition-colors duration-300">
           <h2 className="text-lg font-bold text-zinc-200 mb-4 flex items-center gap-2">
             <FolderPlus size={18} className="text-zinc-400" />
             Create New Project
@@ -387,63 +411,35 @@ export default function ProjectsPage() {
 
             {/* Create Button */}
             <div className="pt-2">
-              <button
+              <PremiumButton
+                variant="primary"
                 onClick={handleCreate}
-                className="bg-zinc-100 hover:bg-zinc-200 text-zinc-950 px-5 py-2.5 rounded-lg font-medium transition duration-200 shadow-sm cursor-pointer text-xs"
               >
                 Create Project
-              </button>
+              </PremiumButton>
             </div>
           </div>
-        </div>
+        </PremiumCard>
 
         {/* ── PROJECTS VIEW PORT ────────────────────────────────────────── */}
         {isLoading ? (
-          /* Animated skeleton loader */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[1, 2, 3, 4].map((k) => (
-              <div key={k} className="bg-zinc-900/30 border border-zinc-800/80 rounded-xl p-6 h-48 animate-pulse space-y-4">
-                <div className="flex justify-between items-center">
-                  <div className="h-4 bg-zinc-850 rounded w-1/4"></div>
-                  <div className="h-4 bg-zinc-850 rounded w-1/3"></div>
-                </div>
-                <div className="h-6 bg-zinc-800 rounded w-1/2"></div>
-                <div className="h-3 bg-zinc-850 rounded w-3/4"></div>
-                <div className="h-2 bg-zinc-800 rounded w-full"></div>
-              </div>
-            ))}
-          </div>
+          <ProjectsSkeleton />
         ) : projects.length === 0 ? (
-          /* ── BEAUTIFUL EMPTY STATE ────────────────────────────────────── */
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center justify-center text-center p-12 py-20 bg-zinc-900/20 border border-dashed border-zinc-850 rounded-xl max-w-2xl mx-auto"
-          >
-            {/* Folder SVG Illustration */}
-            <div className="w-16 h-16 rounded-full bg-zinc-950 border border-zinc-800/80 flex items-center justify-center text-zinc-400 mb-6 shadow-inner">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-              </svg>
-            </div>
-
-            <h3 className="text-lg font-bold text-zinc-200 mb-2">No projects in workspace</h3>
-            <p className="text-xs text-zinc-300 max-w-lg leading-relaxed mb-8">
-              Get started by creating a new development project to track tasks, velocity stats, and pipeline integrations.
-            </p>
-
-            <button
-              onClick={scrollToForm}
-              className="px-4 py-2 border border-zinc-850 hover:border-zinc-700 text-zinc-300 hover:text-white rounded-lg text-xs font-semibold font-mono flex items-center gap-1.5 transition-all shadow-sm"
-            >
-              <span>Initialize Project</span>
-              <ArrowUpRight size={12} />
-            </button>
-          </motion.div>
+          <EmptyState
+            icon={FolderKanban}
+            title="No projects in workspace"
+            description="Get started by creating a new development project to track tasks, velocity stats, and pipeline integrations."
+            primaryActionLabel="Initialize Project"
+            onPrimaryAction={scrollToForm}
+          />
         ) : (
-          /* Actual projects grid layout */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          /* Actual projects grid layout with stagger entry */
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
             {projects.map((project) => {
               const parsed = parseDescription(project.description);
               const projCategory = parsed.category || "General";
@@ -468,76 +464,79 @@ export default function ProjectsPage() {
               const progressPercent = projPriority === "HIGH" ? 45 : projPriority === "MEDIUM" ? 70 : 85;
 
               return (
-                <div
-                  key={project.id}
-                  onClick={() => setSelectedProject(project)}
-                  className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md hover:border-zinc-700/80 hover:translate-y-[-2px] hover:shadow-[0_0_15px_rgba(124,58,237,0.04)] transition-all duration-200 flex flex-col justify-between cursor-pointer"
-                >
-                  <div>
-                    <div className="flex flex-wrap items-center justify-between gap-2 mb-4 font-mono text-[10px]">
-                      <span className="px-2 py-0.5 rounded border border-zinc-800 bg-zinc-950 text-zinc-400 uppercase">
-                        {projCategory}
-                      </span>
-                      <div className="flex gap-1.5 items-center">
-                        <span className={`px-2 py-0.5 rounded border uppercase tracking-wider ${priorityColors[projPriority]}`}>
-                          {projPriority}
+                <motion.div variants={itemVariants} key={project.id} className="flex">
+                  <PremiumCard
+                    onClick={() => setSelectedProject(project)}
+                    className="flex flex-col justify-between w-full"
+                  >
+                    <div>
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-4 font-mono text-[10px]">
+                        <span className="px-2 py-0.5 rounded border border-zinc-800 bg-zinc-950 text-zinc-400 uppercase">
+                          {projCategory}
                         </span>
-                        <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded border ${health.color}`}>
-                          <span className="w-1.5 h-1.5 rounded-full bg-current block"></span>
-                          <span>{health.label}</span>
-                        </span>
+                        <div className="flex gap-1.5 items-center">
+                          <span className={`px-2 py-0.5 rounded border uppercase tracking-wider ${priorityColors[projPriority]}`}>
+                            {projPriority}
+                          </span>
+                          <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded border ${health.color}`}>
+                            <span className="w-1.5 h-1.5 rounded-full bg-current block"></span>
+                            <span>{health.label}</span>
+                          </span>
+                        </div>
                       </div>
+
+                      <h3 className="text-lg font-bold text-zinc-150">
+                        {project.title}
+                      </h3>
+
+                      <p className="text-zinc-300 mt-2 text-xs leading-relaxed line-clamp-2">
+                        {projDescription}
+                      </p>
                     </div>
 
-                    <h3 className="text-lg font-bold text-zinc-150">
-                      {project.title}
-                    </h3>
-
-                    <p className="text-zinc-300 mt-2 text-xs leading-relaxed line-clamp-2">
-                      {projDescription}
-                    </p>
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-zinc-850">
-                    <div className="mb-4">
-                      <div className="flex justify-between items-center mb-1.5 text-[10px] font-mono text-zinc-500">
-                        <span>Completion Progress</span>
-                        <span>{progressPercent}%</span>
+                    <div className="mt-6 pt-4 border-t border-zinc-850">
+                      <div className="mb-4">
+                        <div className="flex justify-between items-center mb-1.5 text-[10px] font-mono text-zinc-500">
+                          <span>Completion Progress</span>
+                          <span>{progressPercent}%</span>
+                        </div>
+                        <div className="w-full bg-zinc-950 border border-zinc-850 rounded-full h-1.5 overflow-hidden">
+                          <div
+                            className="bg-zinc-400 h-1.5 rounded-full transition-all duration-500"
+                            style={{ width: `${progressPercent}%` }}
+                          />
+                        </div>
                       </div>
-                      <div className="w-full bg-zinc-950 border border-zinc-850 rounded-full h-1.5 overflow-hidden">
-                        <div
-                          className="bg-zinc-400 h-1.5 rounded-full transition-all duration-500"
-                          style={{ width: `${progressPercent}%` }}
-                        />
+
+                      <div className="flex justify-between items-center">
+                        {projDeadline ? (
+                          <span className="flex items-center gap-1 font-mono text-[10px] text-zinc-500">
+                            <Calendar size={10} />
+                            Due: {new Date(projDeadline).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-mono text-zinc-500">No deadline set</span>
+                        )}
+
+                        <PremiumButton
+                          variant="danger"
+                          size="sm"
+                          leftIcon={<Trash2 size={12} />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(project.id);
+                          }}
+                          className="font-mono text-[10px] h-7 px-2.5"
+                        >
+                          Delete
+                        </PremiumButton>
                       </div>
                     </div>
-
-                    <div className="flex justify-between items-center">
-                      {projDeadline ? (
-                        <span className="flex items-center gap-1 font-mono text-[10px] text-zinc-500">
-                          <Calendar size={10} />
-                          Due: {new Date(projDeadline).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
-                        </span>
-                      ) : (
-                        <span className="text-[10px] font-mono text-zinc-500">No deadline set</span>
-                      )}
-
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(project.id);
-                        }}
-                        className="text-red-400 hover:text-red-300 font-semibold font-mono text-[10px] transition-colors flex items-center gap-1 cursor-pointer"
-                      >
-                        <Trash2 size={12} />
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                  </PremiumCard>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         )}
       </motion.div>
     </DashboardLayout>

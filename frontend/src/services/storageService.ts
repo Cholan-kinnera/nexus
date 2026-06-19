@@ -7,7 +7,10 @@ export interface StorageUploadResponse {
   content_type: string;
 }
 
-export const uploadFile = async (file: File): Promise<StorageUploadResponse> => {
+export const uploadFile = async (
+  file: File,
+  onUploadProgress?: (progressEvent: any) => void
+): Promise<StorageUploadResponse> => {
   const formData = new FormData();
   formData.append("file", file);
 
@@ -15,6 +18,7 @@ export const uploadFile = async (file: File): Promise<StorageUploadResponse> => 
     headers: {
       "Content-Type": "multipart/form-data",
     },
+    onUploadProgress,
   });
   return response.data;
 };

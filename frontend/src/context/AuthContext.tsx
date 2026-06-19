@@ -69,12 +69,18 @@ export function AuthProvider({
   };
 
   const logout = useCallback(() => {
+    // Clear local storage and state immediately for smooth UI transitions
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     sessionStorage.removeItem("hasBooted");
     setHasBootedState(false);
     setToken(null);
     setUser(null);
+
+    // Revoke the refresh token on the backend in the background
+    api.post("/auth/logout").catch((err) => {
+      console.error("Failed to revoke session on backend during logout:", err);
+    });
   }, []);
 
   const updateUser = useCallback((updates: Partial<User>) => {

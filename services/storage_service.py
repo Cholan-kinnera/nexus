@@ -69,17 +69,18 @@ class StorageService:
         logger.info(f"  R2_PUBLIC_URL    : {self.public_url or '[EMPTY]'}")
         logger.info(f"  MODE             : {'☁️  CLOUDFLARE R2 (LIVE)' if not self.use_simulator else '💾 LOCAL SIMULATOR'}")
 
+        # Always initialize local storage path for simulator fallback or safe testing
+        self.local_storage_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
+            "local_storage_uploads"
+        )
+        os.makedirs(self.local_storage_path, exist_ok=True)
+
         if self.use_simulator:
             logger.warning(
                 "Cloudflare R2 environment variables are not fully configured. "
                 "Storage service will run in local simulation mode."
             )
-            # Create a local storage path for simulated uploads
-            self.local_storage_path = os.path.join(
-                os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
-                "local_storage_uploads"
-            )
-            os.makedirs(self.local_storage_path, exist_ok=True)
             logger.info(f"  LOCAL PATH       : {self.local_storage_path}")
             logger.info(f"  CONNECTION TEST  : SKIPPED (simulator mode)")
         else:

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Play, Terminal, CheckCircle2 } from "lucide-react";
+import { Shield, Terminal, CheckCircle2 } from "lucide-react";
+import { PremiumCard } from "../components/ui/PremiumCard";
+import { EmptyState } from "../components/ui/EmptyState";
 
 export default function SecurityLogsPage() {
   const [isScanning, setIsScanning] = useState(false);
@@ -46,7 +48,7 @@ export default function SecurityLogsPage() {
           {/* Ambient header glow */}
           <div className="absolute -left-20 -top-20 w-80 h-80 bg-violet-500/5 rounded-full blur-3xl pointer-events-none z-0" />
           <div className="z-10 w-full max-w-5xl">
-            <h1 className="text-4xl font-bold text-zinc-100">
+            <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">
               Security Audit Logs
             </h1>
             <p className="text-zinc-300 mt-2 text-sm font-sans max-w-2xl leading-relaxed">
@@ -60,40 +62,21 @@ export default function SecurityLogsPage() {
 
           {/* Left Columns - Beautiful Empty State */}
           <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-center justify-center text-center p-12 py-20 bg-zinc-900/20 border border-dashed border-zinc-850 rounded-xl h-full shadow-md"
-            >
-              {/* Shield SVG Illustration */}
-              <div className="w-16 h-16 rounded-full bg-zinc-950 border border-zinc-800/80 flex items-center justify-center text-zinc-400 mb-6 shadow-inner">
-                <Shield size={22} className="text-zinc-550" />
-              </div>
-
-              <h3 className="text-lg font-bold text-zinc-200 mb-2">No security incidents detected</h3>
-              <p className="text-xs text-zinc-300 max-w-lg leading-relaxed mb-8">
-                Your workspace is secured. Active access control audits and JWT token verification systems are operating normally.
-              </p>
-
-              <button
-                onClick={handleScan}
-                disabled={isScanning}
-                className={`px-4 py-2 rounded-lg text-xs font-semibold font-mono flex items-center gap-1.5 transition-all shadow-sm ${isScanning
-                    ? "bg-zinc-850 border border-zinc-800 text-zinc-500 cursor-not-allowed"
-                    : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950 cursor-pointer"
-                  }`}
-              >
-                <Play size={12} fill="currentColor" />
-                <span>{isScanning ? "Scanning System..." : "Run Security Scan"}</span>
-              </button>
-            </motion.div>
+            <EmptyState
+              icon={Shield}
+              title="No security incidents detected"
+              description="Your workspace is secured. Active access control audits and JWT token verification systems are operating normally."
+              primaryActionLabel={isScanning ? "Scanning System..." : "Run Security Scan"}
+              onPrimaryAction={handleScan}
+              isPrimaryDisabled={isScanning}
+            />
           </div>
 
           {/* Right Column - Scan Console */}
           <div className="lg:col-span-1">
-            <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 shadow-md flex flex-col justify-between h-full min-h-[300px]">
+            <PremiumCard hoverable={false} className="flex flex-col justify-between h-full min-h-[300px]">
               <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <h3 className="text-sm font-bold text-zinc-100 flex items-center gap-2">
                   <Terminal size={14} />
                   Audit Console
                 </h3>
@@ -129,7 +112,7 @@ export default function SecurityLogsPage() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </PremiumCard>
           </div>
 
         </div>

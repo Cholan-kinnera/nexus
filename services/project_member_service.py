@@ -382,6 +382,7 @@ async def get_project_members(db: AsyncSession, project_id: int) -> list[dict]:
             ProjectMember.user_id,
             User.full_name,
             User.email,
+            User.avatar_url,
             ProjectMember.role,
             ProjectMember.joined_at,
             ProjectMember.invited_by,
@@ -398,9 +399,10 @@ async def get_project_members(db: AsyncSession, project_id: int) -> list[dict]:
                 "user_id": row[1],
                 "full_name": row[2],
                 "email": row[3],
-                "role": row[4],
-                "joined_at": row[5],
-                "invited_by": row[6],
+                "avatar_url": row[4],
+                "role": row[5],
+                "joined_at": row[6],
+                "invited_by": row[7],
             }
         )
     return members

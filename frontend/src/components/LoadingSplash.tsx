@@ -77,7 +77,7 @@ export default function LoadingSplash() {
 
         {/* Text Area */}
         <div className="flex flex-col items-center gap-1.5 text-center z-10">
-          <h2 className="text-white font-bold text-lg tracking-wider uppercase">
+          <h2 className="text-zinc-50 font-bold text-lg tracking-wider uppercase">
             NEXUS <span className="text-violet-500">PM</span>
           </h2>
 

@@ -46,7 +46,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   })();
 
   const isPublicRoute = location
-    ? ["/", "/auth", "/login", "/signup"].includes(location.pathname)
+    ? ["/", "/auth", "/login", "/signup", "/forgot-password"].includes(location.pathname)
     : false;
 
   useEffect(() => {

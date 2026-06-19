@@ -14,4 +14,7 @@ class Settings:
     BACKEND_PORT: int = int(
         os.getenv("BACKEND_PORT", 8000)
     )
+    REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+    COOKIE_SECURE: bool = os.getenv("COOKIE_SECURE", "false").lower() == "true"
+    COOKIE_SAMESITE: str = os.getenv("COOKIE_SAMESITE", "lax")
 settings = Settings()

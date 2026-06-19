@@ -16,6 +16,7 @@ class ProjectMemberResponse(BaseModel):
     user_id: int
     full_name: Optional[str] = None
     email: Optional[str] = None
+    avatar_url: Optional[str] = None
     role: str
     joined_at: datetime
     invited_by: Optional[int] = None

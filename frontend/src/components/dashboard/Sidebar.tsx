@@ -14,7 +14,9 @@ import {
 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+
+const MotionNavLink = motion(NavLink);
 
 export default function Sidebar() {
   const { theme, toggleTheme } = useTheme();
@@ -22,9 +24,24 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const userName = user?.full_name;
   const userEmail = user?.email;
+
+  // Helper functions to construct dynamic class strings for NavLinks to fulfill contrast requirements
+  const getNavLinkClass = (isActive: boolean) => {
+    const base = "relative flex items-center gap-3 p-2.5 rounded-lg transition-all duration-200 border text-xs group cursor-pointer";
+    const activeClass = "bg-violet-100 dark:bg-zinc-900/30 border-violet-200 dark:border-zinc-850 text-violet-700 dark:text-zinc-100 font-semibold";
+    const inactiveClass = "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/20 hover:text-zinc-900 dark:hover:text-zinc-200 border-transparent";
+    return `${base} ${isActive ? activeClass : inactiveClass}`;
+  };
+
+  const getIconClass = (isActive: boolean) => {
+    return isActive
+      ? "text-violet-700 dark:text-violet-400 transition-colors"
+      : "text-zinc-450 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors";
+  };
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -58,108 +75,143 @@ export default function Sidebar() {
         </div>
 
         <nav className="px-4 space-y-1">
-          <NavLink
+          <MotionNavLink
             to="/dashboard"
-            className={({ isActive }) =>
-              `relative flex items-center gap-3 p-2.5 rounded-lg transition-all duration-200 border text-xs ${isActive
-                ? "bg-violet-500/10 dark:bg-zinc-900/30 border-violet-500/20 dark:border-zinc-850 text-violet-600 dark:text-zinc-100 font-semibold"
-                : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-800/10 dark:hover:bg-zinc-900/20 hover:text-zinc-950 dark:hover:text-zinc-200 border-transparent"
-              }`
-            }
+            className={({ isActive }) => getNavLinkClass(isActive)}
+            whileHover="hover"
           >
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-violet-500 rounded-r" />
+                  <motion.span
+                    layoutId="activeIndicator"
+                    className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-violet-600 dark:bg-violet-500 rounded-r"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
                 )}
-                <LayoutDashboard size={16} className={isActive ? "text-violet-600 dark:text-violet-400" : "text-zinc-450 dark:text-zinc-450"} />
-                <span>Dashboard</span>
+                <LayoutDashboard size={16} className={getIconClass(isActive)} />
+                <motion.span
+                  variants={{
+                    hover: shouldReduceMotion ? {} : { x: 4 }
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  Dashboard
+                </motion.span>
               </>
             )}
-          </NavLink>
+          </MotionNavLink>
 
-          <NavLink
+          <MotionNavLink
             to="/projects"
-            className={({ isActive }) =>
-              `relative flex items-center gap-3 p-2.5 rounded-lg transition-all duration-200 border text-xs ${isActive
-                ? "bg-violet-500/10 dark:bg-zinc-900/30 border-violet-500/20 dark:border-zinc-850 text-violet-600 dark:text-zinc-100 font-semibold"
-                : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-800/10 dark:hover:bg-zinc-900/20 hover:text-zinc-950 dark:hover:text-zinc-200 border-transparent"
-              }`
-            }
+            className={({ isActive }) => getNavLinkClass(isActive)}
+            whileHover="hover"
           >
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-violet-500 rounded-r" />
+                  <motion.span
+                    layoutId="activeIndicator"
+                    className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-violet-600 dark:bg-violet-500 rounded-r"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
                 )}
-                <FolderKanban size={16} className={isActive ? "text-violet-600 dark:text-violet-400" : "text-zinc-450 dark:text-zinc-450"} />
-                <span>Projects</span>
+                <FolderKanban size={16} className={getIconClass(isActive)} />
+                <motion.span
+                  variants={{
+                    hover: shouldReduceMotion ? {} : { x: 4 }
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  Projects
+                </motion.span>
               </>
             )}
-          </NavLink>
+          </MotionNavLink>
 
-          <NavLink
+          <MotionNavLink
             to="/tasks"
-            className={({ isActive }) =>
-              `relative flex items-center gap-3 p-2.5 rounded-lg transition-all duration-200 border text-xs ${isActive
-                ? "bg-violet-500/10 dark:bg-zinc-900/30 border-violet-500/20 dark:border-zinc-850 text-violet-600 dark:text-zinc-100 font-semibold"
-                : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-800/10 dark:hover:bg-zinc-900/20 hover:text-zinc-950 dark:hover:text-zinc-200 border-transparent"
-              }`
-            }
+            className={({ isActive }) => getNavLinkClass(isActive)}
+            whileHover="hover"
           >
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-violet-500 rounded-r" />
+                  <motion.span
+                    layoutId="activeIndicator"
+                    className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-violet-600 dark:bg-violet-500 rounded-r"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
                 )}
-                <CheckSquare size={16} className={isActive ? "text-violet-600 dark:text-violet-400" : "text-zinc-450 dark:text-zinc-450"} />
-                <span>Tasks</span>
+                <CheckSquare size={16} className={getIconClass(isActive)} />
+                <motion.span
+                  variants={{
+                    hover: shouldReduceMotion ? {} : { x: 4 }
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  Tasks
+                </motion.span>
               </>
             )}
-          </NavLink>
+          </MotionNavLink>
 
           {/* Subtle separator between primary tools and system logs */}
           <div className="h-px bg-zinc-800/60 dark:bg-zinc-800/40 my-3.5 mx-2" />
 
-          <NavLink
+          <MotionNavLink
             to="/storage"
-            className={({ isActive }) =>
-              `relative flex items-center gap-3 p-2.5 rounded-lg transition-all duration-200 border text-xs ${isActive
-                ? "bg-violet-500/10 dark:bg-zinc-900/30 border-violet-500/20 dark:border-zinc-850 text-violet-600 dark:text-zinc-100 font-semibold"
-                : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-800/10 dark:hover:bg-zinc-900/20 hover:text-zinc-950 dark:hover:text-zinc-200 border-transparent"
-              }`
-            }
+            className={({ isActive }) => getNavLinkClass(isActive)}
+            whileHover="hover"
           >
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-violet-500 rounded-r" />
+                  <motion.span
+                    layoutId="activeIndicator"
+                    className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-violet-600 dark:bg-violet-500 rounded-r"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
                 )}
-                <Database size={16} className={isActive ? "text-violet-600 dark:text-violet-400" : "text-zinc-450 dark:text-zinc-450"} />
-                <span>Storage</span>
+                <Database size={16} className={getIconClass(isActive)} />
+                <motion.span
+                  variants={{
+                    hover: shouldReduceMotion ? {} : { x: 4 }
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  Storage
+                </motion.span>
               </>
             )}
-          </NavLink>
+          </MotionNavLink>
 
-          <NavLink
+          <MotionNavLink
             to="/security"
-            className={({ isActive }) =>
-              `relative flex items-center gap-3 p-2.5 rounded-lg transition-all duration-200 border text-xs ${isActive
-                ? "bg-violet-500/10 dark:bg-zinc-900/30 border-violet-500/20 dark:border-zinc-850 text-violet-600 dark:text-zinc-100 font-semibold"
-                : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-800/10 dark:hover:bg-zinc-900/20 hover:text-zinc-950 dark:hover:text-zinc-200 border-transparent"
-              }`
-            }
+            className={({ isActive }) => getNavLinkClass(isActive)}
+            whileHover="hover"
           >
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-violet-500 rounded-r" />
+                  <motion.span
+                    layoutId="activeIndicator"
+                    className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-violet-600 dark:bg-violet-500 rounded-r"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
                 )}
-                <ShieldAlert size={16} className={isActive ? "text-violet-600 dark:text-violet-400" : "text-zinc-450 dark:text-zinc-450"} />
-                <span>Security Logs</span>
+                <ShieldAlert size={16} className={getIconClass(isActive)} />
+                <motion.span
+                  variants={{
+                    hover: shouldReduceMotion ? {} : { x: 4 }
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  Security Logs
+                </motion.span>
               </>
             )}
-          </NavLink>
+          </MotionNavLink>
         </nav>
       </div>
 

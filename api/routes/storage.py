@@ -3,6 +3,10 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
 from dependencies.auth import get_current_user
 from models.user import User
 from services.storage_service import storage_service
+from db.database import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import delete
+from models.task_attachment import TaskAttachment
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -52,10 +56,21 @@ async def upload_file(
 async def delete_file(
     file_key: str,
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
 ):
     """
-    Deletes an uploaded file from Cloudflare R2 storage by its file key.
+    Deletes an uploaded file from Cloudflare R2 storage by its file key
+    and removes any matching database attachment record.
     """
+    try:
+        await db.execute(
+            delete(TaskAttachment).where(TaskAttachment.file_key == file_key)
+        )
+        await db.commit()
+        logger.info(f"Deleted database attachment record for file key: {file_key}")
+    except Exception as db_err:
+        logger.error(f"Failed to delete attachment record from database: {db_err}")
+
     success = storage_service.delete_file(file_key)
     if not success:
         raise HTTPException(
@@ -64,7 +79,7 @@ async def delete_file(
         )
     return {
         "success": True,
-        "message": f"File key '{file_key}' was deleted successfully."
+        "message": f"File key '{file_key}' was deleted successfully from database and storage."
     }
 
 @router.get("", status_code=status.HTTP_200_OK)

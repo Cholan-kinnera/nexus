@@ -1,0 +1,32 @@
+# Virtual Environment
+venv/
+.env/
+
+# Node modules and build outputs
+node_modules/
+dist/
+frontend/node_modules/
+frontend/dist/
+
+# Git folder and log files
+.git/
+.github/
+*.log
+app.log
+
+# Python cache folders and files
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local uploads and backups
+local_storage_uploads/
+migration_backup/
+
+# Environment configurations
+.env
+.env.production
+.env.development
+.env.local

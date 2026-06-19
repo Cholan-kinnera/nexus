@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, func
 from fastapi import HTTPException
 
 from models.project import Project
@@ -70,13 +70,53 @@ async def get_projects_service(
         .where((ProjectMember.user_id == owner_id) | (Project.owner_id == owner_id))
         .distinct()
     )
-    return await paginate(
+    
+    # 1. Log current authenticated user ID on every projects request.
+    logger.info(f"PROJECT FETCH DEBUG - Current User ID: {owner_id}")
+    
+    # 2. Log SQL query used to fetch projects.
+    try:
+        from sqlalchemy.dialects import postgresql
+        compiled_sql = query.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True})
+        logger.info(f"PROJECT FETCH SQL QUERY:\n{compiled_sql}")
+    except Exception as e:
+        logger.error(f"Failed to compile SQL query for projects fetch: {e}")
+
+    result_dict = await paginate(
         db=db,
         query=query,
         model=Project,
         params=params,
         search_fields=["title", "description"]
     )
+
+    projects = result_dict.get("items", [])
+    project_owner_ids = [p.owner_id for p in projects]
+
+    # Calculate members count for each returned project
+    member_counts = []
+    for p in projects:
+        count_res = await db.execute(
+            select(func.count(ProjectMember.id)).where(ProjectMember.project_id == p.id)
+        )
+        member_counts.append(count_res.scalar_one() or 0)
+
+    # Compare current_user.id (owner_id here) and project.owner_id
+    for p in projects:
+        logger.info(f"Comparing project id={p.id}: current_user.id={owner_id}, project.owner_id={p.owner_id}")
+
+    # Add required diagnostics
+    diagnostics = (
+        f"\nPROJECT FETCH DEBUG\n"
+        f"Current User ID: {owner_id}\n"
+        f"Projects Returned: {len(projects)}\n"
+        f"Project Owner IDs: {project_owner_ids}\n"
+        f"Project Members Count: {member_counts}\n"
+    )
+    logger.info(diagnostics)
+    print(diagnostics)
+
+    return result_dict
 
 
 async def get_project_by_id_service(
