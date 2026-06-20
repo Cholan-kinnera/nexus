@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
-import { useTheme } from "../context/ThemeContext";
-import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../hooks/useTheme";
+import { useAuth } from "../hooks/useAuth";
 import api from "../api/client";
 import { motion, useReducedMotion } from "framer-motion";
 import { PremiumButton } from "../components/ui/PremiumButton";
@@ -57,6 +57,8 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (user) {
+      // Sync settings profile details synchronously when user context loads
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFullName(user.full_name || "");
       setEmail(user.email || "");
       setRole(user.role || "");

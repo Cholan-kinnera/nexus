@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ParticleBackground from "../components/auth/ParticleBackground";
 import {
@@ -123,8 +124,13 @@ export default function ForgotPasswordPage() {
       setSuccessMsg("Reset code has been sent to your email.");
       setOtpTimer(59);
       setStep(2);
-    } catch (err: any) {
-      setError(err?.response?.data?.detail || "Failed to send reset code. Please verify your email.");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        setError(responseData?.detail || "Failed to send reset code. Please verify your email.");
+      } else {
+        setError("Failed to send reset code. Please verify your email.");
+      }
     } finally {
       setLoading(false);
     }
@@ -143,8 +149,13 @@ export default function ForgotPasswordPage() {
       await verifyResetOtp(email.trim(), otpCode);
       setSuccessMsg("Code verified. Please enter your new password.");
       setStep(3);
-    } catch (err: any) {
-      setError(err?.response?.data?.detail || "Invalid code. Please try again.");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        setError(responseData?.detail || "Invalid code. Please try again.");
+      } else {
+        setError("Invalid code. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -167,8 +178,13 @@ export default function ForgotPasswordPage() {
       await resetPassword(email.trim(), otpCode, newPassword);
       alert("Password reset successfully! Redirecting to login...");
       navigate("/auth");
-    } catch (err: any) {
-      setError(err?.response?.data?.detail || "Failed to reset password. Please request a new code.");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        setError(responseData?.detail || "Failed to reset password. Please request a new code.");
+      } else {
+        setError("Failed to reset password. Please request a new code.");
+      }
     } finally {
       setLoading(false);
     }
@@ -205,7 +221,7 @@ export default function ForgotPasswordPage() {
       setSuccessMsg("A new verification code has been sent!");
       setOtpTimer(59);
       setOtp(Array(6).fill(""));
-    } catch (err: any) {
+    } catch {
       setError("Failed to resend code. Please try again.");
     }
   };

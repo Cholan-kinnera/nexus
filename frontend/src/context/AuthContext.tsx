@@ -1,6 +1,5 @@
+import axios from "axios";
 import {
-  createContext,
-  useContext,
   useState,
   useEffect,
   useCallback,
@@ -8,29 +7,8 @@ import {
 
 import type { ReactNode } from "react";
 import api from "../api/client";
-
-export interface User {
-  id?: number;
-  full_name: string | null;
-  name?: string | null;
-  email: string;
-  role?: string | null;
-  avatar_url?: string | null;
-}
-
-interface AuthContextType {
-  token: string | null;
-  user: User | null;
-  hasBooted: boolean;
-  setHasBooted: (val: boolean) => void;
-  login: (token: string, user: User) => void;
-  logout: () => void;
-  updateUser: (updates: Partial<User>) => void;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-);
+import { AuthContext } from "./AuthContextObject";
+import type { User } from "./AuthContextObject";
 
 export function AuthProvider({
   children,
@@ -54,7 +32,7 @@ export function AuthProvider({
     if (saved) {
       try {
         return JSON.parse(saved);
-      } catch (e) {
+      } catch {
         // ignore
       }
     }
@@ -101,9 +79,9 @@ export function AuthProvider({
         const freshUser = response.data;
         setUser(freshUser);
         localStorage.setItem("user", JSON.stringify(freshUser));
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Failed to automatically hydrate user profile:", err);
-        if (err.response?.status === 401) {
+        if (axios.isAxiosError(err) && err.response?.status === 401) {
           logout();
         }
       }
@@ -161,12 +139,3 @@ export function AuthProvider({
   );
 }
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuth must be used inside AuthProvider");
-  }
-
-  return context;
-}

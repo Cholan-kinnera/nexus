@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import DashboardLayout from "../layouts/DashboardLayout";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import { getMe, updateProfile, updateAvatar } from "../services/profileService";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, Mail, Shield, Camera, UploadCloud, CheckCircle2, AlertTriangle } from "lucide-react";
@@ -31,6 +32,8 @@ export default function ProfilePage() {
   useEffect(() => {
     // Sync state from context user
     if (user) {
+      // Sync display name and details synchronously when user context changes/loads
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDisplayName(user.full_name || "");
       setEmail(user.email || "");
       setRole(user.role || "Team Member");
@@ -57,7 +60,7 @@ export default function ProfilePage() {
       }
     };
     loadFreshProfile();
-  }, []);
+  }, [updateUser]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -84,10 +87,15 @@ export default function ProfilePage() {
         full_name: updated.full_name,
       });
       setProfileMessage({ type: "success", text: "Profile details updated successfully!" });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      const errMsg = err.response?.data?.detail || "Failed to update profile details. Please try again.";
-      setProfileMessage({ type: "error", text: errMsg });
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        const errMsg = responseData?.detail || "Failed to update profile details. Please try again.";
+        setProfileMessage({ type: "error", text: errMsg });
+      } else {
+        setProfileMessage({ type: "error", text: "Failed to update profile details. Please try again." });
+      }
     } finally {
       setIsProfileSaving(false);
     }
@@ -167,10 +175,15 @@ export default function ProfilePage() {
       setAvatarMessage({ type: "success", text: "Avatar uploaded successfully!" });
       setSelectedFile(null);
       setPreviewUrl(null);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      const errMsg = err.response?.data?.detail || "Avatar upload failed. Please try again.";
-      setAvatarMessage({ type: "error", text: errMsg });
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        const errMsg = responseData?.detail || "Avatar upload failed. Please try again.";
+        setAvatarMessage({ type: "error", text: errMsg });
+      } else {
+        setAvatarMessage({ type: "error", text: "Avatar upload failed. Please try again." });
+      }
     } finally {
       setIsAvatarUploading(false);
     }

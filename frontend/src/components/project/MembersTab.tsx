@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useEffect, useState, useCallback } from "react";
+import axios from "axios";
+import { useAuth } from "../../hooks/useAuth";
 import {
   getProjectMembers,
   updateProjectMemberRole,
@@ -23,7 +24,7 @@ export default function MembersTab({ projectId }: Props) {
   const [successMsg, setSuccessMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const loadMembers = async () => {
+  const loadMembers = useCallback(async () => {
     try {
       setIsLoading(true);
       setError("");
@@ -38,17 +39,19 @@ export default function MembersTab({ projectId }: Props) {
         // Fallback or legacy owner check
         setCurrentUserRole("viewer");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       setError("Failed to load project members.");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [projectId, user?.email]);
 
   useEffect(() => {
+    // Fetch project members synchronously on mount/dependency change
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadMembers();
-  }, [projectId]);
+  }, [loadMembers]);
 
   const showSuccess = (msg: string) => {
     setSuccessMsg(msg);
@@ -61,9 +64,14 @@ export default function MembersTab({ projectId }: Props) {
       await updateProjectMemberRole(projectId, targetUserId, newRole);
       showSuccess("Member role updated successfully");
       loadMembers();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.response?.data?.detail || "Failed to update role");
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        setError(responseData?.detail || "Failed to update role");
+      } else {
+        setError("Failed to update role");
+      }
     }
   };
 
@@ -76,9 +84,14 @@ export default function MembersTab({ projectId }: Props) {
       await removeProjectMember(projectId, targetUserId);
       showSuccess("Member removed successfully");
       loadMembers();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.response?.data?.detail || "Failed to remove member");
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        setError(responseData?.detail || "Failed to remove member");
+      } else {
+        setError("Failed to remove member");
+      }
     }
   };
 

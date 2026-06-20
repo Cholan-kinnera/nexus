@@ -50,7 +50,7 @@ export const PremiumButton: React.FC<PremiumButtonProps> = ({
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
       className={`${baseStyle} ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={disabled || isLoading}
-      {...(props as any)}
+      {...(props as Record<string, unknown>)}
     >
       {isLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
       {!isLoading && leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}

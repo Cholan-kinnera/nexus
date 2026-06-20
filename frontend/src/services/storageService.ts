@@ -1,3 +1,4 @@
+import type { AxiosProgressEvent } from "axios";
 import api from "../api/client";
 
 export interface StorageUploadResponse {
@@ -9,7 +10,7 @@ export interface StorageUploadResponse {
 
 export const uploadFile = async (
   file: File,
-  onUploadProgress?: (progressEvent: any) => void
+  onUploadProgress?: (progressEvent: AxiosProgressEvent) => void
 ): Promise<StorageUploadResponse> => {
   const formData = new FormData();
   formData.append("file", file);
@@ -37,7 +38,7 @@ export const getFiles = async (): Promise<StorageFile[]> => {
   return response.data;
 };
 
-export const deleteFile = async (fileKey: string): Promise<any> => {
+export const deleteFile = async (fileKey: string): Promise<{ message: string }> => {
   const response = await api.delete(`/storage/delete/${fileKey}`);
   return response.data;
 };

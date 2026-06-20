@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "../hooks/useTheme";
 import { getProjects } from "../services/projectService";
 import { getTasks } from "../services/taskService";
 import { getProjectMembers } from "../services/projectMemberService";
@@ -34,7 +34,7 @@ const parseDescription = (rawDesc: string | undefined) => {
       priority: data.priority || "",
       deadline: data.deadline || "",
     };
-  } catch (e) {
+  } catch {
     return {
       description: rawDesc,
       category: "",
@@ -68,7 +68,26 @@ const formatRelativeTime = (dateString: string) => {
   });
 };
 
-const formatActivityMessage = (log: any, userMap: Record<number, string>) => {
+interface ActivityLog {
+  id: number;
+  user_id: number | null;
+  action: string;
+  entity_type?: string;
+  created_at: string;
+  log_metadata?: {
+    project_name?: string;
+    user_name?: string;
+    user_id?: number;
+    role?: string;
+    new_role?: string;
+    task_title?: string;
+    old_status?: string;
+    new_status?: string;
+    assigned_to?: number;
+  } | null;
+}
+
+const formatActivityMessage = (log: ActivityLog, userMap: Record<number, string>) => {
   const actor = log.user_id ? (userMap[log.user_id] || `User #${log.user_id}`) : "System";
   const meta = log.log_metadata || {};
 
@@ -84,24 +103,28 @@ const formatActivityMessage = (log: any, userMap: Record<number, string>) => {
       return `${actor} updated project '${meta.project_name || "Unknown Project"}'`;
     case "PROJECT_DELETED":
       return `${actor} deleted project '${meta.project_name || "Unknown Project"}'`;
-    case "MEMBER_ADDED":
+    case "MEMBER_ADDED": {
       const addedMemberName = meta.user_name || (meta.user_id && userMap[meta.user_id]) || `User #${meta.user_id}`;
       return `${actor} invited ${addedMemberName} to project '${meta.project_name || "Unknown Project"}' as ${capitalizeRole(meta.role)}`;
-    case "MEMBER_REMOVED":
+    }
+    case "MEMBER_REMOVED": {
       const removedMemberName = (meta.user_id && userMap[meta.user_id]) || `User #${meta.user_id}`;
       return `${actor} removed member ${removedMemberName} from project '${meta.project_name || "Unknown Project"}'`;
-    case "MEMBER_ROLE_UPDATED":
+    }
+    case "MEMBER_ROLE_UPDATED": {
       const targetMemberName = (meta.user_id && userMap[meta.user_id]) || `User #${meta.user_id}`;
       return `${actor} updated role of ${targetMemberName} to ${capitalizeRole(meta.new_role)}`;
+    }
     case "TASK_CREATED":
       return `${actor} created task '${meta.task_title || "Unknown Task"}'`;
     case "TASK_MOVED":
       return `${actor} moved task '${meta.task_title || "Unknown Task"}' from ${meta.old_status || "TODO"} to ${meta.new_status || "DONE"}`;
     case "TASK_UPDATED":
       return `${actor} updated task '${meta.task_title || "Unknown Task"}'`;
-    case "TASK_ASSIGNED":
+    case "TASK_ASSIGNED": {
       const assigneeName = (meta.assigned_to && userMap[meta.assigned_to]) || `User #${meta.assigned_to}`;
       return `${actor} assigned task '${meta.task_title || "Unknown Task"}' to ${assigneeName}`;
+    }
     case "COMMENT_ADDED":
       return `${actor} added a comment to task`;
     case "LOGIN_SUCCESS":
@@ -186,16 +209,36 @@ function ChartWrapper({ children }: ChartWrapperProps) {
 }
 
 
+interface ProjectItem {
+  id: number;
+  title: string;
+  description?: string;
+}
+
+interface TaskItem {
+  id: number;
+  title: string;
+  status: string;
+}
+
+interface DashboardMetrics {
+  total_projects: number;
+  total_tasks: number;
+  completed_tasks: number;
+  todo_tasks: number;
+  in_progress_tasks: number;
+}
+
 export default function DashboardPage() {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
   const shouldReduceMotion = useReducedMotion();
 
-  const [projects, setProjects] = useState<any[]>([]);
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [projects, setProjects] = useState<ProjectItem[]>([]);
+  const [tasks, setTasks] = useState<TaskItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [metrics, setMetrics] = useState<any>(null);
-  const [activityLogs, setActivityLogs] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
+  const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
   const [userMap, setUserMap] = useState<Record<number, string>>({});
 
   useEffect(() => {
@@ -208,13 +251,13 @@ export default function DashboardPage() {
           api.get("/activity-logs?limit=50").then((res) => res.data)
         ]);
 
-        const projectsList = projData?.items ?? [];
-        const tasksList = taskData?.items ?? [];
-        const logsList = logsData?.items ?? [];
+        const projectsList = (projData?.items ?? []) as ProjectItem[];
+        const tasksList = (taskData?.items ?? []) as TaskItem[];
+        const logsList = (logsData?.items ?? []) as ActivityLog[];
 
         setProjects(projectsList);
         setTasks(tasksList);
-        setMetrics(analyticsData);
+        setMetrics(analyticsData as DashboardMetrics);
         setActivityLogs(logsList);
 
         // Build a user map dynamically from accessible project members
@@ -232,10 +275,10 @@ export default function DashboardPage() {
 
         // Fetch members of all accessible projects in parallel
         try {
-          const membersPromises = projectsList.map((p: any) => getProjectMembers(p.id).catch(() => []));
+          const membersPromises = projectsList.map((p: ProjectItem) => getProjectMembers(p.id).catch(() => []));
           const membersResults = await Promise.all(membersPromises);
           membersResults.forEach((membersList) => {
-            membersList.forEach((m: any) => {
+            membersList.forEach((m: { user_id?: number; full_name?: string | null }) => {
               if (m.user_id && m.full_name) {
                 tempUserMap[m.user_id] = m.full_name;
               }
@@ -249,10 +292,9 @@ export default function DashboardPage() {
       } catch (err) {
         console.error("Failed to load dashboard data:", err);
       } finally {
-        const timer = setTimeout(() => {
+        setTimeout(() => {
           setIsLoading(false);
         }, 1200);
-        return () => clearTimeout(timer);
       }
     };
 

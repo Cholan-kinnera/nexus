@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "../hooks/useTheme";
 import { motion, AnimatePresence } from "framer-motion";
 import { getProjects } from "../services/projectService";
 import { getTasks } from "../services/taskService";
@@ -130,6 +130,8 @@ export default function CommandPalette() {
   // Reset index and focus input on open
   useEffect(() => {
     if (isOpen) {
+      // Sync state synchronously on open to clear previous search query
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSearch("");
       setSelectedIndex(0);
       setTimeout(() => inputRef.current?.focus(), 50);
@@ -150,7 +152,7 @@ export default function CommandPalette() {
         const projectsList = projectsData?.items ?? [];
         const tasksList = tasksData?.items ?? [];
 
-        const projectCommands: CommandItem[] = projectsList.map((proj: any) => ({
+        const projectCommands: CommandItem[] = projectsList.map((proj: { id: number; title: string }) => ({
           id: `proj-${proj.id}`,
           title: `Go to Project: ${proj.title}`,
           category: "Projects",
@@ -160,7 +162,7 @@ export default function CommandPalette() {
           }
         }));
 
-        const taskCommands: CommandItem[] = tasksList.map((task: any) => ({
+        const taskCommands: CommandItem[] = tasksList.map((task: { id: number; title: string }) => ({
           id: `task-${task.id}`,
           title: `Go to Task: ${task.title}`,
           category: "Tasks",

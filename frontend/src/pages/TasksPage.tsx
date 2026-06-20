@@ -1,4 +1,6 @@
 import { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import type { AxiosProgressEvent } from "axios";
 import {
   getTasks,
   createTask,
@@ -15,12 +17,49 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { TasksSkeleton } from "../components/ui/SkeletonLoader";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import { getProjectMembers } from "../services/projectMemberService";
+import type { ProjectMemberResponse } from "../services/projectMemberService";
 import api from "../api/client";
 import { PremiumButton } from "../components/ui/PremiumButton";
 import { PremiumCard } from "../components/ui/PremiumCard";
 import { EmptyState } from "../components/ui/EmptyState";
+
+interface ProjectItem {
+  id: number;
+  title: string;
+  description?: string;
+  created_at?: string;
+}
+
+interface TaskItem {
+  id: number;
+  title: string;
+  description?: string;
+  status: string;
+  priority?: string;
+  project_id: number;
+  due_date?: string;
+}
+
+interface UserProfile {
+  id: number;
+  full_name?: string;
+  email: string;
+  avatar_url?: string;
+  role?: string;
+}
+
+interface CommentItem {
+  id: number;
+  content: string;
+  created_at: string;
+  user_id: number;
+  user?: {
+    full_name?: string;
+    email?: string;
+  };
+}
 import {
   DndContext,
   closestCenter,
@@ -48,7 +87,7 @@ import {
 } from "lucide-react";
 
 // Mock helper to fetch task hours
-const getTaskHours = (task: any) => {
+const getTaskHours = (task: TaskItem) => {
   return (task.id % 5) + 2;
 };
 
@@ -68,7 +107,7 @@ function DroppableColumn({
   children: React.ReactNode;
   count: number;
   totalHours: number;
-  activeTask: any | null;
+  activeTask: TaskItem | null;
 }) {
   const { isOver, setNodeRef } = useDroppable({ id });
 
@@ -144,12 +183,12 @@ function DraggableTaskCard({
   columnStatus,
   onCardClick,
 }: {
-  task: any;
+  task: TaskItem;
   getProjectName: (id: number) => string;
   handleDelete: (id: number) => void;
   handleStatusChange: (id: number, status: string) => void;
   columnStatus: string;
-  onCardClick: (task: any) => void;
+  onCardClick: (task: TaskItem) => void;
 }) {
   const {
     attributes,
@@ -285,18 +324,18 @@ function TaskModal({
   onClose,
   getProjectName,
 }: {
-  task: any;
+  task: TaskItem | null;
   isOpen: boolean;
   onClose: () => void;
   getProjectName: (id: number) => string;
 }) {
   const { user } = useAuth();
   const shouldReduceMotion = useReducedMotion();
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<CommentItem[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
-  const [projectMembers, setProjectMembers] = useState<any[]>([]);
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [projectMembers, setProjectMembers] = useState<ProjectMemberResponse[]>([]);
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
 
   // Attachments State
   const [attachments, setAttachments] = useState<TaskAttachment[]>([]);
@@ -416,19 +455,24 @@ function TaskModal({
     }
 
     try {
-      await uploadTaskAttachment(task.id, file, (progressEvent: any) => {
-        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      await uploadTaskAttachment(task!.id, file, (progressEvent: AxiosProgressEvent) => {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total || file.size));
         setUploadProgress(percentCompleted);
       });
       setUploadSuccess(true);
       if (fileInputRef.current) fileInputRef.current.value = "";
       // Reload attachments list
-      const updated = await getTaskAttachments(task.id);
+      const updated = await getTaskAttachments(task!.id);
       setAttachments(updated ?? []);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Upload failed:", err);
-      const errMsg = err.response?.data?.detail || "Failed to upload file. Please try again.";
-      setUploadError(errMsg);
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        const errMsg = responseData?.detail || "Failed to upload file. Please try again.";
+        setUploadError(errMsg);
+      } else {
+        setUploadError("Failed to upload file. Please try again.");
+      }
     } finally {
       setIsUploading(false);
       setUploadProgress(null);
@@ -441,12 +485,17 @@ function TaskModal({
     try {
       await deleteTaskAttachment(attachmentId);
       // Reload attachments list
-      const updated = await getTaskAttachments(task.id);
+      const updated = await getTaskAttachments(task!.id);
       setAttachments(updated ?? []);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Delete failed:", err);
-      const errMsg = err.response?.data?.detail || "Failed to delete attachment.";
-      alert(errMsg);
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        const errMsg = responseData?.detail || "Failed to delete attachment.";
+        alert(errMsg);
+      } else {
+        alert("Failed to delete attachment.");
+      }
     }
   };
 
@@ -781,16 +830,16 @@ function TaskModal({
 // ---------------------------------------------------------------------------
 export function TasksPage() {
   const shouldReduceMotion = useReducedMotion();
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<ProjectItem[]>([]);
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
 
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<TaskItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [activeTask, setActiveTask] = useState<any | null>(null);
+  const [activeTask, setActiveTask] = useState<TaskItem | null>(null);
 
-  const [selectedModalTask, setSelectedModalTask] = useState<any | null>(null);
+  const [selectedModalTask, setSelectedModalTask] = useState<TaskItem | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
   const formRef = useRef<HTMLDivElement>(null);
@@ -835,6 +884,8 @@ export function TasksPage() {
   };
 
   useEffect(() => {
+    // Load tasks and projects synchronously on component mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     Promise.all([loadTasks(), loadProjects()]).finally(() => {
       const timer = setTimeout(() => {
         setIsLoading(false);
@@ -946,7 +997,7 @@ export function TasksPage() {
         </div>
 
         {/* Create Task Form */}
-        <PremiumCard ref={formRef as any} hoverable={false} className="mb-8 text-zinc-100 transition-colors duration-300">
+        <PremiumCard ref={formRef} hoverable={false} className="mb-8 text-zinc-100 transition-colors duration-300">
           <h2 className="text-lg font-bold text-zinc-200 mb-4 flex items-center gap-2">
             <ClipboardList size={18} className="text-zinc-450" />
             Create New Task

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   getProjects,
   createProject,
@@ -31,7 +31,7 @@ const parseDescription = (rawDesc: string | undefined) => {
       priority: data.priority || "MEDIUM",
       deadline: data.deadline || "",
     };
-  } catch (e) {
+  } catch {
     return {
       description: rawDesc,
       category: "",
@@ -41,9 +41,16 @@ const parseDescription = (rawDesc: string | undefined) => {
   }
 };
 
+interface ProjectItem {
+  id: number;
+  title: string;
+  description?: string;
+  created_at?: string;
+}
+
 export default function ProjectsPage() {
   const shouldReduceMotion = useReducedMotion();
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<ProjectItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -56,7 +63,7 @@ export default function ProjectsPage() {
   const [isPriorityOpen, setIsPriorityOpen] = useState(false);
   const priorityRef = useRef<HTMLDivElement>(null);
 
-  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [activeTab, setActiveTab] = useState<string>("overview");
 
   const formRef = useRef<HTMLDivElement>(null);
@@ -80,14 +87,14 @@ export default function ProjectsPage() {
     },
   };
 
-  const loadProjects = async () => {
+  const loadProjects = useCallback(async () => {
     try {
       const data = await getProjects();
-      const projectsList = data?.items ?? [];
+      const projectsList = (data?.items ?? []) as ProjectItem[];
       setProjects(projectsList);
       // Sync selected project details if currently open
       if (selectedProject) {
-        const updated = projectsList.find((p: any) => p.id === selectedProject.id);
+        const updated = projectsList.find((p) => p.id === selectedProject.id);
         if (updated) {
           setSelectedProject(updated);
         }
@@ -95,16 +102,17 @@ export default function ProjectsPage() {
     } catch (e) {
       console.error(e);
     } finally {
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         setIsLoading(false);
       }, 1000);
-      return () => clearTimeout(timer);
     }
-  };
+  }, [selectedProject]);
 
   useEffect(() => {
+    // Fetch projects synchronously on component mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadProjects();
-  }, []);
+  }, [loadProjects]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -290,7 +298,7 @@ export default function ProjectsPage() {
         </div>
 
         {/* Create Project Form Container */}
-        <PremiumCard ref={formRef as any} hoverable={false} className="mb-8 text-zinc-100 transition-colors duration-300">
+        <PremiumCard ref={formRef} hoverable={false} className="mb-8 text-zinc-100 transition-colors duration-300">
           <h2 className="text-lg font-bold text-zinc-200 mb-4 flex items-center gap-2">
             <FolderPlus size={18} className="text-zinc-400" />
             Create New Project

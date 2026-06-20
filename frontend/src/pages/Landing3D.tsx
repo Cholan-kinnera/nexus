@@ -26,12 +26,14 @@ const WorkspaceModel = memo(function WorkspaceModel() {
   
   useEffect(() => {
     scene.traverse((child) => {
-      if ((child as any).isMesh) {
-        const mesh = child as THREE.Mesh;
+      if (child instanceof THREE.Mesh) {
+        const mesh = child;
         if (mesh.material) {
           const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-          materials.forEach((mat: any) => {
-            if ('map' in mat) mat.map = null;
+          materials.forEach((mat: THREE.Material) => {
+            if (mat && 'map' in mat) {
+              (mat as { map: THREE.Texture | null }).map = null;
+            }
           });
           mesh.material = new THREE.MeshPhysicalMaterial({
             color: '#ffffff',
@@ -485,7 +487,7 @@ export default function Landing3D() {
                   return (
                     <button
                       key={tab.id}
-                      onClick={() => setActiveAITab(tab.id as any)}
+                      onClick={() => setActiveAITab(tab.id as 'sprint' | 'tasks' | 'summary' | 'risks')}
                       className={`flex items-start text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer hover:scale-[1.01] active:scale-[0.99] ${
                         isSelected 
                           ? 'bg-zinc-900/60 border-zinc-700/80 shadow-md text-white' 

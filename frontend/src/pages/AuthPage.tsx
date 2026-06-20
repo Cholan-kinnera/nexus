@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { useTheme } from "../context/ThemeContext";
+import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
+import { useTheme } from "../hooks/useTheme";
 import api from "../api/client";
 import ParticleBackground from "../components/auth/ParticleBackground";
 import { GoogleLogin } from "@react-oauth/google";
+import type { CredentialResponse } from "@react-oauth/google";
 
 // ─── Cursor glow hook ─────────────────────────────────────────────────────────
 function useCursorGlow() {
@@ -315,14 +317,19 @@ function LoginForm({ onSwitch, onSuccess }: {
       const { data } = await api.post("/auth/login", { email: form.email, password: form.password });
       login(data.access_token, { full_name: data.full_name, email: data.email });
       onSuccess();
-    } catch (err: any) {
-      if (err?.response?.status === 422) {
-        setError("Invalid input formatting. Please check your email and fields.");
-      } else if (typeof err?.response?.data?.detail === "string") {
-        setError(err.response.data.detail);
-      } else if (Array.isArray(err?.response?.data?.detail)) {
-        const msgs = err.response.data.detail.map((d: any) => d.msg).join(", ");
-        setError(`Validation Error: ${msgs}`);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 422) {
+          setError("Invalid input formatting. Please check your email and fields.");
+        } else if (typeof err.response?.data?.detail === "string") {
+          setError(err.response.data.detail);
+        } else if (err.response?.data?.detail && Array.isArray(err.response.data.detail)) {
+          const detailList = err.response.data.detail as Array<{ msg: string }>;
+          const msgs = detailList.map((d) => d.msg).join(", ");
+          setError(`Validation Error: ${msgs}`);
+        } else {
+          setError("Invalid email or password.");
+        }
       } else {
         setError("Invalid email or password.");
       }
@@ -418,14 +425,19 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
       await api.post("/auth/signup", { email: form.email, password: form.password, full_name: form.fullName });
       setSuccess(true);
       setOtpTimer(59);
-    } catch (err: any) {
-      if (err?.response?.status === 422) {
-        setError("Invalid input formatting. Please check your email and fields.");
-      } else if (typeof err?.response?.data?.detail === "string") {
-        setError(err.response.data.detail);
-      } else if (Array.isArray(err?.response?.data?.detail)) {
-        const msgs = err.response.data.detail.map((d: any) => d.msg).join(", ");
-        setError(`Validation Error: ${msgs}`);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 422) {
+          setError("Invalid input formatting. Please check your email and fields.");
+        } else if (typeof err.response?.data?.detail === "string") {
+          setError(err.response.data.detail);
+        } else if (err.response?.data?.detail && Array.isArray(err.response.data.detail)) {
+          const detailList = err.response.data.detail as Array<{ msg: string }>;
+          const msgs = detailList.map((d) => d.msg).join(", ");
+          setError(`Validation Error: ${msgs}`);
+        } else {
+          setError("Something went wrong. Try again.");
+        }
       } else {
         setError("Something went wrong. Try again.");
       }
@@ -494,8 +506,13 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
       } else {
         throw new Error("No token returned from server.");
       }
-    } catch (err: any) {
-      setOtpError(err?.response?.data?.detail || "Invalid verification code. Please try again.");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        setOtpError(responseData?.detail || "Invalid verification code. Please try again.");
+      } else {
+        setOtpError("Invalid verification code. Please try again.");
+      }
     } finally {
       setVerifying(false);
     }
@@ -736,7 +753,7 @@ function SocialButtons({
     }
   }, []);
 
-  const handleGoogleSuccess = async (credentialResponse: any) => {
+  const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
     setError("");
     setLoading(true);
     try {
@@ -753,12 +770,16 @@ function SocialButtons({
         role: data.role || "developer",
       });
       navigate("/dashboard");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Google login error:", err);
-      if (err?.response?.status === 422) {
-        setError("Invalid Google token formatting or parameters.");
-      } else if (typeof err?.response?.data?.detail === "string") {
-        setError(err.response.data.detail);
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 422) {
+          setError("Invalid Google token formatting or parameters.");
+        } else if (typeof err.response?.data?.detail === "string") {
+          setError(err.response.data.detail);
+        } else {
+          setError("Google authentication failed. Please try again.");
+        }
       } else {
         setError("Google authentication failed. Please try again.");
       }

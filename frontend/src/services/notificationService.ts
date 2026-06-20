@@ -6,7 +6,7 @@ export interface NotificationResponse {
   title: string;
   message: string;
   is_read: boolean;
-  notification_metadata: Record<string, any> | null;
+  notification_metadata: Record<string, unknown> | null;
   created_at: string;
 }
 
@@ -77,7 +77,7 @@ export const formatRelativeTime = (dateString: string): string => {
     if (diffMins < 60) return `${diffMins}m ago`;
     if (diffHours < 24) return `${diffHours}h ago`;
     return `${diffDays}d ago`;
-  } catch (e) {
+  } catch {
     return "some time ago";
   }
 };

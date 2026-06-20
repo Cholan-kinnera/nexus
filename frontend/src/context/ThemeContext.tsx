@@ -1,18 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-
-export type Theme = "light" | "dark" | "system";
-
-export interface ThemeContextType {
-  theme: Theme;
-  resolvedTheme: "light" | "dark";
-  setTheme: (theme: Theme) => void;
-  toggleTheme: () => void;
-  themeLogs: string[];
-  clearThemeLogs: () => void;
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+import { ThemeContext } from "./ThemeContextObject";
+import type { Theme } from "./ThemeContextObject";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
@@ -30,20 +19,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (saved) {
       try {
         return JSON.parse(saved);
-      } catch (e) {
+      } catch {
         // Fallback
       }
     }
     return [`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}] Theme initialized: system`];
   });
 
-  const location = (() => {
-    try {
-      return useLocation();
-    } catch {
-      return null;
-    }
-  })();
+  const location = useLocation();
 
   const isPublicRoute = location
     ? ["/", "/auth", "/login", "/signup", "/forgot-password"].includes(location.pathname)
@@ -54,7 +37,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = () => {
-      let activeTheme: "light" | "dark" = "dark";
+      let activeTheme: "light" | "dark";
       if (isPublicRoute) {
         activeTheme = "dark";
       } else if (theme === "system") {
@@ -117,10 +100,3 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error("useTheme must be used within a ThemeProvider");
-  }
-  return context;
-}

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "../components/dashboard/Sidebar";
@@ -6,7 +6,7 @@ import LoadingSplash from "../components/LoadingSplash";
 import CommandPalette from "../components/CommandPalette";
 import { Bell, CheckCheck, Search, User as UserIcon, Settings as SettingsIcon, LogOut as LogOutIcon } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import { NotificationsSkeleton } from "../components/ui/SkeletonLoader";
 import {
   getNotifications,
@@ -36,7 +36,7 @@ export default function DashboardLayout({ children }: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
 
-  const loadNotificationsData = async () => {
+  const loadNotificationsData = useCallback(async () => {
     if (!token) return;
     try {
       setIsLoading(true);
@@ -51,7 +51,7 @@ export default function DashboardLayout({ children }: Props) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [token]);
 
   const handleMarkRead = async (id: number) => {
     try {
@@ -74,16 +74,20 @@ export default function DashboardLayout({ children }: Props) {
   // Load initially when token is available
   useEffect(() => {
     if (token) {
+      // Load notifications synchronously on token load
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       loadNotificationsData();
     }
-  }, [token]);
+  }, [token, loadNotificationsData]);
 
   // Load on open dropdown transition
   useEffect(() => {
     if (notifsOpen && token) {
+      // Refresh notifications synchronously when opening the dropdown
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       loadNotificationsData();
     }
-  }, [notifsOpen, token]);
+  }, [notifsOpen, token, loadNotificationsData]);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -101,6 +105,8 @@ export default function DashboardLayout({ children }: Props) {
 
   useEffect(() => {
     if (hasBooted) {
+      // Sync booting status state synchronously once booted
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsBooting(false);
       return;
     }

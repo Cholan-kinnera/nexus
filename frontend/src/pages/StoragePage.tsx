@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import type { AxiosProgressEvent } from "axios";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Database, PlusCircle, CheckCircle2, Trash2, FileText, HardDrive, Loader2, Download, Image, FileSpreadsheet, FileArchive, File } from "lucide-react";
@@ -50,6 +52,8 @@ export default function StoragePage() {
   };
 
   useEffect(() => {
+    // Fetch storage vault files synchronously on component mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadFiles();
   }, []);
 
@@ -72,7 +76,7 @@ export default function StoragePage() {
     setUploadError(null);
     setUploadProgress(0);
     try {
-      await uploadFile(file, (progressEvent: any) => {
+      await uploadFile(file, (progressEvent: AxiosProgressEvent) => {
         const total = progressEvent.total || file.size;
         const current = progressEvent.loaded;
         const percentage = Math.round((current / total) * 100);
@@ -81,9 +85,14 @@ export default function StoragePage() {
       setIsSuccess(true);
       setTimeout(() => setIsSuccess(false), 3000);
       await loadFiles();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Upload failed:", err);
-      setUploadError(err.response?.data?.detail || "Upload failed. Check size constraints.");
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        setUploadError(responseData?.detail || "Upload failed. Check size constraints.");
+      } else {
+        setUploadError("Upload failed. Check size constraints.");
+      }
     } finally {
       setIsUploading(false);
       setUploadProgress(null);
@@ -96,9 +105,14 @@ export default function StoragePage() {
     try {
       await deleteFile(fileKey);
       await loadFiles();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Delete failed:", err);
-      alert(err.response?.data?.detail || "Failed to delete file.");
+      if (axios.isAxiosError(err)) {
+        const responseData = err.response?.data as { detail?: string } | undefined;
+        alert(responseData?.detail || "Failed to delete file.");
+      } else {
+        alert("Failed to delete file.");
+      }
     }
   };
 
@@ -275,7 +289,7 @@ export default function StoragePage() {
                   animate="visible"
                   className="divide-y divide-zinc-800/40 text-xs"
                 >
-                  {files.map((file, _idx) => (
+                  {files.map((file) => (
                     <motion.tr
                       variants={itemVariants}
                       key={file.file_key}

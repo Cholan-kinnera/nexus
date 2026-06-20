@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, ShieldAlert, ChevronDown, Check } from "lucide-react";
 import { lookupUserByEmail, addProjectMember } from "../../services/projectMemberService";
@@ -69,12 +70,19 @@ export default function InviteMemberModal({
       setRole("developer");
       onSuccess();
       onClose();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      if (err.response?.status === 404) {
-        setError(`No user found with email: ${email}`);
-      } else if (err.response?.data?.detail) {
-        setError(err.response.data.detail);
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 404) {
+          setError(`No user found with email: ${email}`);
+        } else {
+          const responseData = err.response?.data as { detail?: string } | undefined;
+          if (responseData?.detail) {
+            setError(responseData.detail);
+          } else {
+            setError("Failed to invite member. Please verify email and try again.");
+          }
+        }
       } else {
         setError("Failed to invite member. Please verify email and try again.");
       }

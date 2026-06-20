@@ -1,3 +1,4 @@
+import type { AxiosProgressEvent } from "axios";
 import api from "../api/client";
 
 export const getTasks = async () => {
@@ -67,15 +68,21 @@ export interface TaskAttachment {
 }
 
 export const getTaskAttachments = async (taskId: number): Promise<TaskAttachment[]> => {
-  const response = await api.get<any>(`/tasks/${taskId}/attachments`);
+  const response = await api.get<TaskAttachment[] | { items: TaskAttachment[] }>(`/tasks/${taskId}/attachments`);
   const data = response.data;
-  return Array.isArray(data) ? data : (Array.isArray(data?.items) ? data.items : []);
+  if (Array.isArray(data)) {
+    return data;
+  }
+  if (data && typeof data === "object" && "items" in data && Array.isArray(data.items)) {
+    return data.items;
+  }
+  return [];
 };
 
 export const uploadTaskAttachment = async (
   taskId: number,
   file: File,
-  onUploadProgress?: (progressEvent: any) => void
+  onUploadProgress?: (progressEvent: AxiosProgressEvent) => void
 ): Promise<TaskAttachment> => {
   const formData = new FormData();
   formData.append("file", file);
@@ -88,7 +95,7 @@ export const uploadTaskAttachment = async (
   return response.data;
 };
 
-export const deleteTaskAttachment = async (attachmentId: number): Promise<any> => {
-  const response = await api.delete(`/tasks/attachments/${attachmentId}`);
+export const deleteTaskAttachment = async (attachmentId: number): Promise<{ message: string }> => {
+  const response = await api.delete<{ message: string }>(`/tasks/attachments/${attachmentId}`);
   return response.data;
 };

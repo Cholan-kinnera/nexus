@@ -44,7 +44,7 @@ export const PremiumCard = React.forwardRef<HTMLDivElement, PremiumCardProps>(
         }
         transition={shouldReduceMotion ? { duration: 0.1 } : { duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
         className={`${cardStyle} ${paddings[padding]} ${className} cursor-pointer`}
-        {...(props as any)}
+        {...(props as Record<string, unknown>)}
       >
         {children}
       </motion.div>
