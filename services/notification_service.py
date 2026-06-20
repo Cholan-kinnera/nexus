@@ -169,7 +169,9 @@ async def mark_all_notifications_read(
     try:
         stmt = (
             update(Notification)
-            .where((Notification.user_id == user_id) & (Notification.is_read.is_(False)))
+            .where(
+                (Notification.user_id == user_id) & (Notification.is_read.is_(False))
+            )
             .values(is_read=True)
         )
 
