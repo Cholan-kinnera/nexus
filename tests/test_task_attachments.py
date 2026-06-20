@@ -4,7 +4,6 @@ import httpx
 from fastapi import status
 from main import app
 from db.database import AsyncSessionLocal, Base, engine
-import models
 from models.user import User
 from models.project import Project
 from models.project_member import ProjectMember
@@ -12,7 +11,7 @@ from models.task import Task
 from models.task_attachment import TaskAttachment
 from core.security import hash_password, create_access_token
 from services.storage_service import storage_service
-from sqlalchemy import select, delete
+from sqlalchemy import delete
 
 
 class TestTaskAttachments(unittest.IsolatedAsyncioTestCase):

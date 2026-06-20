@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -66,7 +66,7 @@ async def read_unread_count(
         .select_from(Notification)
         .where(
             Notification.user_id == current_user.id,
-            Notification.is_read == False,
+            Notification.is_read.is_(False),
         )
     )
     unread_count = result.scalar() or 0

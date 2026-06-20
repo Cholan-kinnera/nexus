@@ -20,11 +20,11 @@ async def send_otp_email(email: str, otp: str) -> bool:
             "AWS SES credentials or sender email are not configured. Email will be printed to terminal instead."
         )
         logger.info(f"🔑 [AWS SES SIMULATOR] Your security verification code is: {otp}")
-        print(f"\n==================================================")
+        print("\n==================================================")
         print(f"📧 [AWS SES SIMULATOR] Sending email to: {email}")
         print(f"🔑 Your Nexus PM security verification code is: {otp}")
-        print(f"⏳ This code expires in 5 minutes.")
-        print(f"==================================================\n")
+        print("⏳ This code expires in 5 minutes.")
+        print("==================================================\n")
         return False
 
     try:
@@ -71,10 +71,10 @@ async def send_otp_email(email: str, otp: str) -> bool:
         logger.error(f"Failed to send email via AWS SES: {e}")
         logger.info(f"🔑 [AWS SES FALLBACK] Your security verification code is: {otp}")
         # Return fallback simulator so the developer can still proceed in local environments if AWS SES credentials are temporarily invalid
-        print(f"\n==================================================")
+        print("\n==================================================")
         print(f"📧 [AWS SES FALLBACK] Failed to send via AWS: {e}")
         print(f"🔑 Your security verification code is: {otp}")
-        print(f"==================================================\n")
+        print("==================================================\n")
         return False
 
 
@@ -92,11 +92,11 @@ async def send_password_reset_email(email: str, otp: str) -> bool:
             "AWS SES credentials or sender email are not configured. Email will be printed to terminal instead."
         )
         logger.info(f"🔑 [AWS SES SIMULATOR] Your password reset code is: {otp}")
-        print(f"\n==================================================")
+        print("\n==================================================")
         print(f"📧 [AWS SES SIMULATOR] Sending password reset email to: {email}")
         print(f"🔑 Your Nexus PM password reset code is: {otp}")
-        print(f"⏳ This code expires in 5 minutes.")
-        print(f"==================================================\n")
+        print("⏳ This code expires in 5 minutes.")
+        print("==================================================\n")
         return False
 
     try:
@@ -145,8 +145,8 @@ async def send_password_reset_email(email: str, otp: str) -> bool:
     except (BotoCoreError, ClientError) as e:
         logger.error(f"Failed to send password reset email via AWS SES: {e}")
         logger.info(f"🔑 [AWS SES FALLBACK] Your password reset code is: {otp}")
-        print(f"\n==================================================")
+        print("\n==================================================")
         print(f"📧 [AWS SES FALLBACK] Failed to send via AWS: {e}")
         print(f"🔑 Your password reset verification code is: {otp}")
-        print(f"==================================================\n")
+        print("==================================================\n")
         return False

@@ -8,7 +8,7 @@ Scoped to the current user's accessible projects via project membership.
 import logging
 from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import select, func, case, and_
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.project import Project
@@ -84,7 +84,7 @@ async def get_dashboard_metrics(db: AsyncSession, user_id: int) -> dict:
     notif_result = await db.execute(
         select(
             func.count().label("total"),
-            func.count().filter(Notification.is_read == False).label("unread"),
+            func.count().filter(Notification.is_read.is_(False)).label("unread"),
         ).where(Notification.user_id == user_id)
     )
     notif_row = notif_result.one()

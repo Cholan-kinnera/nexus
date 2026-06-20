@@ -114389,3 +114389,1128 @@ WHERE activity_logs.id = $1::INTEGER
 2026-06-19 18:44:19,330 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
 2026-06-19 18:44:19,330 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 10.93s ago] ('outsider@test.com',)
 2026-06-19 18:44:19,347 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-20 19:15:56,860 - asyncio - WARNING - [Request-ID: -] - Executing <Task pending name='Task-1' coro=<TestTaskAttachments.asyncSetUp() running at C:\NEXUS PM 1\tests\test_task_attachments.py:25> wait_for=<Future pending cb=[_chain_future.<locals>._call_check_cancel() at C:\Python313\Lib\asyncio\futures.py:384, Task.task_wakeup()] created at C:\Python313\Lib\asyncio\base_events.py:459> cb=[_run_until_complete_cb() at C:\Python313\Lib\asyncio\base_events.py:181] created at C:\Python313\Lib\asyncio\runners.py:100> took 0.155 seconds
+2026-06-20 19:15:57,467 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - select pg_catalog.version()
+2026-06-20 19:15:57,467 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [raw sql] ()
+2026-06-20 19:15:57,590 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - select current_schema()
+2026-06-20 19:15:57,590 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [raw sql] ()
+2026-06-20 19:15:57,671 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - show standard_conforming_strings
+2026-06-20 19:15:57,672 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [raw sql] ()
+2026-06-20 19:15:57,732 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-20 19:15:57,740 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:57,740 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00071s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:57,888 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:57,888 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.1487s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:57,907 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:57,908 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.1679s ago] ('tasks', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:57,926 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:57,926 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.1863s ago] ('comments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:57,944 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:57,944 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.2044s ago] ('activity_logs', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:57,961 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:57,962 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.2221s ago] ('notifications', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:57,986 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:57,987 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.247s ago] ('project_members', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:58,005 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:58,006 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.2658s ago] ('refresh_tokens', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:58,022 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:58,023 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.2829s ago] ('password_reset_otps', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:58,050 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:58,051 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.311s ago] ('forgot_password_rate_limits', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:58,079 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-20 19:15:58,080 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.3398s ago] ('task_attachments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-20 19:15:58,107 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-20 19:15:58,158 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-20 19:15:58,160 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM task_attachments
+2026-06-20 19:15:58,160 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00052s] ()
+2026-06-20 19:15:58,249 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM project_members
+2026-06-20 19:15:58,250 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00038s] ()
+2026-06-20 19:15:58,298 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM tasks
+2026-06-20 19:15:58,299 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00052s] ()
+2026-06-20 19:15:58,349 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM projects
+2026-06-20 19:15:58,349 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00037s] ()
+2026-06-20 19:15:58,428 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-20 19:15:58,429 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00045s] ('owner@test.com',)
+2026-06-20 19:15:58,467 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-20 19:15:58,467 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.0388s ago] ('dev@test.com',)
+2026-06-20 19:15:58,485 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-20 19:15:58,485 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.05693s ago] ('viewer@test.com',)
+2026-06-20 19:15:58,504 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-20 19:15:58,504 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.07596s ago] ('outsider@test.com',)
+2026-06-20 19:15:58,528 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-20 19:16:00,467 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-20 19:16:00,474 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - INSERT INTO users (full_name, email, password, role, avatar_url, google_id, auth_provider, created_at, updated_at) SELECT p0::VARCHAR, p1::VARCHAR, p2::VARCHAR, p3::VARCHAR, p4::VARCHAR, p5::VARCHAR, p6::VARCHAR, p7::TIMESTAMP WITH TIME ZONE, p8::TIM ... 704 characters truncated ...  p2, p3, p4, p5, p6, p7, p8, sen_counter) ORDER BY sen_counter RETURNING users.id, users.id AS id__1
+2026-06-20 19:16:00,475 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00033s (insertmanyvalues) 1/1 (ordered)] ('Owner User', 'owner@test.com', '$2b$12$h5WpqQB.V3FediG2f5FLl.4GMDqvbE9EEZrDGhFeYRzPZF06Y5gFm', None, None, None, 'local', datetime.datetime(2026, 6, 20, 13, 46, 0, 474187, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 20, 13, 46, 0, 474197, tzinfo=datetime.timezone.utc), 'Developer User', 'dev@test.com', '$2b$12$JL4Ae0Ae0d28J0q3Y3/1DezBLZS14fekBH4tTo1LMxWBN.ZjLsqYW', None, None, None, 'local', datetime.datetime(2026, 6, 20, 13, 46, 0, 474202, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 20, 13, 46, 0, 474206, tzinfo=datetime.timezone.utc), 'Viewer User', 'viewer@test.com', '$2b$12$5UH2rTD4BtGXbZEYmS79vOKjpNKUWwPE2Q7uNTJwlhEOUthXzj2XW', None, None, None, 'local', datetime.datetime(2026, 6, 20, 13, 46, 0, 474208, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 20, 13, 46, 0, 474210, tzinfo=datetime.timezone.utc), 'Outsider User', 'outsider@test.com', '$2b$12$Af.J4o66RjPOK1keSZ36puJTtzy3PeqX7jMFcq2xhbjRPoeRp8lTO', None, None, None, 'local', datetime.datetime(2026, 6, 20, 13, 46, 0, 474211, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 20, 13, 46, 0, 474212, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:00,490 - asyncio - WARNING - [Request-ID: -] - Executing <Task pending name='Task-1' coro=<TestTaskAttachments.asyncSetUp() running at C:\NEXUS PM 1\tests\test_task_attachments.py:62> wait_for=<Future pending cb=[BaseProtocol._on_waiter_completed(), Task.task_wakeup()] created at C:\Python313\Lib\asyncio\base_events.py:459> cb=[_run_until_complete_cb() at C:\Python313\Lib\asyncio\base_events.py:181] created at C:\Python313\Lib\asyncio\runners.py:100> took 1.935 seconds
+2026-06-20 19:16:00,559 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-20 19:16:00,588 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-20 19:16:00,594 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-06-20 19:16:00,594 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00059s] (21,)
+2026-06-20 19:16:00,664 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-06-20 19:16:00,664 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.07094s ago] (22,)
+2026-06-20 19:16:00,688 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-06-20 19:16:00,689 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.09524s ago] (23,)
+2026-06-20 19:16:00,709 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-06-20 19:16:00,710 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.1161s ago] (24,)
+2026-06-20 19:16:00,735 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - INSERT INTO projects (title, description, owner_id) VALUES ($1::VARCHAR, $2::VARCHAR, $3::INTEGER) RETURNING projects.id
+2026-06-20 19:16:00,735 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00056s] ('Test Project', 'Test Description', 21)
+2026-06-20 19:16:00,783 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-20 19:16:00,808 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-20 19:16:00,810 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-06-20 19:16:00,810 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00048s] (6,)
+2026-06-20 19:16:00,865 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - INSERT INTO project_members (project_id, user_id, role, invited_by, joined_at) SELECT p0::INTEGER, p1::INTEGER, p2::VARCHAR, p3::INTEGER, p4::TIMESTAMP WITH TIME ZONE FROM (VALUES ($1::INTEGER, $2::INTEGER, $3::VARCHAR, $4::INTEGER, $5::TIMESTAMP WIT ... 219 characters truncated ...  p3, p4, sen_counter) ORDER BY sen_counter RETURNING project_members.id, project_members.id AS id__1
+2026-06-20 19:16:00,866 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00021s (insertmanyvalues) 1/1 (ordered)] (6, 21, 'owner', None, datetime.datetime(2026, 6, 20, 13, 46, 0, 865531, tzinfo=datetime.timezone.utc), 6, 22, 'developer', None, datetime.datetime(2026, 6, 20, 13, 46, 0, 865537, tzinfo=datetime.timezone.utc), 6, 23, 'viewer', None, datetime.datetime(2026, 6, 20, 13, 46, 0, 865539, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:00,902 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-20 19:16:00,929 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-20 19:16:00,931 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - INSERT INTO tasks (title, description, status, priority, due_date, project_id, assigned_to, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::TIMESTAMP WITH TIME ZONE, $6::INTEGER, $7::INTEGER, $8::TIMESTAMP WITH TIME ZONE, $9::TIMESTAMP WITH TIME ZONE) RETURNING tasks.id
+2026-06-20 19:16:00,932 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00053s] ('Test Task', 'Test Task Description', 'TODO', 'MEDIUM', None, 6, None, datetime.datetime(2026, 6, 20, 13, 46, 0, 931599, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 20, 13, 46, 0, 931605, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:00,999 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-20 19:16:01,017 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-20 19:16:01,019 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:01,020 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00043s] (6,)
+2026-06-20 19:16:01,082 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT task_attachments.id AS task_attachments_id, task_attachments.task_id AS task_attachments_task_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE $1::INTEGER = task_attachments.task_id
+2026-06-20 19:16:01,082 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00054s] (6,)
+2026-06-20 19:16:01,776 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - BEGIN (implicit)
+2026-06-20 19:16:01,777 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:01,778 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - [generated in 0.00047s] ('dev@test.com',)
+2026-06-20 19:16:01,861 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:01,861 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - [generated in 0.00050s] (6,)
+2026-06-20 19:16:01,913 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:01,913 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - [generated in 0.00062s] (6,)
+2026-06-20 19:16:01,969 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:01,970 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - [generated in 0.00044s] (6, 22)
+2026-06-20 19:16:02,025 - services.storage_service - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - [R2 SIMULATOR] Uploaded file to local storage: C:\NEXUS PM 1\local_storage_uploads\2c199f616d8b497ba24054528d814f23.txt
+2026-06-20 19:16:02,029 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - INSERT INTO task_attachments (task_id, user_id, file_name, file_key, file_size, mime_type, file_url, created_at) VALUES ($1::INTEGER, $2::INTEGER, $3::VARCHAR, $4::VARCHAR, $5::INTEGER, $6::VARCHAR, $7::VARCHAR, $8::TIMESTAMP WITH TIME ZONE) RETURNING task_attachments.id
+2026-06-20 19:16:02,029 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - [generated in 0.00052s] (6, 22, 'document.txt', '2c199f616d8b497ba24054528d814f23.txt', 71, 'text/plain', 'http://127.0.0.1:8000/static/uploads/2c199f616d8b497ba24054528d814f23.txt', datetime.datetime(2026, 6, 20, 13, 46, 2, 28902, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:02,087 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - COMMIT
+2026-06-20 19:16:02,118 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - BEGIN (implicit)
+2026-06-20 19:16:02,119 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-20 19:16:02,120 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - [generated in 0.00051s] (13,)
+2026-06-20 19:16:02,217 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-20 19:16:02,217 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - [generated in 0.00062s] (22, 'TASK_ATTACHMENT_ADDED', 'task_attachment', 13, '{"task_id": 6, "project_id": 6, "attachment_id": 13, "file_name": "document.txt"}', datetime.datetime(2026, 6, 20, 13, 46, 2, 217189, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:02,275 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - COMMIT
+2026-06-20 19:16:02,300 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - BEGIN (implicit)
+2026-06-20 19:16:02,302 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-20 19:16:02,303 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - [generated in 0.00043s] (21,)
+2026-06-20 19:16:02,379 - services.activity_service - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - Activity logged: action=TASK_ATTACHMENT_ADDED entity_type=task_attachment entity_id=13 user_id=22
+2026-06-20 19:16:02,435 - sqlalchemy.engine.Engine - INFO - [Request-ID: e7dfd4e5-d8dd-4c14-8c3d-1ed942abba0c] - ROLLBACK
+2026-06-20 19:16:02,467 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/6/attachments "HTTP/1.1 201 Created"
+2026-06-20 19:16:02,483 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - BEGIN (implicit)
+2026-06-20 19:16:02,484 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:02,484 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - [cached since 0.7071s ago] ('viewer@test.com',)
+2026-06-20 19:16:02,541 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:02,542 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - [cached since 0.6806s ago] (6,)
+2026-06-20 19:16:02,569 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:02,569 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - [cached since 0.6564s ago] (6,)
+2026-06-20 19:16:02,595 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-20 19:16:02,595 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - [generated in 0.00051s] (22,)
+2026-06-20 19:16:02,641 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:02,642 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - [cached since 0.6724s ago] (6, 23)
+2026-06-20 19:16:02,677 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id = $1::INTEGER ORDER BY task_attachments.created_at ASC
+2026-06-20 19:16:02,677 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - [generated in 0.00042s] (6,)
+2026-06-20 19:16:02,731 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-20 19:16:02,731 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - [generated in 0.00058s] (22,)
+2026-06-20 19:16:02,798 - sqlalchemy.engine.Engine - INFO - [Request-ID: ff787904-7652-47b8-9bc8-7f12672e9bc9] - ROLLBACK
+2026-06-20 19:16:02,825 - httpx - INFO - [Request-ID: -] - HTTP Request: GET http://127.0.0.1/api/tasks/6/attachments "HTTP/1.1 200 OK"
+2026-06-20 19:16:03,113 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - BEGIN (implicit)
+2026-06-20 19:16:03,114 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:03,114 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - [cached since 1.337s ago] ('owner@test.com',)
+2026-06-20 19:16:03,180 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:03,180 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - [cached since 1.32s ago] (6,)
+2026-06-20 19:16:03,213 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:03,213 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - [cached since 1.301s ago] (6,)
+2026-06-20 19:16:03,247 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-20 19:16:03,247 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - [cached since 0.6525s ago] (22,)
+2026-06-20 19:16:03,274 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:03,274 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - [cached since 1.305s ago] (6, 21)
+2026-06-20 19:16:03,304 - services.storage_service - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - [R2 SIMULATOR] Uploaded file to local storage: C:\NEXUS PM 1\local_storage_uploads\d6ca1cdde9624fd1bac794f58492847b.csv
+2026-06-20 19:16:03,305 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - INSERT INTO task_attachments (task_id, user_id, file_name, file_key, file_size, mime_type, file_url, created_at) VALUES ($1::INTEGER, $2::INTEGER, $3::VARCHAR, $4::VARCHAR, $5::INTEGER, $6::VARCHAR, $7::VARCHAR, $8::TIMESTAMP WITH TIME ZONE) RETURNING task_attachments.id
+2026-06-20 19:16:03,305 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - [cached since 1.277s ago] (6, 21, 'data.csv', 'd6ca1cdde9624fd1bac794f58492847b.csv', 29, 'text/csv', 'http://127.0.0.1:8000/static/uploads/d6ca1cdde9624fd1bac794f58492847b.csv', datetime.datetime(2026, 6, 20, 13, 46, 3, 305291, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:03,331 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - COMMIT
+2026-06-20 19:16:03,364 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - BEGIN (implicit)
+2026-06-20 19:16:03,364 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-20 19:16:03,365 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - [cached since 1.246s ago] (14,)
+2026-06-20 19:16:03,432 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-20 19:16:03,432 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - [cached since 1.216s ago] (21, 'TASK_ATTACHMENT_ADDED', 'task_attachment', 14, '{"task_id": 6, "project_id": 6, "attachment_id": 14, "file_name": "data.csv"}', datetime.datetime(2026, 6, 20, 13, 46, 3, 432497, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:03,468 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - COMMIT
+2026-06-20 19:16:03,504 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - BEGIN (implicit)
+2026-06-20 19:16:03,505 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-20 19:16:03,505 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - [cached since 1.203s ago] (22,)
+2026-06-20 19:16:03,569 - services.activity_service - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - Activity logged: action=TASK_ATTACHMENT_ADDED entity_type=task_attachment entity_id=14 user_id=21
+2026-06-20 19:16:03,601 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1c094f3e-e0f5-4d32-97a9-3e7425fc650b] - ROLLBACK
+2026-06-20 19:16:03,632 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/6/attachments "HTTP/1.1 201 Created"
+2026-06-20 19:16:03,935 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - BEGIN (implicit)
+2026-06-20 19:16:03,935 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:03,935 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - [cached since 2.158s ago] ('dev@test.com',)
+2026-06-20 19:16:03,991 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:03,992 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - [cached since 2.131s ago] (6,)
+2026-06-20 19:16:04,026 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:04,026 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - [cached since 2.113s ago] (6,)
+2026-06-20 19:16:04,061 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-20 19:16:04,061 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - [cached since 1.467s ago] (21, 22)
+2026-06-20 19:16:04,127 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:04,127 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - [cached since 2.158s ago] (6, 22)
+2026-06-20 19:16:04,165 - services.storage_service - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - [R2 SIMULATOR] Uploaded file to local storage: C:\NEXUS PM 1\local_storage_uploads\a7d96c86cea4443ab6d25ff3c7ab04de.xlsx
+2026-06-20 19:16:04,166 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - INSERT INTO task_attachments (task_id, user_id, file_name, file_key, file_size, mime_type, file_url, created_at) VALUES ($1::INTEGER, $2::INTEGER, $3::VARCHAR, $4::VARCHAR, $5::INTEGER, $6::VARCHAR, $7::VARCHAR, $8::TIMESTAMP WITH TIME ZONE) RETURNING task_attachments.id
+2026-06-20 19:16:04,167 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - [cached since 2.138s ago] (6, 22, 'sheet.xlsx', 'a7d96c86cea4443ab6d25ff3c7ab04de.xlsx', 24, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'http://127.0.0.1:8000/static/uploads/a7d96c86cea4443ab6d25ff3c7ab04de.xlsx', datetime.datetime(2026, 6, 20, 13, 46, 4, 166851, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:04,191 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - COMMIT
+2026-06-20 19:16:04,218 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - BEGIN (implicit)
+2026-06-20 19:16:04,219 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-20 19:16:04,219 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - [cached since 2.1s ago] (15,)
+2026-06-20 19:16:04,269 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-20 19:16:04,270 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - [cached since 2.053s ago] (22, 'TASK_ATTACHMENT_ADDED', 'task_attachment', 15, '{"task_id": 6, "project_id": 6, "attachment_id": 15, "file_name": "sheet.xlsx"}', datetime.datetime(2026, 6, 20, 13, 46, 4, 269848, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:04,298 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - COMMIT
+2026-06-20 19:16:04,334 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - BEGIN (implicit)
+2026-06-20 19:16:04,335 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-20 19:16:04,336 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - [cached since 2.033s ago] (23,)
+2026-06-20 19:16:04,390 - services.activity_service - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - Activity logged: action=TASK_ATTACHMENT_ADDED entity_type=task_attachment entity_id=15 user_id=22
+2026-06-20 19:16:04,432 - sqlalchemy.engine.Engine - INFO - [Request-ID: 155fce7e-ef81-4041-ba23-20316d38d930] - ROLLBACK
+2026-06-20 19:16:04,466 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/6/attachments "HTTP/1.1 201 Created"
+2026-06-20 19:16:04,790 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - BEGIN (implicit)
+2026-06-20 19:16:04,790 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:04,790 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - [cached since 3.013s ago] ('viewer@test.com',)
+2026-06-20 19:16:04,849 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:04,849 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - [cached since 2.988s ago] (6,)
+2026-06-20 19:16:04,885 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:04,886 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - [cached since 2.973s ago] (6,)
+2026-06-20 19:16:04,915 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-20 19:16:04,916 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - [cached since 2.321s ago] (21, 22)
+2026-06-20 19:16:04,945 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:04,946 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - [cached since 2.976s ago] (6, 23)
+2026-06-20 19:16:04,988 - sqlalchemy.engine.Engine - INFO - [Request-ID: b4c65764-2c4c-4de9-8e24-df396acd5e47] - ROLLBACK
+2026-06-20 19:16:05,032 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/6/attachments "HTTP/1.1 403 Forbidden"
+2026-06-20 19:16:05,344 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - BEGIN (implicit)
+2026-06-20 19:16:05,345 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:05,345 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - [cached since 3.568s ago] ('outsider@test.com',)
+2026-06-20 19:16:05,400 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:05,401 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - [cached since 3.54s ago] (6,)
+2026-06-20 19:16:05,429 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:05,429 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - [cached since 3.516s ago] (6,)
+2026-06-20 19:16:05,461 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-20 19:16:05,461 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - [cached since 2.867s ago] (21, 22)
+2026-06-20 19:16:05,484 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:05,485 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - [cached since 3.515s ago] (6, 24)
+2026-06-20 19:16:05,516 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - SELECT projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-06-20 19:16:05,516 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - [generated in 0.00046s] (6,)
+2026-06-20 19:16:05,601 - sqlalchemy.engine.Engine - INFO - [Request-ID: 68b8df29-4498-4517-8608-8aa19c86b32a] - ROLLBACK
+2026-06-20 19:16:05,659 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/6/attachments "HTTP/1.1 403 Forbidden"
+2026-06-20 19:16:06,066 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - BEGIN (implicit)
+2026-06-20 19:16:06,066 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:06,066 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - [cached since 4.289s ago] ('dev@test.com',)
+2026-06-20 19:16:06,117 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:06,117 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - [cached since 4.256s ago] (6,)
+2026-06-20 19:16:06,147 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:06,148 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - [cached since 4.235s ago] (6,)
+2026-06-20 19:16:06,180 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-20 19:16:06,180 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - [cached since 3.585s ago] (21, 22)
+2026-06-20 19:16:06,205 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:06,205 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - [cached since 4.236s ago] (6, 22)
+2026-06-20 19:16:06,269 - sqlalchemy.engine.Engine - INFO - [Request-ID: 88c9c9d6-2c69-48be-92f1-98e5a5b6da62] - ROLLBACK
+2026-06-20 19:16:06,328 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/6/attachments "HTTP/1.1 400 Bad Request"
+2026-06-20 19:16:06,666 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - BEGIN (implicit)
+2026-06-20 19:16:06,667 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:06,667 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - [cached since 4.89s ago] ('dev@test.com',)
+2026-06-20 19:16:06,740 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:06,740 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - [cached since 4.879s ago] (6,)
+2026-06-20 19:16:06,775 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:06,776 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - [cached since 4.863s ago] (6,)
+2026-06-20 19:16:06,806 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-20 19:16:06,806 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - [cached since 4.212s ago] (21, 22)
+2026-06-20 19:16:06,833 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:06,833 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - [cached since 4.864s ago] (6, 22)
+2026-06-20 19:16:06,874 - sqlalchemy.engine.Engine - INFO - [Request-ID: 21bc338a-8ab2-4171-b379-d04e48f13e66] - ROLLBACK
+2026-06-20 19:16:06,929 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/6/attachments "HTTP/1.1 400 Bad Request"
+2026-06-20 19:16:06,947 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - BEGIN (implicit)
+2026-06-20 19:16:06,947 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:06,948 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - [cached since 5.171s ago] ('outsider@test.com',)
+2026-06-20 19:16:07,020 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:07,020 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - [cached since 5.159s ago] (6,)
+2026-06-20 19:16:07,064 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:07,064 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - [cached since 5.152s ago] (6,)
+2026-06-20 19:16:07,101 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-20 19:16:07,102 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - [cached since 4.507s ago] (21, 22)
+2026-06-20 19:16:07,137 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:07,137 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - [cached since 5.168s ago] (6, 24)
+2026-06-20 19:16:07,169 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - SELECT projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-06-20 19:16:07,169 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - [cached since 1.654s ago] (6,)
+2026-06-20 19:16:07,213 - sqlalchemy.engine.Engine - INFO - [Request-ID: 0cda106e-d1e5-4e31-b502-cff6693dff88] - ROLLBACK
+2026-06-20 19:16:07,266 - httpx - INFO - [Request-ID: -] - HTTP Request: GET http://127.0.0.1/api/tasks/6/attachments "HTTP/1.1 403 Forbidden"
+2026-06-20 19:16:07,289 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - BEGIN (implicit)
+2026-06-20 19:16:07,290 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:07,290 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - [cached since 5.513s ago] ('outsider@test.com',)
+2026-06-20 19:16:07,355 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-20 19:16:07,356 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - [generated in 0.00039s] (13,)
+2026-06-20 19:16:07,382 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-20 19:16:07,383 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - [cached since 4.652s ago] (22,)
+2026-06-20 19:16:07,409 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:07,409 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - [cached since 5.548s ago] (6,)
+2026-06-20 19:16:07,433 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:07,434 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - [cached since 5.521s ago] (6,)
+2026-06-20 19:16:07,465 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-20 19:16:07,465 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - [cached since 4.87s ago] (21, 22)
+2026-06-20 19:16:07,497 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:07,497 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - [cached since 5.528s ago] (6, 24)
+2026-06-20 19:16:07,529 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - SELECT projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-06-20 19:16:07,529 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - [cached since 2.013s ago] (6,)
+2026-06-20 19:16:07,576 - sqlalchemy.engine.Engine - INFO - [Request-ID: 931aa004-da03-43fb-a0c3-d811b72a5c49] - ROLLBACK
+2026-06-20 19:16:07,629 - httpx - INFO - [Request-ID: -] - HTTP Request: DELETE http://127.0.0.1/api/tasks/attachments/13 "HTTP/1.1 403 Forbidden"
+2026-06-20 19:16:07,646 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - BEGIN (implicit)
+2026-06-20 19:16:07,646 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:07,646 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - [cached since 5.869s ago] ('viewer@test.com',)
+2026-06-20 19:16:07,716 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-20 19:16:07,717 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - [cached since 0.3611s ago] (13,)
+2026-06-20 19:16:07,752 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-20 19:16:07,752 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - [cached since 5.022s ago] (22,)
+2026-06-20 19:16:07,784 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:07,784 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - [cached since 5.923s ago] (6,)
+2026-06-20 19:16:07,813 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:07,813 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - [cached since 5.901s ago] (6,)
+2026-06-20 19:16:07,836 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-20 19:16:07,837 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - [cached since 5.242s ago] (21, 22)
+2026-06-20 19:16:07,874 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:07,874 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - [cached since 5.905s ago] (6, 23)
+2026-06-20 19:16:07,911 - sqlalchemy.engine.Engine - INFO - [Request-ID: c4cd3d92-6dbb-4807-a8be-6444f5ee8f0d] - ROLLBACK
+2026-06-20 19:16:07,959 - httpx - INFO - [Request-ID: -] - HTTP Request: DELETE http://127.0.0.1/api/tasks/attachments/13 "HTTP/1.1 403 Forbidden"
+2026-06-20 19:16:07,972 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - BEGIN (implicit)
+2026-06-20 19:16:07,972 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:07,973 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [cached since 6.195s ago] ('dev@test.com',)
+2026-06-20 19:16:08,025 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-20 19:16:08,026 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [cached since 0.6703s ago] (13,)
+2026-06-20 19:16:08,049 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-20 19:16:08,049 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [cached since 5.319s ago] (22,)
+2026-06-20 19:16:08,078 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:08,078 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [cached since 6.218s ago] (6,)
+2026-06-20 19:16:08,108 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:08,109 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [cached since 6.196s ago] (6,)
+2026-06-20 19:16:08,138 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-20 19:16:08,139 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [cached since 5.544s ago] (21, 22)
+2026-06-20 19:16:08,182 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:08,182 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [cached since 6.213s ago] (6, 22)
+2026-06-20 19:16:08,211 - services.storage_service - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [R2 SIMULATOR] Deleted file from local storage: C:\NEXUS PM 1\local_storage_uploads\2c199f616d8b497ba24054528d814f23.txt
+2026-06-20 19:16:08,214 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - DELETE FROM task_attachments WHERE task_attachments.id = $1::INTEGER
+2026-06-20 19:16:08,214 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [generated in 0.00044s] (13,)
+2026-06-20 19:16:08,268 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - COMMIT
+2026-06-20 19:16:08,293 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - BEGIN (implicit)
+2026-06-20 19:16:08,294 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-20 19:16:08,294 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [cached since 6.078s ago] (22, 'TASK_ATTACHMENT_DELETED', 'task_attachment', 13, '{"task_id": 6, "project_id": 6, "attachment_id": 13, "file_name": "document.txt"}', datetime.datetime(2026, 6, 20, 13, 46, 8, 294482, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:08,358 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - COMMIT
+2026-06-20 19:16:08,392 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - BEGIN (implicit)
+2026-06-20 19:16:08,393 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-20 19:16:08,393 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - [cached since 6.091s ago] (24,)
+2026-06-20 19:16:08,448 - services.activity_service - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - Activity logged: action=TASK_ATTACHMENT_DELETED entity_type=task_attachment entity_id=13 user_id=22
+2026-06-20 19:16:08,480 - sqlalchemy.engine.Engine - INFO - [Request-ID: f49e7af7-cc62-4cb0-9d0a-f9075bd7bb19] - ROLLBACK
+2026-06-20 19:16:08,513 - httpx - INFO - [Request-ID: -] - HTTP Request: DELETE http://127.0.0.1/api/tasks/attachments/13 "HTTP/1.1 200 OK"
+2026-06-20 19:16:08,529 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - BEGIN (implicit)
+2026-06-20 19:16:08,530 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:08,530 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [cached since 6.753s ago] ('owner@test.com',)
+2026-06-20 19:16:08,604 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-20 19:16:08,604 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [cached since 1.248s ago] (14,)
+2026-06-20 19:16:08,629 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-20 19:16:08,630 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [cached since 5.899s ago] (21,)
+2026-06-20 19:16:08,656 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-20 19:16:08,656 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [cached since 6.795s ago] (6,)
+2026-06-20 19:16:08,687 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-20 19:16:08,688 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [cached since 6.775s ago] (6,)
+2026-06-20 19:16:08,719 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-20 19:16:08,719 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [cached since 6.125s ago] (21, 22)
+2026-06-20 19:16:08,749 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-20 19:16:08,749 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [cached since 6.78s ago] (6, 21)
+2026-06-20 19:16:08,780 - services.storage_service - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [R2 SIMULATOR] Deleted file from local storage: C:\NEXUS PM 1\local_storage_uploads\d6ca1cdde9624fd1bac794f58492847b.csv
+2026-06-20 19:16:08,781 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - DELETE FROM task_attachments WHERE task_attachments.id = $1::INTEGER
+2026-06-20 19:16:08,781 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [cached since 0.5677s ago] (14,)
+2026-06-20 19:16:08,816 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - COMMIT
+2026-06-20 19:16:08,905 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - BEGIN (implicit)
+2026-06-20 19:16:08,906 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-20 19:16:08,907 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [cached since 6.69s ago] (21, 'TASK_ATTACHMENT_DELETED', 'task_attachment', 14, '{"task_id": 6, "project_id": 6, "attachment_id": 14, "file_name": "data.csv"}', datetime.datetime(2026, 6, 20, 13, 46, 8, 906624, tzinfo=datetime.timezone.utc))
+2026-06-20 19:16:08,960 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - COMMIT
+2026-06-20 19:16:08,987 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - BEGIN (implicit)
+2026-06-20 19:16:08,987 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-20 19:16:08,988 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - [cached since 6.685s ago] (25,)
+2026-06-20 19:16:09,045 - services.activity_service - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - Activity logged: action=TASK_ATTACHMENT_DELETED entity_type=task_attachment entity_id=14 user_id=21
+2026-06-20 19:16:09,091 - sqlalchemy.engine.Engine - INFO - [Request-ID: c1ef5b7b-53b4-44da-aaf1-2e1cd80da474] - ROLLBACK
+2026-06-20 19:16:09,131 - httpx - INFO - [Request-ID: -] - HTTP Request: DELETE http://127.0.0.1/api/tasks/attachments/14 "HTTP/1.1 200 OK"
+2026-06-20 19:16:09,146 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM task_attachments
+2026-06-20 19:16:09,146 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 10.99s ago] ()
+2026-06-20 19:16:09,175 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM project_members
+2026-06-20 19:16:09,176 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 10.93s ago] ()
+2026-06-20 19:16:09,198 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM tasks
+2026-06-20 19:16:09,199 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 10.9s ago] ()
+2026-06-20 19:16:09,287 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM projects
+2026-06-20 19:16:09,287 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 10.94s ago] ()
+2026-06-20 19:16:09,306 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:09,306 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 10.88s ago] ('owner@test.com',)
+2026-06-20 19:16:09,341 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:09,341 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 10.91s ago] ('dev@test.com',)
+2026-06-20 19:16:09,361 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:09,361 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 10.93s ago] ('viewer@test.com',)
+2026-06-20 19:16:09,382 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-20 19:16:09,382 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 10.95s ago] ('outsider@test.com',)
+2026-06-20 19:16:09,401 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-21 00:22:41,646 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - select pg_catalog.version()
+2026-06-21 00:22:41,646 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [raw sql] ()
+2026-06-21 00:22:41,684 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - select current_schema()
+2026-06-21 00:22:41,684 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [raw sql] ()
+2026-06-21 00:22:41,717 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - show standard_conforming_strings
+2026-06-21 00:22:41,717 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [raw sql] ()
+2026-06-21 00:22:41,741 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-21 00:22:41,745 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,745 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00056s] ('users', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,779 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,779 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.03476s ago] ('projects', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,787 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,787 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.04255s ago] ('tasks', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,795 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,795 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.05089s ago] ('comments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,803 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,803 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.05853s ago] ('activity_logs', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,811 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,811 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.06644s ago] ('notifications', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,819 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,819 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.07461s ago] ('project_members', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,827 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,827 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.08233s ago] ('refresh_tokens', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,834 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,835 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.0901s ago] ('password_reset_otps', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,843 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,843 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.09824s ago] ('forgot_password_rate_limits', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,850 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT pg_catalog.pg_class.relname 
+FROM pg_catalog.pg_class JOIN pg_catalog.pg_namespace ON pg_catalog.pg_namespace.oid = pg_catalog.pg_class.relnamespace 
+WHERE pg_catalog.pg_class.relname = $1::VARCHAR AND pg_catalog.pg_class.relkind = ANY (ARRAY[$2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR]) AND pg_catalog.pg_table_is_visible(pg_catalog.pg_class.oid) AND pg_catalog.pg_namespace.nspname != $7::VARCHAR
+2026-06-21 00:22:41,851 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.1062s ago] ('task_attachments', 'r', 'p', 'f', 'v', 'm', 'pg_catalog')
+2026-06-21 00:22:41,860 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-21 00:22:41,874 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-21 00:22:41,875 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM task_attachments
+2026-06-21 00:22:41,875 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00017s] ()
+2026-06-21 00:22:41,906 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM project_members
+2026-06-21 00:22:41,906 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00035s] ()
+2026-06-21 00:22:41,924 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM tasks
+2026-06-21 00:22:41,924 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00027s] ()
+2026-06-21 00:22:41,939 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM projects
+2026-06-21 00:22:41,939 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00030s] ()
+2026-06-21 00:22:41,968 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:41,969 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00025s] ('owner@test.com',)
+2026-06-21 00:22:41,985 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:41,985 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.0164s ago] ('dev@test.com',)
+2026-06-21 00:22:41,992 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:41,992 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.02409s ago] ('viewer@test.com',)
+2026-06-21 00:22:42,000 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:42,000 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.03169s ago] ('outsider@test.com',)
+2026-06-21 00:22:42,008 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-21 00:22:42,841 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-21 00:22:42,843 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - INSERT INTO users (full_name, email, password, role, avatar_url, google_id, auth_provider, created_at, updated_at) SELECT p0::VARCHAR, p1::VARCHAR, p2::VARCHAR, p3::VARCHAR, p4::VARCHAR, p5::VARCHAR, p6::VARCHAR, p7::TIMESTAMP WITH TIME ZONE, p8::TIM ... 704 characters truncated ...  p2, p3, p4, p5, p6, p7, p8, sen_counter) ORDER BY sen_counter RETURNING users.id, users.id AS id__1
+2026-06-21 00:22:42,843 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00014s (insertmanyvalues) 1/1 (ordered)] ('Owner User', 'owner@test.com', '$2b$12$0gZAk8jouD4ELKJOYyKxXuJVorHkJuYc2nJFSngkrlcaKoS9aTrKq', None, None, None, 'local', datetime.datetime(2026, 6, 20, 18, 52, 42, 843296, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 20, 18, 52, 42, 843300, tzinfo=datetime.timezone.utc), 'Developer User', 'dev@test.com', '$2b$12$efaBxI7fXriA2fZvFKWnq.pV6I2rWpATnK2Se8bJ7fO0bduDP9HaO', None, None, None, 'local', datetime.datetime(2026, 6, 20, 18, 52, 42, 843301, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 20, 18, 52, 42, 843302, tzinfo=datetime.timezone.utc), 'Viewer User', 'viewer@test.com', '$2b$12$TmGlT/.fkw4jwWxor8gEJeXonR2FgwVOWZAo3Z6o1YjWg2nmqswV6', None, None, None, 'local', datetime.datetime(2026, 6, 20, 18, 52, 42, 843303, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 20, 18, 52, 42, 843303, tzinfo=datetime.timezone.utc), 'Outsider User', 'outsider@test.com', '$2b$12$S0mJwUq6JB8unWQz5iSRjekZHzmDyV54cWlsZqTCNWlBQDScWVf0q', None, None, None, 'local', datetime.datetime(2026, 6, 20, 18, 52, 42, 843304, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 20, 18, 52, 42, 843304, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:42,849 - asyncio - WARNING - [Request-ID: -] - Executing <Task pending name='Task-1' coro=<TestTaskAttachments.asyncSetUp() running at C:\NEXUS PM 1\tests\test_task_attachments.py:61> wait_for=<Future pending cb=[BaseProtocol._on_waiter_completed(), Task.task_wakeup()] created at C:\Python313\Lib\asyncio\base_events.py:459> cb=[_run_until_complete_cb() at C:\Python313\Lib\asyncio\base_events.py:181] created at C:\Python313\Lib\asyncio\runners.py:100> took 0.834 seconds
+2026-06-21 00:22:42,871 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-21 00:22:42,881 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-21 00:22:42,883 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-06-21 00:22:42,883 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00022s] (25,)
+2026-06-21 00:22:42,909 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-06-21 00:22:42,909 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.02627s ago] (26,)
+2026-06-21 00:22:42,917 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-06-21 00:22:42,917 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.03428s ago] (27,)
+2026-06-21 00:22:42,925 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = $1::INTEGER
+2026-06-21 00:22:42,925 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 0.04222s ago] (28,)
+2026-06-21 00:22:42,933 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - INSERT INTO projects (title, description, owner_id) VALUES ($1::VARCHAR, $2::VARCHAR, $3::INTEGER) RETURNING projects.id
+2026-06-21 00:22:42,933 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00021s] ('Test Project', 'Test Description', 25)
+2026-06-21 00:22:42,950 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-21 00:22:42,962 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-21 00:22:42,963 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT projects.id, projects.title, projects.description, projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-06-21 00:22:42,963 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00020s] (7,)
+2026-06-21 00:22:42,988 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - INSERT INTO project_members (project_id, user_id, role, invited_by, joined_at) SELECT p0::INTEGER, p1::INTEGER, p2::VARCHAR, p3::INTEGER, p4::TIMESTAMP WITH TIME ZONE FROM (VALUES ($1::INTEGER, $2::INTEGER, $3::VARCHAR, $4::INTEGER, $5::TIMESTAMP WIT ... 219 characters truncated ...  p3, p4, sen_counter) ORDER BY sen_counter RETURNING project_members.id, project_members.id AS id__1
+2026-06-21 00:22:42,989 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00015s (insertmanyvalues) 1/1 (ordered)] (7, 25, 'owner', None, datetime.datetime(2026, 6, 20, 18, 52, 42, 988587, tzinfo=datetime.timezone.utc), 7, 26, 'developer', None, datetime.datetime(2026, 6, 20, 18, 52, 42, 988592, tzinfo=datetime.timezone.utc), 7, 27, 'viewer', None, datetime.datetime(2026, 6, 20, 18, 52, 42, 988592, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:43,005 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-21 00:22:43,014 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-21 00:22:43,015 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - INSERT INTO tasks (title, description, status, priority, due_date, project_id, assigned_to, created_at, updated_at) VALUES ($1::VARCHAR, $2::VARCHAR, $3::VARCHAR, $4::VARCHAR, $5::TIMESTAMP WITH TIME ZONE, $6::INTEGER, $7::INTEGER, $8::TIMESTAMP WITH TIME ZONE, $9::TIMESTAMP WITH TIME ZONE) RETURNING tasks.id
+2026-06-21 00:22:43,016 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00022s] ('Test Task', 'Test Task Description', 'TODO', 'MEDIUM', None, 7, None, datetime.datetime(2026, 6, 20, 18, 52, 43, 15894, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 6, 20, 18, 52, 43, 15897, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:43,040 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT
+2026-06-21 00:22:43,050 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - BEGIN (implicit)
+2026-06-21 00:22:43,051 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:43,052 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00025s] (7,)
+2026-06-21 00:22:43,081 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - SELECT task_attachments.id AS task_attachments_id, task_attachments.task_id AS task_attachments_task_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE $1::INTEGER = task_attachments.task_id
+2026-06-21 00:22:43,081 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [generated in 0.00025s] (7,)
+2026-06-21 00:22:43,450 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - BEGIN (implicit)
+2026-06-21 00:22:43,450 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:43,450 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - [generated in 0.00017s] ('dev@test.com',)
+2026-06-21 00:22:43,481 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:43,481 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - [generated in 0.00024s] (7,)
+2026-06-21 00:22:43,500 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:43,501 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - [generated in 0.00029s] (7,)
+2026-06-21 00:22:43,521 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:43,521 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - [generated in 0.00022s] (7, 26)
+2026-06-21 00:22:43,542 - services.storage_service - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - [R2 SIMULATOR] Uploaded file to local storage: C:\NEXUS PM 1\local_storage_uploads\c81bec71b853405fa5cc0a71241ba1ae.txt
+2026-06-21 00:22:43,543 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - INSERT INTO task_attachments (task_id, user_id, file_name, file_key, file_size, mime_type, file_url, created_at) VALUES ($1::INTEGER, $2::INTEGER, $3::VARCHAR, $4::VARCHAR, $5::INTEGER, $6::VARCHAR, $7::VARCHAR, $8::TIMESTAMP WITH TIME ZONE) RETURNING task_attachments.id
+2026-06-21 00:22:43,543 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - [generated in 0.00030s] (7, 26, 'document.txt', 'c81bec71b853405fa5cc0a71241ba1ae.txt', 71, 'text/plain', 'http://127.0.0.1:8000/static/uploads/c81bec71b853405fa5cc0a71241ba1ae.txt', datetime.datetime(2026, 6, 20, 18, 52, 43, 543563, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:43,563 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - COMMIT
+2026-06-21 00:22:43,574 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - BEGIN (implicit)
+2026-06-21 00:22:43,574 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-21 00:22:43,574 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - [generated in 0.00017s] (16,)
+2026-06-21 00:22:43,603 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-21 00:22:43,603 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - [generated in 0.00032s] (26, 'TASK_ATTACHMENT_ADDED', 'task_attachment', 16, '{"task_id": 7, "project_id": 7, "attachment_id": 16, "file_name": "document.txt"}', datetime.datetime(2026, 6, 20, 18, 52, 43, 603306, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:43,623 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - COMMIT
+2026-06-21 00:22:43,634 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - BEGIN (implicit)
+2026-06-21 00:22:43,635 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-21 00:22:43,635 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - [generated in 0.00023s] (26,)
+2026-06-21 00:22:43,664 - services.activity_service - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - Activity logged: action=TASK_ATTACHMENT_ADDED entity_type=task_attachment entity_id=16 user_id=26
+2026-06-21 00:22:43,689 - sqlalchemy.engine.Engine - INFO - [Request-ID: d705b24f-9711-474c-80cd-79a165727053] - ROLLBACK
+2026-06-21 00:22:43,699 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/7/attachments "HTTP/1.1 201 Created"
+2026-06-21 00:22:43,706 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - BEGIN (implicit)
+2026-06-21 00:22:43,706 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:43,706 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - [cached since 0.2561s ago] ('viewer@test.com',)
+2026-06-21 00:22:43,729 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:43,729 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - [cached since 0.2483s ago] (7,)
+2026-06-21 00:22:43,739 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:43,739 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - [cached since 0.2388s ago] (7,)
+2026-06-21 00:22:43,750 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-21 00:22:43,750 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - [generated in 0.00026s] (26,)
+2026-06-21 00:22:43,769 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:43,769 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - [cached since 0.2489s ago] (7, 27)
+2026-06-21 00:22:43,780 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id = $1::INTEGER ORDER BY task_attachments.created_at ASC
+2026-06-21 00:22:43,780 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - [generated in 0.00022s] (7,)
+2026-06-21 00:22:43,799 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-21 00:22:43,799 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - [generated in 0.00027s] (26,)
+2026-06-21 00:22:43,823 - sqlalchemy.engine.Engine - INFO - [Request-ID: 436a57b9-913a-4146-a56f-600dbea5a472] - ROLLBACK
+2026-06-21 00:22:43,833 - httpx - INFO - [Request-ID: -] - HTTP Request: GET http://127.0.0.1/api/tasks/7/attachments "HTTP/1.1 200 OK"
+2026-06-21 00:22:43,946 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - BEGIN (implicit)
+2026-06-21 00:22:43,946 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:43,946 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - [cached since 0.4956s ago] ('owner@test.com',)
+2026-06-21 00:22:43,965 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:43,966 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - [cached since 0.4852s ago] (7,)
+2026-06-21 00:22:43,976 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:43,976 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - [cached since 0.476s ago] (7,)
+2026-06-21 00:22:43,992 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-21 00:22:43,992 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - [cached since 0.2423s ago] (26,)
+2026-06-21 00:22:44,002 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:44,002 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - [cached since 0.4818s ago] (7, 25)
+2026-06-21 00:22:44,014 - services.storage_service - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - [R2 SIMULATOR] Uploaded file to local storage: C:\NEXUS PM 1\local_storage_uploads\94219e5f06694aaf907f32fe121c1de1.csv
+2026-06-21 00:22:44,014 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - INSERT INTO task_attachments (task_id, user_id, file_name, file_key, file_size, mime_type, file_url, created_at) VALUES ($1::INTEGER, $2::INTEGER, $3::VARCHAR, $4::VARCHAR, $5::INTEGER, $6::VARCHAR, $7::VARCHAR, $8::TIMESTAMP WITH TIME ZONE) RETURNING task_attachments.id
+2026-06-21 00:22:44,014 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - [cached since 0.4714s ago] (7, 25, 'data.csv', '94219e5f06694aaf907f32fe121c1de1.csv', 29, 'text/csv', 'http://127.0.0.1:8000/static/uploads/94219e5f06694aaf907f32fe121c1de1.csv', datetime.datetime(2026, 6, 20, 18, 52, 44, 14781, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:44,025 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - COMMIT
+2026-06-21 00:22:44,036 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - BEGIN (implicit)
+2026-06-21 00:22:44,036 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-21 00:22:44,036 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - [cached since 0.4621s ago] (17,)
+2026-06-21 00:22:44,058 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-21 00:22:44,058 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - [cached since 0.455s ago] (25, 'TASK_ATTACHMENT_ADDED', 'task_attachment', 17, '{"task_id": 7, "project_id": 7, "attachment_id": 17, "file_name": "data.csv"}', datetime.datetime(2026, 6, 20, 18, 52, 44, 58040, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:44,068 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - COMMIT
+2026-06-21 00:22:44,077 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - BEGIN (implicit)
+2026-06-21 00:22:44,078 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-21 00:22:44,078 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - [cached since 0.4428s ago] (27,)
+2026-06-21 00:22:44,099 - services.activity_service - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - Activity logged: action=TASK_ATTACHMENT_ADDED entity_type=task_attachment entity_id=17 user_id=25
+2026-06-21 00:22:44,118 - sqlalchemy.engine.Engine - INFO - [Request-ID: 1475170a-cb39-4bb3-bb9e-0b6ae04d4eb3] - ROLLBACK
+2026-06-21 00:22:44,129 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/7/attachments "HTTP/1.1 201 Created"
+2026-06-21 00:22:44,245 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - BEGIN (implicit)
+2026-06-21 00:22:44,245 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:44,245 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - [cached since 0.7951s ago] ('dev@test.com',)
+2026-06-21 00:22:44,265 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:44,265 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - [cached since 0.7843s ago] (7,)
+2026-06-21 00:22:44,274 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:44,275 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - [cached since 0.7742s ago] (7,)
+2026-06-21 00:22:44,284 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-21 00:22:44,284 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - [cached since 0.5345s ago] (25, 26)
+2026-06-21 00:22:44,304 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:44,304 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - [cached since 0.7831s ago] (7, 26)
+2026-06-21 00:22:44,315 - services.storage_service - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - [R2 SIMULATOR] Uploaded file to local storage: C:\NEXUS PM 1\local_storage_uploads\83b99abfbf3b4f038b34c7fef3f9e665.xlsx
+2026-06-21 00:22:44,315 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - INSERT INTO task_attachments (task_id, user_id, file_name, file_key, file_size, mime_type, file_url, created_at) VALUES ($1::INTEGER, $2::INTEGER, $3::VARCHAR, $4::VARCHAR, $5::INTEGER, $6::VARCHAR, $7::VARCHAR, $8::TIMESTAMP WITH TIME ZONE) RETURNING task_attachments.id
+2026-06-21 00:22:44,315 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - [cached since 0.7724s ago] (7, 26, 'sheet.xlsx', '83b99abfbf3b4f038b34c7fef3f9e665.xlsx', 24, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'http://127.0.0.1:8000/static/uploads/83b99abfbf3b4f038b34c7fef3f9e665.xlsx', datetime.datetime(2026, 6, 20, 18, 52, 44, 315753, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:44,325 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - COMMIT
+2026-06-21 00:22:44,335 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - BEGIN (implicit)
+2026-06-21 00:22:44,336 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-21 00:22:44,336 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - [cached since 0.7615s ago] (18,)
+2026-06-21 00:22:44,355 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-21 00:22:44,355 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - [cached since 0.7526s ago] (26, 'TASK_ATTACHMENT_ADDED', 'task_attachment', 18, '{"task_id": 7, "project_id": 7, "attachment_id": 18, "file_name": "sheet.xlsx"}', datetime.datetime(2026, 6, 20, 18, 52, 44, 355550, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:44,365 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - COMMIT
+2026-06-21 00:22:44,376 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - BEGIN (implicit)
+2026-06-21 00:22:44,376 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-21 00:22:44,376 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - [cached since 0.741s ago] (28,)
+2026-06-21 00:22:44,396 - services.activity_service - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - Activity logged: action=TASK_ATTACHMENT_ADDED entity_type=task_attachment entity_id=18 user_id=26
+2026-06-21 00:22:44,410 - sqlalchemy.engine.Engine - INFO - [Request-ID: d7968869-f488-48e6-b64e-bdc704eb45df] - ROLLBACK
+2026-06-21 00:22:44,420 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/7/attachments "HTTP/1.1 201 Created"
+2026-06-21 00:22:44,562 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - BEGIN (implicit)
+2026-06-21 00:22:44,562 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:44,562 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - [cached since 1.112s ago] ('viewer@test.com',)
+2026-06-21 00:22:44,584 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:44,585 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - [cached since 1.104s ago] (7,)
+2026-06-21 00:22:44,600 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:44,600 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - [cached since 1.1s ago] (7,)
+2026-06-21 00:22:44,614 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-21 00:22:44,614 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - [cached since 0.8643s ago] (25, 26)
+2026-06-21 00:22:44,627 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:44,628 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - [cached since 1.107s ago] (7, 27)
+2026-06-21 00:22:44,649 - sqlalchemy.engine.Engine - INFO - [Request-ID: f56bba50-344a-4d72-b9b3-bdcbf772e40f] - ROLLBACK
+2026-06-21 00:22:44,675 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/7/attachments "HTTP/1.1 403 Forbidden"
+2026-06-21 00:22:44,834 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - BEGIN (implicit)
+2026-06-21 00:22:44,834 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:44,834 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - [cached since 1.384s ago] ('outsider@test.com',)
+2026-06-21 00:22:44,860 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:44,860 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - [cached since 1.38s ago] (7,)
+2026-06-21 00:22:44,871 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:44,871 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - [cached since 1.371s ago] (7,)
+2026-06-21 00:22:44,882 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-21 00:22:44,883 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - [cached since 1.133s ago] (25, 26)
+2026-06-21 00:22:44,897 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:44,897 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - [cached since 1.376s ago] (7, 28)
+2026-06-21 00:22:44,910 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - SELECT projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-06-21 00:22:44,910 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - [generated in 0.00022s] (7,)
+2026-06-21 00:22:44,936 - sqlalchemy.engine.Engine - INFO - [Request-ID: 42797d90-8a6e-44d2-af88-b04cad27f7f1] - ROLLBACK
+2026-06-21 00:22:44,956 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/7/attachments "HTTP/1.1 403 Forbidden"
+2026-06-21 00:22:45,098 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - BEGIN (implicit)
+2026-06-21 00:22:45,098 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:45,099 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - [cached since 1.648s ago] ('dev@test.com',)
+2026-06-21 00:22:45,119 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:45,119 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - [cached since 1.638s ago] (7,)
+2026-06-21 00:22:45,130 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:45,130 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - [cached since 1.63s ago] (7,)
+2026-06-21 00:22:45,141 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-21 00:22:45,141 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - [cached since 1.391s ago] (25, 26)
+2026-06-21 00:22:45,152 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:45,152 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - [cached since 1.632s ago] (7, 26)
+2026-06-21 00:22:45,179 - sqlalchemy.engine.Engine - INFO - [Request-ID: ba679e85-67e4-4cc6-b10c-d71d18148e46] - ROLLBACK
+2026-06-21 00:22:45,206 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/7/attachments "HTTP/1.1 400 Bad Request"
+2026-06-21 00:22:45,321 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - BEGIN (implicit)
+2026-06-21 00:22:45,321 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:45,321 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - [cached since 1.871s ago] ('dev@test.com',)
+2026-06-21 00:22:45,342 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:45,342 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - [cached since 1.862s ago] (7,)
+2026-06-21 00:22:45,352 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:45,352 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - [cached since 1.852s ago] (7,)
+2026-06-21 00:22:45,363 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-21 00:22:45,363 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - [cached since 1.613s ago] (25, 26)
+2026-06-21 00:22:45,374 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:45,375 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - [cached since 1.854s ago] (7, 26)
+2026-06-21 00:22:45,391 - sqlalchemy.engine.Engine - INFO - [Request-ID: 851f407b-e32e-472c-b20f-29c7156b39d4] - ROLLBACK
+2026-06-21 00:22:45,411 - httpx - INFO - [Request-ID: -] - HTTP Request: POST http://127.0.0.1/api/tasks/7/attachments "HTTP/1.1 400 Bad Request"
+2026-06-21 00:22:45,416 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - BEGIN (implicit)
+2026-06-21 00:22:45,417 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:45,417 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - [cached since 1.966s ago] ('outsider@test.com',)
+2026-06-21 00:22:45,440 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:45,440 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - [cached since 1.96s ago] (7,)
+2026-06-21 00:22:45,450 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:45,451 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - [cached since 1.95s ago] (7,)
+2026-06-21 00:22:45,462 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-21 00:22:45,462 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - [cached since 1.712s ago] (25, 26)
+2026-06-21 00:22:45,473 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:45,473 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - [cached since 1.953s ago] (7, 28)
+2026-06-21 00:22:45,484 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - SELECT projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-06-21 00:22:45,484 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - [cached since 0.5742s ago] (7,)
+2026-06-21 00:22:45,500 - sqlalchemy.engine.Engine - INFO - [Request-ID: e26568ee-43bc-42a3-a4e9-d1ca623eab1d] - ROLLBACK
+2026-06-21 00:22:45,519 - httpx - INFO - [Request-ID: -] - HTTP Request: GET http://127.0.0.1/api/tasks/7/attachments "HTTP/1.1 403 Forbidden"
+2026-06-21 00:22:45,526 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - BEGIN (implicit)
+2026-06-21 00:22:45,527 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:45,527 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - [cached since 2.077s ago] ('outsider@test.com',)
+2026-06-21 00:22:45,551 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-21 00:22:45,551 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - [generated in 0.00024s] (16,)
+2026-06-21 00:22:45,562 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-21 00:22:45,562 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - [cached since 1.763s ago] (26,)
+2026-06-21 00:22:45,573 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:45,573 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - [cached since 2.092s ago] (7,)
+2026-06-21 00:22:45,583 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:45,583 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - [cached since 2.083s ago] (7,)
+2026-06-21 00:22:45,594 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-21 00:22:45,594 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - [cached since 1.844s ago] (25, 26)
+2026-06-21 00:22:45,605 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:45,605 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - [cached since 2.084s ago] (7, 28)
+2026-06-21 00:22:45,616 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - SELECT projects.owner_id 
+FROM projects 
+WHERE projects.id = $1::INTEGER
+2026-06-21 00:22:45,616 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - [cached since 0.7061s ago] (7,)
+2026-06-21 00:22:45,637 - sqlalchemy.engine.Engine - INFO - [Request-ID: df3e3a7e-5136-4823-bbaf-78aee6a3812f] - ROLLBACK
+2026-06-21 00:22:45,661 - httpx - INFO - [Request-ID: -] - HTTP Request: DELETE http://127.0.0.1/api/tasks/attachments/16 "HTTP/1.1 403 Forbidden"
+2026-06-21 00:22:45,668 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - BEGIN (implicit)
+2026-06-21 00:22:45,668 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:45,668 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - [cached since 2.218s ago] ('viewer@test.com',)
+2026-06-21 00:22:45,691 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-21 00:22:45,692 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - [cached since 0.141s ago] (16,)
+2026-06-21 00:22:45,702 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-21 00:22:45,702 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - [cached since 1.903s ago] (26,)
+2026-06-21 00:22:45,713 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:45,713 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - [cached since 2.232s ago] (7,)
+2026-06-21 00:22:45,723 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:45,723 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - [cached since 2.223s ago] (7,)
+2026-06-21 00:22:45,735 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-21 00:22:45,736 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - [cached since 1.986s ago] (25, 26)
+2026-06-21 00:22:45,750 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:45,751 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - [cached since 2.23s ago] (7, 27)
+2026-06-21 00:22:45,775 - sqlalchemy.engine.Engine - INFO - [Request-ID: 14fb9ad9-b46f-4004-a5dd-82c96321014b] - ROLLBACK
+2026-06-21 00:22:45,800 - httpx - INFO - [Request-ID: -] - HTTP Request: DELETE http://127.0.0.1/api/tasks/attachments/16 "HTTP/1.1 403 Forbidden"
+2026-06-21 00:22:45,813 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - BEGIN (implicit)
+2026-06-21 00:22:45,813 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:45,814 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [cached since 2.363s ago] ('dev@test.com',)
+2026-06-21 00:22:45,860 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-21 00:22:45,861 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [cached since 0.3101s ago] (16,)
+2026-06-21 00:22:45,893 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-21 00:22:45,894 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [cached since 2.095s ago] (26,)
+2026-06-21 00:22:45,913 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:45,914 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [cached since 2.433s ago] (7,)
+2026-06-21 00:22:45,931 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:45,932 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [cached since 2.431s ago] (7,)
+2026-06-21 00:22:45,947 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-21 00:22:45,947 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [cached since 2.197s ago] (25, 26)
+2026-06-21 00:22:45,960 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:45,960 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [cached since 2.44s ago] (7, 26)
+2026-06-21 00:22:45,974 - services.storage_service - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [R2 SIMULATOR] Deleted file from local storage: C:\NEXUS PM 1\local_storage_uploads\c81bec71b853405fa5cc0a71241ba1ae.txt
+2026-06-21 00:22:45,976 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - DELETE FROM task_attachments WHERE task_attachments.id = $1::INTEGER
+2026-06-21 00:22:45,976 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [generated in 0.00025s] (16,)
+2026-06-21 00:22:46,007 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - COMMIT
+2026-06-21 00:22:46,028 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - BEGIN (implicit)
+2026-06-21 00:22:46,029 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-21 00:22:46,029 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [cached since 2.426s ago] (26, 'TASK_ATTACHMENT_DELETED', 'task_attachment', 16, '{"task_id": 7, "project_id": 7, "attachment_id": 16, "file_name": "document.txt"}', datetime.datetime(2026, 6, 20, 18, 52, 46, 28932, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:46,059 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - COMMIT
+2026-06-21 00:22:46,071 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - BEGIN (implicit)
+2026-06-21 00:22:46,071 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-21 00:22:46,071 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - [cached since 2.436s ago] (29,)
+2026-06-21 00:22:46,097 - services.activity_service - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - Activity logged: action=TASK_ATTACHMENT_DELETED entity_type=task_attachment entity_id=16 user_id=26
+2026-06-21 00:22:46,117 - sqlalchemy.engine.Engine - INFO - [Request-ID: 78c2b7b0-22bc-4286-aec0-553ca51052ac] - ROLLBACK
+2026-06-21 00:22:46,134 - httpx - INFO - [Request-ID: -] - HTTP Request: DELETE http://127.0.0.1/api/tasks/attachments/16 "HTTP/1.1 200 OK"
+2026-06-21 00:22:46,144 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - BEGIN (implicit)
+2026-06-21 00:22:46,144 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - SELECT users.id, users.full_name, users.email, users.password, users.role, users.avatar_url, users.google_id, users.auth_provider, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:46,144 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [cached since 2.694s ago] ('owner@test.com',)
+2026-06-21 00:22:46,178 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - SELECT task_attachments.id, task_attachments.task_id, task_attachments.user_id, task_attachments.file_name, task_attachments.file_key, task_attachments.file_size, task_attachments.mime_type, task_attachments.file_url, task_attachments.created_at 
+FROM task_attachments 
+WHERE task_attachments.id = $1::INTEGER
+2026-06-21 00:22:46,178 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [cached since 0.6279s ago] (17,)
+2026-06-21 00:22:46,192 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER)
+2026-06-21 00:22:46,192 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [cached since 2.393s ago] (25,)
+2026-06-21 00:22:46,203 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - SELECT tasks.id, tasks.title, tasks.description, tasks.status, tasks.priority, tasks.due_date, tasks.project_id, tasks.assigned_to, tasks.created_at, tasks.updated_at 
+FROM tasks 
+WHERE tasks.id = $1::INTEGER
+2026-06-21 00:22:46,203 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [cached since 2.723s ago] (7,)
+2026-06-21 00:22:46,214 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - SELECT task_attachments.task_id AS task_attachments_task_id, task_attachments.id AS task_attachments_id, task_attachments.user_id AS task_attachments_user_id, task_attachments.file_name AS task_attachments_file_name, task_attachments.file_key AS task_attachments_file_key, task_attachments.file_size AS task_attachments_file_size, task_attachments.mime_type AS task_attachments_mime_type, task_attachments.file_url AS task_attachments_file_url, task_attachments.created_at AS task_attachments_created_at 
+FROM task_attachments 
+WHERE task_attachments.task_id IN ($1::INTEGER)
+2026-06-21 00:22:46,214 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [cached since 2.714s ago] (7,)
+2026-06-21 00:22:46,227 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - SELECT users.id AS users_id, users.full_name AS users_full_name, users.email AS users_email, users.password AS users_password, users.role AS users_role, users.avatar_url AS users_avatar_url, users.google_id AS users_google_id, users.auth_provider AS users_auth_provider, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN ($1::INTEGER, $2::INTEGER)
+2026-06-21 00:22:46,227 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [cached since 2.477s ago] (25, 26)
+2026-06-21 00:22:46,237 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - SELECT project_members.role 
+FROM project_members 
+WHERE project_members.project_id = $1::INTEGER AND project_members.user_id = $2::INTEGER
+2026-06-21 00:22:46,237 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [cached since 2.717s ago] (7, 25)
+2026-06-21 00:22:46,249 - services.storage_service - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [R2 SIMULATOR] Deleted file from local storage: C:\NEXUS PM 1\local_storage_uploads\94219e5f06694aaf907f32fe121c1de1.csv
+2026-06-21 00:22:46,250 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - DELETE FROM task_attachments WHERE task_attachments.id = $1::INTEGER
+2026-06-21 00:22:46,250 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [cached since 0.274s ago] (17,)
+2026-06-21 00:22:46,260 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - COMMIT
+2026-06-21 00:22:46,271 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - BEGIN (implicit)
+2026-06-21 00:22:46,272 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - INSERT INTO activity_logs (user_id, action, entity_type, entity_id, metadata, created_at) VALUES ($1::INTEGER, $2::VARCHAR, $3::VARCHAR, $4::INTEGER, $5::JSON, $6::TIMESTAMP WITH TIME ZONE) RETURNING activity_logs.id
+2026-06-21 00:22:46,272 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [cached since 2.669s ago] (25, 'TASK_ATTACHMENT_DELETED', 'task_attachment', 17, '{"task_id": 7, "project_id": 7, "attachment_id": 17, "file_name": "data.csv"}', datetime.datetime(2026, 6, 20, 18, 52, 46, 272089, tzinfo=datetime.timezone.utc))
+2026-06-21 00:22:46,296 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - COMMIT
+2026-06-21 00:22:46,308 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - BEGIN (implicit)
+2026-06-21 00:22:46,308 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - SELECT activity_logs.id, activity_logs.user_id, activity_logs.action, activity_logs.entity_type, activity_logs.entity_id, activity_logs.metadata, activity_logs.created_at 
+FROM activity_logs 
+WHERE activity_logs.id = $1::INTEGER
+2026-06-21 00:22:46,308 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - [cached since 2.673s ago] (30,)
+2026-06-21 00:22:46,330 - services.activity_service - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - Activity logged: action=TASK_ATTACHMENT_DELETED entity_type=task_attachment entity_id=17 user_id=25
+2026-06-21 00:22:46,344 - sqlalchemy.engine.Engine - INFO - [Request-ID: c35db459-2b62-495e-bbf5-db785454fa5d] - ROLLBACK
+2026-06-21 00:22:46,354 - httpx - INFO - [Request-ID: -] - HTTP Request: DELETE http://127.0.0.1/api/tasks/attachments/17 "HTTP/1.1 200 OK"
+2026-06-21 00:22:46,361 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM task_attachments
+2026-06-21 00:22:46,362 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 4.487s ago] ()
+2026-06-21 00:22:46,375 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM project_members
+2026-06-21 00:22:46,375 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 4.469s ago] ()
+2026-06-21 00:22:46,385 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM tasks
+2026-06-21 00:22:46,385 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 4.462s ago] ()
+2026-06-21 00:22:46,398 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM projects
+2026-06-21 00:22:46,398 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 4.459s ago] ()
+2026-06-21 00:22:46,408 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:46,409 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 4.44s ago] ('owner@test.com',)
+2026-06-21 00:22:46,423 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:46,423 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 4.455s ago] ('dev@test.com',)
+2026-06-21 00:22:46,432 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:46,433 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 4.464s ago] ('viewer@test.com',)
+2026-06-21 00:22:46,443 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - DELETE FROM users WHERE users.email = $1::VARCHAR
+2026-06-21 00:22:46,443 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - [cached since 4.474s ago] ('outsider@test.com',)
+2026-06-21 00:22:46,452 - sqlalchemy.engine.Engine - INFO - [Request-ID: -] - COMMIT

@@ -12,13 +12,11 @@ from api.routes.auth import router as auth_router
 from db.database import Base, engine, get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from services.storage_service import storage_service
-from dependencies.auth import get_current_user
 from core.config import settings
 from api.routes import tasks
 from api.routes import comments
 from api.routes import activity_logs
 from api.routes import notifications
-import models
 
 
 from core.request_id_middleware import RequestIDFilter, RequestIDMiddleware
@@ -129,7 +127,7 @@ app.add_middleware(
 
 app.add_middleware(RequestIDMiddleware)
 
-from fastapi.staticfiles import StaticFiles
+from fastapi.staticfiles import StaticFiles  # noqa: E402
 
 # Create local storage upload dir if not exists (for simulation mode fallback)
 os.makedirs("local_storage_uploads", exist_ok=True)
@@ -241,7 +239,7 @@ async def root() -> Dict[str, Any]:
     }
 
 
-from api.routes import project_members
+from api.routes import project_members  # noqa: E402
 
 app.include_router(
     auth_router,
@@ -276,7 +274,7 @@ app.include_router(comments.router)
 app.include_router(activity_logs.router)
 app.include_router(notifications.router)
 
-from api.routes import analytics
+from api.routes import analytics  # noqa: E402
 
 app.include_router(
     analytics.router,
@@ -284,7 +282,7 @@ app.include_router(
     tags=["Analytics"],
 )
 
-from api.routes import storage
+from api.routes import storage  # noqa: E402
 
 app.include_router(
     storage.router,

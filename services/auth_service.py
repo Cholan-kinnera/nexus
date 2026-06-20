@@ -231,7 +231,7 @@ async def login_service(email: str, password: str, db: AsyncSession):
     except HTTPException:
         # Re-raise HTTP exceptions
         raise
-    except Exception as e:
+    except Exception:
         # Handle any unexpected errors
         raise HTTPException(
             status_code=500, detail="Internal server error during login"
@@ -429,7 +429,7 @@ async def forgot_password_service(email: str, ip_address: str, db: AsyncSession)
         # 4. Ensure only one active OTP exists per email (invalidate all previous active OTPs)
         await db.execute(
             update(PasswordResetOTP)
-            .where(PasswordResetOTP.email == email, PasswordResetOTP.used == False)
+            .where(PasswordResetOTP.email == email, PasswordResetOTP.used.is_(False))
             .values(used=True)
         )
 
@@ -476,7 +476,7 @@ async def verify_reset_otp_service(email: str, otp: str, db: AsyncSession):
         # Find active OTP record for the email
         stmt = select(PasswordResetOTP).where(
             PasswordResetOTP.email == email,
-            PasswordResetOTP.used == False,
+            PasswordResetOTP.used.is_(False),
             PasswordResetOTP.expires_at > datetime.now(UTC),
         )
         result = await db.execute(stmt)
@@ -532,7 +532,7 @@ async def reset_password_service(
         # Find active OTP record
         stmt = select(PasswordResetOTP).where(
             PasswordResetOTP.email == email,
-            PasswordResetOTP.used == False,
+            PasswordResetOTP.used.is_(False),
             PasswordResetOTP.expires_at > datetime.now(UTC),
         )
         otp_result = await db.execute(stmt)

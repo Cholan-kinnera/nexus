@@ -64,7 +64,7 @@ def create_access_token(
     return encoded_jwt
 
 
-import hashlib
+import hashlib  # noqa: E402
 
 REFRESH_SECRET_KEY = settings.REFRESH_SECRET_KEY
 

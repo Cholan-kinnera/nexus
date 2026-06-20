@@ -1,6 +1,5 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import create_async_engine
 
@@ -19,18 +18,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from db.database import Base
-from models.user import User
-from models.project import Project
-from models.task import Task
-from models.comment import Comment
-from models.activity_log import ActivityLog
-from models.notification import Notification
-from models.project_member import ProjectMember
-from models.refresh_token import RefreshToken
-from models.password_reset_otp import PasswordResetOTP
-from models.forgot_password_rate_limit import ForgotPasswordRateLimit
-from models.task_attachment import TaskAttachment
+from db.database import Base  # noqa: E402
 
 target_metadata = Base.metadata
 
@@ -40,8 +28,8 @@ target_metadata = Base.metadata
 # ... etc.
 
 
-import asyncio
-import os
+import asyncio  # noqa: E402
+import os  # noqa: E402
 
 
 def get_url() -> str:

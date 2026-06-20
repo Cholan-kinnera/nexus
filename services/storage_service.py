@@ -127,7 +127,7 @@ class StorageService:
                 "Storage service will run in local simulation mode."
             )
             logger.info(f"  LOCAL PATH       : {self.local_storage_path}")
-            logger.info(f"  CONNECTION TEST  : SKIPPED (simulator mode)")
+            logger.info("  CONNECTION TEST  : SKIPPED (simulator mode)")
         else:
             # Initialize S3 client for Cloudflare R2
             endpoint_url = f"https://{self.account_id}.r2.cloudflarestorage.com"

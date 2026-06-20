@@ -181,8 +181,6 @@ async def update_task_service(task_id: int, task_data, current_user, db: AsyncSe
     # Capture state before update
     old_status = task.status
     old_assigned_to = task.assigned_to
-    old_title = task.title
-    old_project_id = task.project_id
 
     update_data = task_data.dict(exclude_unset=True)
 

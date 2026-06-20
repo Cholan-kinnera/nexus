@@ -1,8 +1,14 @@
+from __future__ import annotations
 from datetime import datetime, UTC
+from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, Integer, Text, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db.database import Base
+
+if TYPE_CHECKING:
+    from models.task import Task
+    from models.user import User
 
 
 class Comment(Base):

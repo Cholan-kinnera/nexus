@@ -30,7 +30,7 @@ class TaskUpdate(BaseModel):
     assigned_to: Optional[int] = Field(default=None)
 
 
-from schemas.user import UserResponse
+from schemas.user import UserResponse  # noqa: E402
 
 
 class TaskAttachmentResponse(BaseModel):

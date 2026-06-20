@@ -14,7 +14,7 @@ Supported actions:
 import logging
 from typing import Any, Optional
 
-from sqlalchemy import select, desc
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 

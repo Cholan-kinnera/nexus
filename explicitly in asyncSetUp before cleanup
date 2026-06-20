@@ -1,0 +1,8 @@
+[33mcommit cdd8d9acee5413750706db556da944bd73880ebe[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/devops[m[33m, [m[1;31morigin/develop[m[33m, [m[1;32mdevops[m[33m)[m
+Author: Cholan-kinnera <imcholan.kinnera@gmail.com>
+Date:   Sat Jun 20 01:28:45 2026 +0530
+
+    fix: provide env vars for backend import validation
+
+ .github/workflows/ci.yml | 3 [32m+++[m
+ 1 file changed, 3 insertions(+)

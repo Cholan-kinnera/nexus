@@ -10,7 +10,7 @@ Supported notification triggers:
 import logging
 from typing import Any, Optional
 
-from sqlalchemy import select, update, desc, func
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 
@@ -85,7 +85,7 @@ async def get_user_notifications(
         query = select(Notification).where(Notification.user_id == user_id)
 
         if unread_only:
-            query = query.where(Notification.is_read == False)
+            query = query.where(Notification.is_read.is_(False))
 
         return await paginate(
             db=db, query=query, model=Notification, params=params, search_fields=None
@@ -169,7 +169,7 @@ async def mark_all_notifications_read(
     try:
         stmt = (
             update(Notification)
-            .where((Notification.user_id == user_id) & (Notification.is_read == False))
+            .where((Notification.user_id == user_id) & (Notification.is_read.is_(False)))
             .values(is_read=True)
         )
 

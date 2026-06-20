@@ -1,6 +1,6 @@
 import logging
 import asyncio
-from typing import Optional, Any
+from typing import Optional
 import redis.asyncio as aioredis
 from core.config import settings
 
