@@ -3,7 +3,8 @@ import unittest
 import httpx
 from fastapi import status
 from main import app
-from db.database import AsyncSessionLocal
+from db.database import AsyncSessionLocal, Base, engine
+import models
 from models.user import User
 from models.project import Project
 from models.project_member import ProjectMember
@@ -19,6 +20,10 @@ class TestTaskAttachments(unittest.IsolatedAsyncioTestCase):
         # Configure storage service to use simulator for safe local file testing
         self.original_use_simulator = storage_service.use_simulator
         storage_service.use_simulator = True
+
+        # Ensure all tables are created before running setup or tests
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
 
         self.db = AsyncSessionLocal()
 
