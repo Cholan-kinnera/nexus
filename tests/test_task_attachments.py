@@ -4,6 +4,7 @@ import httpx
 from fastapi import status
 from main import app
 from db.database import AsyncSessionLocal, Base, engine
+import models  # noqa: F401
 from models.user import User
 from models.project import Project
 from models.project_member import ProjectMember
