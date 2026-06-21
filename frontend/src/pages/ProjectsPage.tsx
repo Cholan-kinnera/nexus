@@ -59,11 +59,18 @@ export default function ProjectsPage() {
   const [category, setCategory] = useState("");
   const [priority, setPriority] = useState("MEDIUM");
   const [deadline, setDeadline] = useState("");
+  const todayStr = new Date().toISOString().split("T")[0];
 
   const [isPriorityOpen, setIsPriorityOpen] = useState(false);
   const priorityRef = useRef<HTMLDivElement>(null);
 
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const selectedProjectRef = useRef<ProjectItem | null>(null);
+
+  useEffect(() => {
+    selectedProjectRef.current = selectedProject;
+  }, [selectedProject]);
+
   const [activeTab, setActiveTab] = useState<string>("overview");
 
   const formRef = useRef<HTMLDivElement>(null);
@@ -93,8 +100,9 @@ export default function ProjectsPage() {
       const projectsList = (data?.items ?? []) as ProjectItem[];
       setProjects(projectsList);
       // Sync selected project details if currently open
-      if (selectedProject) {
-        const updated = projectsList.find((p) => p.id === selectedProject.id);
+      const currentSelected = selectedProjectRef.current;
+      if (currentSelected) {
+        const updated = projectsList.find((p) => p.id === currentSelected.id);
         if (updated) {
           setSelectedProject(updated);
         }
@@ -106,7 +114,7 @@ export default function ProjectsPage() {
         setIsLoading(false);
       }, 1000);
     }
-  }, [selectedProject]);
+  }, []);
 
   useEffect(() => {
     // Fetch projects synchronously on component mount
@@ -375,7 +383,7 @@ export default function ProjectsPage() {
                 <button
                   type="button"
                   onClick={() => setIsPriorityOpen(!isPriorityOpen)}
-                  className="w-full bg-zinc-950/60 border border-zinc-800 rounded-lg p-3 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs flex justify-between items-center text-left h-[42px]"
+                  className="w-full bg-zinc-950/60 border border-zinc-800 rounded-lg p-3 focus:border-zinc-700 text-zinc-100 font-mono outline-none transition duration-200 cursor-pointer text-sm flex justify-between items-center text-left h-[42px]"
                 >
                   <span>
                     {priority === "LOW" && "Low"}
@@ -406,10 +414,10 @@ export default function ProjectsPage() {
                           setPriority(item.value);
                           setIsPriorityOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2.5 text-xs transition-colors duration-150 ${
+                        className={`w-full text-left px-4 py-2.5 text-sm font-mono transition-colors duration-150 ${
                           priority === item.value
-                            ? "bg-violet-600/10 text-violet-600 dark:bg-violet-600/20 dark:text-violet-400 font-semibold"
-                            : "text-zinc-300 hover:bg-zinc-800"
+                            ? "bg-zinc-800 text-zinc-100 font-semibold"
+                            : "text-zinc-100 hover:bg-zinc-900"
                         }`}
                       >
                         {item.label}
@@ -428,8 +436,9 @@ export default function ProjectsPage() {
                   <input
                     type="date"
                     value={deadline}
+                    min={todayStr}
                     onChange={(e) => setDeadline(e.target.value)}
-                    className="w-full bg-zinc-950/60 border border-zinc-800 rounded-lg p-3 pr-10 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs h-[42px] relative z-10"
+                    className="w-full bg-zinc-950/60 border border-zinc-800 rounded-lg p-3 pr-10 focus:border-zinc-700 text-zinc-100 font-mono outline-none transition duration-200 cursor-pointer text-sm h-[42px] relative z-10"
                   />
                   <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none z-0" />
                 </div>
