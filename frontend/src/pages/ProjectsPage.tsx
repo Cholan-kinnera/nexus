@@ -325,7 +325,7 @@ export default function ProjectsPage() {
         </div>
 
         {/* Create Project Form Container */}
-        <PremiumCard ref={formRef} hoverable={false} className="mb-8 text-zinc-100 transition-colors duration-300">
+        <PremiumCard ref={formRef} hoverable={false} className="mb-8 text-zinc-100 transition-colors duration-300 !overflow-visible">
           <h2 className="text-lg font-bold text-zinc-200 mb-4 flex items-center gap-2">
             <FolderPlus size={18} className="text-zinc-400" />
             Create New Project
