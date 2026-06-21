@@ -72,6 +72,14 @@ export default function StoragePage() {
       return;
     }
 
+    // Front-end extension/type validation
+    const allowedExtensions = ["jpg", "jpeg", "png", "gif", "pdf", "mp4", "zip", "docx", "xlsx"];
+    const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
+    if (!allowedExtensions.includes(fileExt)) {
+      setUploadError(`File extension '.${fileExt}' is not supported. Allowed formats: ${allowedExtensions.join(", ")}`);
+      return;
+    }
+
     setIsUploading(true);
     setUploadError(null);
     setUploadProgress(0);

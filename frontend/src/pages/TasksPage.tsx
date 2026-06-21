@@ -900,28 +900,49 @@ export function TasksPage() {
   };
 
   const handleCreate = async () => {
+    const trimmedTitle = title.trim();
+    if (!trimmedTitle) {
+      alert("Task title is required");
+      return;
+    }
+    if (trimmedTitle.length < 3) {
+      alert("Task title must be at least 3 characters");
+      return;
+    }
     if (!selectedProject) {
       alert("Please select or create a project first");
       return;
     }
     setIsLoading(true);
-    await createTask({
-      title,
-      description,
-      priority: "MEDIUM",
-      project_id: selectedProject,
-    });
-    setTitle("");
-    setDescription("");
-    await loadTasks();
-    setIsLoading(false);
+    try {
+      await createTask({
+        title: trimmedTitle,
+        description,
+        priority: "MEDIUM",
+        project_id: selectedProject,
+      });
+      setTitle("");
+      setDescription("");
+      await loadTasks();
+    } catch (err) {
+      console.error("Failed to create task:", err);
+      alert("Failed to create task. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDelete = async (id: number) => {
     setIsLoading(true);
-    await deleteTask(id);
-    await loadTasks();
-    setIsLoading(false);
+    try {
+      await deleteTask(id);
+      await loadTasks();
+    } catch (err) {
+      console.error("Failed to delete task:", err);
+      alert("Failed to delete task. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
 

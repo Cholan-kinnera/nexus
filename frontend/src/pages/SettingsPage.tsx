@@ -62,12 +62,12 @@ export default function SettingsPage() {
       setFullName(user.full_name || "");
       setEmail(user.email || "");
       setRole(user.role || "");
-
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-      return () => clearTimeout(timer);
     }
+
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
   }, [user]);
 
   // Terminal States

@@ -127,8 +127,13 @@ export default function ProjectsPage() {
   }, []);
 
   const handleCreate = async () => {
-    if (!title.trim()) {
+    const trimmedTitle = title.trim();
+    if (!trimmedTitle) {
       alert("Project title is required");
+      return;
+    }
+    if (trimmedTitle.length < 3) {
+      alert("Project title must be at least 3 characters");
       return;
     }
 
@@ -141,27 +146,41 @@ export default function ProjectsPage() {
     });
 
     setIsLoading(true);
-    await createProject({
-      title,
-      description: serializedDescription,
-    });
+    try {
+      await createProject({
+        title: trimmedTitle,
+        description: serializedDescription,
+      });
 
-    setTitle("");
-    setDescription("");
-    setCategory("");
-    setPriority("MEDIUM");
-    setDeadline("");
+      setTitle("");
+      setDescription("");
+      setCategory("");
+      setPriority("MEDIUM");
+      setDeadline("");
 
-    await loadProjects();
+      await loadProjects();
+    } catch (err) {
+      console.error("Failed to create project:", err);
+      alert("Failed to create project. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDelete = async (id: number) => {
     setIsLoading(true);
-    await deleteProject(id);
-    if (selectedProject?.id === id) {
-      setSelectedProject(null);
+    try {
+      await deleteProject(id);
+      if (selectedProject?.id === id) {
+        setSelectedProject(null);
+      }
+      await loadProjects();
+    } catch (err) {
+      console.error("Failed to delete project:", err);
+      alert("Failed to delete project. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-    await loadProjects();
   };
 
   const scrollToForm = () => {
