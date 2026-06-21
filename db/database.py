@@ -6,7 +6,14 @@ from core.config import settings
 DATABASE_URL = settings.DATABASE_URL
 
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(
+    DATABASE_URL,
+    echo=True,
+    pool_pre_ping=True,
+    connect_args={
+        "statement_cache_size": 0,
+    },
+)
 
 
 AsyncSessionLocal = async_sessionmaker(

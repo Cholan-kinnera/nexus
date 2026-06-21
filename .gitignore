@@ -9,6 +9,8 @@ venv/
 
 # Environment variables
 .env
+.env.production
+.env.development
 
 # Logs
 *.log

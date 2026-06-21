@@ -34,7 +34,7 @@ import os  # noqa: E402
 
 def get_url() -> str:
     """Retrieve database URL from environment variable or fallback to alembic.ini."""
-    url = os.getenv("DATABASE_URL")
+    url = os.getenv("MIGRATION_DATABASE_URL") or os.getenv("DATABASE_URL")
     if url:
         return url
     return config.get_main_option("sqlalchemy.url")
