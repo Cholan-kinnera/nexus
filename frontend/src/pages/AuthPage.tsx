@@ -95,13 +95,14 @@ export default function AuthPage() {
           </div>
 
           {/* Sliding track */}
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-hidden relative">
             <div
               className="flex h-full"
               style={{
                 width: "200%",
                 transform: activeTab === "login" ? "translateX(0)" : "translateX(-50%)",
                 transition: "transform 400ms cubic-bezier(0.4, 0, 0.2, 1)",
+                overflow: "hidden",
               }}
             >
               <div className="h-full" style={{ width: "50%", flexShrink: 0 }}>
