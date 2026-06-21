@@ -93,7 +93,8 @@ const techStack = [
     { name: "OAuth", category: "Auth" },
     { name: "Vite", category: "Tools" },
     { name: "Git", category: "Tools" },
-    { name: "AWS", category: "Infra" },
+    { name: "Resend", category: "Email" },
+    { name: "Cloudflare R2", category: "Storage" },
   ],
 ];
 
@@ -198,9 +199,9 @@ export default function LandingPage() {
         <section className="py-12 border-y border-[#e8e5e0] bg-[#FAFAF9]">
           <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-12 text-center">
             {[
-              { value: "12k+", label: "Teams worldwide" },
-              { value: "99.9%", label: "Uptime SLA" },
-              { value: "4.9/5", label: "User satisfaction" },
+              { value: "100%", label: "Open source" },
+              { value: "Free", label: "Forever free tier" },
+              { value: "5min", label: "Setup time" },
             ].map((stat) => (
               <div key={stat.label} className="flex flex-col items-center">
                 <span className="text-3xl font-bold text-[#1a1a2e]">{stat.value}</span>

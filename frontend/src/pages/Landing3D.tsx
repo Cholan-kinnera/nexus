@@ -652,7 +652,7 @@ export default function Landing3D() {
                 <div>
                   <h3 className="text-[10px] font-bold font-mono text-emerald-400 mb-2 uppercase tracking-wider">Backend API</h3>
                   <p className="text-sm font-bold text-white mb-1">FastAPI Core</p>
-                  <p className="text-xs text-zinc-400 leading-relaxed">FastAPI-powered asynchronous API layer featuring JWT authentication, AWS SES OTP verification, PostgreSQL persistence, SQLAlchemy ORM, and Alembic migrations.</p>
+                  <p className="text-xs text-zinc-400 leading-relaxed">FastAPI-powered asynchronous API layer featuring JWT authentication, Resend email delivery, OTP verification, PostgreSQL persistence, SQLAlchemy ORM, and Alembic migrations.</p>
                 </div>
                 <span className="text-[9px] font-mono text-zinc-500 mt-4 block">FastAPI • JWT • SQLAlchemy • Alembic</span>
               </div>
@@ -674,7 +674,7 @@ export default function Landing3D() {
                   <p className="text-sm font-bold text-white mb-1">AWS Cloud Infrastructure</p>
                   <p className="text-xs text-zinc-400 leading-relaxed">Cloud-native services powering email verification, secure object storage, deployment automation, observability, and future containerized workloads.</p>
                 </div>
-                <span className="text-[9px] font-mono text-zinc-500 mt-4 block">AWS • S3 • SES • Cloud</span>
+                <span className="text-[9px] font-mono text-zinc-500 mt-4 block">AWS • S3 • Resend • Cloud</span>
               </div>
             </div>
 
@@ -704,14 +704,14 @@ export default function Landing3D() {
                   <span className="text-[9px] font-mono text-zinc-600 mt-4 block">SHA-256 HMAC encryption</span>
                 </div>
 
-                {/* Card 2: AWS SES OTP */}
+                {/* Card 2: Resend OTP */}
                 <div className="glass-card-premium p-6 rounded-xl flex flex-col justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-4">
                       <Database size={16} className="text-emerald-400" />
-                      <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">AWS SES OTP</h3>
+                      <h3 className="text-sm font-bold tracking-tight text-white uppercase font-mono">Resend OTP</h3>
                     </div>
-                    <p className="text-xs text-zinc-350 leading-relaxed">Dynamic verification login codes routed securely via automated Amazon Simple Email Service configurations.</p>
+                    <p className="text-xs text-zinc-350 leading-relaxed">Dynamic verification login codes routed securely via automated Resend email delivery configurations.</p>
                   </div>
                   <span className="text-[9px] font-mono text-zinc-600 mt-4 block">2FA One-Time Passwords</span>
                 </div>
