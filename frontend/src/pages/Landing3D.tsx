@@ -767,7 +767,7 @@ export default function Landing3D() {
             className="text-center mb-20"
           >
             <h2 className="text-xs font-mono tracking-widest text-violet-400 uppercase mb-3">Capabilities</h2>
-            <p className="text-3xl sm:text-4xl font-bold text-white tracking-tight">Built for elite engineering environments.</p>
+            <p className="text-3xl sm:text-4xl font-bold text-white tracking-tight">Built For Elite Engineering Environments</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
