@@ -62,7 +62,7 @@ export default function AuthPage() {
       {/* Main card with cursor glow effect */}
       <div
         ref={glowRef}
-        className="relative z-20 max-w-[960px] flex rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900/40 backdrop-blur-md"
+        className="relative z-20 max-w-[960px] flex rounded-2xl overflow-hidden border border-zinc-800/20 shadow-2xl bg-zinc-900/60 backdrop-blur-md"
         style={{ "--glow-x": "50%", "--glow-y": "50%", "--glow-opacity": "0" } as React.CSSProperties}
       >
         {/* Cursor glow layer */}
@@ -128,7 +128,7 @@ export default function AuthPage() {
 function LeftPanel({ activeTab }: { activeTab: "login" | "signup" }) {
   return (
     <div
-      className="hidden md:flex flex-col w-[380px] bg-zinc-950/50 p-10 justify-between relative overflow-hidden border-r border-zinc-800/30 transition-transform duration-100 ease-out"
+      className="hidden md:flex flex-col w-[380px] bg-zinc-950/50 p-10 justify-between relative overflow-hidden border-r border-zinc-800/20 transition-transform duration-100 ease-out"
       style={{ transformStyle: "preserve-3d" }}
     >
       {/* Animated grid */}
@@ -731,6 +731,8 @@ function SocialButtons({
         text="continue_with"
         width={width.toString()}
         auto_select={false}
+        cancel_on_tap_outside={true}
+        itp_support={false}
         use_fedcm_for_prompt={false}
       />
     </div>
