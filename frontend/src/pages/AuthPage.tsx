@@ -39,71 +39,6 @@ function useCursorGlow() {
 
   return ref;
 }
-
-// ─── Magnetic button hook ─────────────────────────────────────────────────────
-function useMagnetic() {
-  const ref = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const move = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (e.clientX - cx) * 0.25;
-      const dy = (e.clientY - cy) * 0.25;
-      el.style.transform = `translate(${dx}px, ${dy}px)`;
-    };
-
-    const reset = () => {
-      el.style.transform = "translate(0,0)";
-    };
-
-    el.addEventListener("mousemove", move);
-    el.addEventListener("mouseleave", reset);
-    return () => {
-      el.removeEventListener("mousemove", move);
-      el.removeEventListener("mouseleave", reset);
-    };
-  }, []);
-
-  return ref;
-}
-
-// ─── Card tilt hook ───────────────────────────────────────────────────────────
-function useTilt() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const move = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = (e.clientY - rect.top) / rect.height;
-      const rotateX = (y - 0.5) * -6;
-      const rotateY = (x - 0.5) * 6;
-      el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    };
-
-    const reset = () => {
-      el.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg)";
-    };
-
-    el.addEventListener("mousemove", move);
-    el.addEventListener("mouseleave", reset);
-    return () => {
-      el.removeEventListener("mousemove", move);
-      el.removeEventListener("mouseleave", reset);
-    };
-  }, []);
-
-  return ref;
-}
-
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface LoginForm { email: string; password: string; remember: boolean }
 interface SignupForm { fullName: string; email: string; password: string; confirmPassword: string }
@@ -191,12 +126,9 @@ export default function AuthPage() {
 
 // ─── Left Panel with tilt ─────────────────────────────────────────────────────
 function LeftPanel({ activeTab }: { activeTab: "login" | "signup" }) {
-  const tiltRef = useTilt();
-
   return (
     <div
-      ref={tiltRef}
-      className="hidden md:flex flex-col w-[380px] bg-zinc-950/50 p-10 justify-between relative overflow-hidden border-r border-zinc-800 transition-transform duration-100 ease-out"
+      className="hidden md:flex flex-col w-[380px] bg-zinc-950/50 p-10 justify-between relative overflow-hidden border-r border-zinc-800/30 transition-transform duration-100 ease-out"
       style={{ transformStyle: "preserve-3d" }}
     >
       {/* Animated grid */}
@@ -307,7 +239,6 @@ function LoginForm({ onSwitch, onSuccess }: {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const btnRef = useMagnetic();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -378,7 +309,7 @@ function LoginForm({ onSwitch, onSuccess }: {
         </button>
       </div>
 
-      <button ref={btnRef} type="submit" disabled={loading}
+      <button type="submit" disabled={loading}
         className="magnetic-btn w-full py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-bold font-mono rounded-lg flex items-center justify-center gap-2 mb-5 cursor-pointer">
         {loading ? <Spinner /> : <>Login &rarr;</>}
       </button>
@@ -412,8 +343,6 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
   const [verifying, setVerifying] = useState(false);
   const [otpError, setOtpError] = useState("");
   const inputRefs = useRef<HTMLInputElement[]>([]);
-
-  const btnRef = useMagnetic();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -620,7 +549,7 @@ function SignupForm({ onSwitch, onSuccess }: { onSwitch: () => void; onSuccess: 
         </InputWrap>
       </Field>
 
-      <button ref={btnRef} type="submit" disabled={loading}
+      <button type="submit" disabled={loading}
         className="magnetic-btn w-full py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-bold font-mono rounded-lg flex items-center justify-center gap-2 mb-5 cursor-pointer">
         {loading ? <Spinner /> : <>Create account &rarr;</>}
       </button>
@@ -801,6 +730,8 @@ function SocialButtons({
         shape="rectangular"
         text="continue_with"
         width={width.toString()}
+        auto_select={false}
+        use_fedcm_for_prompt={false}
       />
     </div>
   );
