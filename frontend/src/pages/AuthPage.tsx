@@ -723,7 +723,7 @@ function SocialButtons({
   };
 
   return (
-    <div ref={containerRef} className="w-full flex justify-center">
+    <div ref={containerRef} className="w-full flex justify-center overflow-hidden rounded-lg">
       <GoogleLogin
         onSuccess={handleGoogleSuccess}
         onError={handleGoogleError}
