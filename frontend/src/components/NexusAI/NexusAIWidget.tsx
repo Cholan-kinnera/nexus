@@ -268,9 +268,9 @@ export default function NexusAIWidget() {
             className="w-[360px] md:w-[400px] min-h-[380px] max-h-[520px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl backdrop-blur-md flex flex-col overflow-hidden mb-4 mr-1 text-zinc-800 dark:text-zinc-150"
           >
             {/* Header */}
-            <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-950/40">
+            <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-950 dark:bg-zinc-950/40">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-zinc-100 text-zinc-950 flex items-center justify-center">
+                <div className="p-1.5 rounded-lg bg-zinc-850 dark:bg-zinc-800 text-zinc-50 flex items-center justify-center">
                   <Sparkles size={14} />
                 </div>
                 <span className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-50">
@@ -279,7 +279,7 @@ export default function NexusAIWidget() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-zinc-500 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+                className="text-zinc-500 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors p-1 rounded-lg hover:bg-zinc-850 dark:hover:bg-zinc-800 cursor-pointer"
               >
                 <X size={14} />
               </button>
@@ -407,7 +407,7 @@ export default function NexusAIWidget() {
                         {activeScreen === "meeting-tasks" && "Meeting → Tasks"}
                       </span>
                     </div>
-                    <div className="-mx-5 px-5 py-4 bg-zinc-50 dark:bg-transparent space-y-4">
+                    <div className="-mx-5 px-5 py-4 bg-zinc-950 dark:bg-transparent space-y-4">
                       {/* Project selector dropdown (visible for all tabs) */}
                       <div>
                         <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono text-left">
@@ -427,10 +427,10 @@ export default function NexusAIWidget() {
                             <select
                               value={selectedProjectId || ""}
                               onChange={(e) => setSelectedProjectId(Number(e.target.value))}
-                              className="w-full appearance-none bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-violet-500 rounded-lg p-2.5 pr-8 transition duration-200 cursor-pointer text-xs font-mono"
+                              className="w-full appearance-none bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-700 text-zinc-50 focus:outline-none focus:ring-1 focus:ring-violet-500 rounded-lg p-2.5 pr-8 transition duration-200 cursor-pointer text-xs font-mono"
                             >
                               {projects.map((proj) => (
-                                <option key={proj.id} value={proj.id} className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200">
+                                <option key={proj.id} value={proj.id} className="bg-white dark:bg-zinc-900 text-zinc-50">
                                   {proj.title}
                                 </option>
                               ))}
@@ -572,10 +572,10 @@ export default function NexusAIWidget() {
                                 <select
                                   value={selectedTaskId || ""}
                                   onChange={(e) => setSelectedTaskId(Number(e.target.value))}
-                                  className="w-full appearance-none bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-violet-500 rounded-lg p-2.5 pr-8 transition duration-200 cursor-pointer text-xs font-mono"
+                                  className="w-full appearance-none bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-700 text-zinc-50 focus:outline-none focus:ring-1 focus:ring-violet-500 rounded-lg p-2.5 pr-8 transition duration-200 cursor-pointer text-xs font-mono"
                                 >
                                   {tasks.map((task) => (
-                                    <option key={task.id} value={task.id} className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200">
+                                    <option key={task.id} value={task.id} className="bg-white dark:bg-zinc-900 text-zinc-50">
                                       {task.title}
                                     </option>
                                   ))}
@@ -639,7 +639,7 @@ export default function NexusAIWidget() {
                               onChange={(e) => setMeetingNotes(e.target.value)}
                               placeholder="Paste your meeting notes here…"
                               rows={4}
-                              className="w-full bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-violet-500 rounded-lg p-2.5 transition duration-200 text-xs font-sans resize-y"
+                              className="w-full bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-700 text-zinc-50 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-violet-500 rounded-lg p-2.5 transition duration-200 text-xs font-sans resize-y"
                             />
                           </div>
 
