@@ -273,7 +273,7 @@ export default function NexusAIWidget() {
                 <div className="p-1.5 rounded-lg bg-zinc-100 text-zinc-950 flex items-center justify-center">
                   <Sparkles size={14} />
                 </div>
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-50">
                   Nexus AI Assistant
                 </span>
               </div>
@@ -297,7 +297,7 @@ export default function NexusAIWidget() {
                     transition={{ duration: 0.2 }}
                     className="flex flex-col text-left"
                   >
-                    <h3 className="text-zinc-900 dark:text-white font-semibold text-base mt-1">
+                    <h3 className="text-zinc-50 font-semibold text-base mt-1">
                       Hi, {firstName} 👋
                     </h3>
                     <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-4">
@@ -311,10 +311,10 @@ export default function NexusAIWidget() {
                         className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
                       >
                         <Sparkles size={16} className="text-violet-400 mb-1" />
-                        <span className="text-zinc-900 dark:text-white text-xs font-semibold mt-1">
+                        <span className="text-zinc-50 text-xs font-semibold mt-1">
                           Generate Tasks
                         </span>
-                        <span className="text-zinc-500 dark:text-zinc-500 text-[10px] leading-tight mt-0.5">
+                        <span className="text-zinc-500 dark:text-zinc-550 text-[10px] leading-tight mt-0.5">
                           Turn goals into tasks
                         </span>
                       </div>
@@ -325,10 +325,10 @@ export default function NexusAIWidget() {
                         className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
                       >
                         <FileText size={16} className="text-violet-400 mb-1" />
-                        <span className="text-zinc-900 dark:text-white text-xs font-semibold mt-1">
+                        <span className="text-zinc-50 text-xs font-semibold mt-1">
                           Project Summary
                         </span>
-                        <span className="text-zinc-500 dark:text-zinc-500 text-[10px] leading-tight mt-0.5">
+                        <span className="text-zinc-500 dark:text-zinc-550 text-[10px] leading-tight mt-0.5">
                           Quick project overview
                         </span>
                       </div>
@@ -339,10 +339,10 @@ export default function NexusAIWidget() {
                         className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
                       >
                         <PenLine size={16} className="text-violet-400 mb-1" />
-                        <span className="text-zinc-900 dark:text-white text-xs font-semibold mt-1">
+                        <span className="text-zinc-50 text-xs font-semibold mt-1">
                           Task Description
                         </span>
-                        <span className="text-zinc-500 dark:text-zinc-500 text-[10px] leading-tight mt-0.5">
+                        <span className="text-zinc-500 dark:text-zinc-550 text-[10px] leading-tight mt-0.5">
                           Write from task title
                         </span>
                       </div>
@@ -353,10 +353,10 @@ export default function NexusAIWidget() {
                         className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
                       >
                         <ClipboardList size={16} className="text-violet-400 mb-1" />
-                        <span className="text-zinc-900 dark:text-white text-xs font-semibold mt-1">
+                        <span className="text-zinc-50 text-xs font-semibold mt-1">
                           Meeting → Tasks
                         </span>
-                        <span className="text-zinc-500 dark:text-zinc-500 text-[10px] leading-tight mt-0.5">
+                        <span className="text-zinc-500 dark:text-zinc-550 text-[10px] leading-tight mt-0.5">
                           Extract tasks from notes
                         </span>
                       </div>
@@ -396,18 +396,18 @@ export default function NexusAIWidget() {
                           }
                           setActiveScreen("home");
                         }}
-                        className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors p-0.5 flex items-center justify-center"
+                        className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-50 dark:hover:text-white cursor-pointer transition-colors p-0.5 flex items-center justify-center"
                       >
                         <ChevronLeft size={16} />
                       </button>
-                      <span className="text-zinc-900 dark:text-white text-sm font-semibold">
+                      <span className="text-zinc-50 text-sm font-semibold">
                         {activeScreen === "generate-tasks" && "Generate Tasks"}
                         {activeScreen === "project-summary" && "Project Summary"}
                         {activeScreen === "task-description" && "Task Description"}
                         {activeScreen === "meeting-tasks" && "Meeting → Tasks"}
                       </span>
                     </div>
-                    <div className="p-4 rounded-xl bg-zinc-50 dark:bg-transparent space-y-4">
+                    <div className="-mx-5 px-5 py-4 bg-zinc-50 dark:bg-transparent space-y-4">
                       {/* Project selector dropdown (visible for all tabs) */}
                       <div>
                         <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono text-left">
@@ -499,7 +499,7 @@ export default function NexusAIWidget() {
                                   className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
                                     sug.added
                                       ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
-                                      : "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-650 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100"
+                                      : "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-650 dark:text-zinc-300 hover:text-zinc-50 dark:hover:text-zinc-100"
                                   }`}
                                 >
                                   {sug.adding ? (
@@ -712,7 +712,7 @@ export default function NexusAIWidget() {
                                   className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
                                     sug.added
                                       ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
-                                      : "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-650 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100"
+                                      : "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-650 dark:text-zinc-300 hover:text-zinc-50 dark:hover:text-zinc-100"
                                   }`}
                                 >
                                   {sug.adding ? (
