@@ -7,7 +7,7 @@ from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
-from api.routes import projects, users
+from api.routes import projects, users, ai
 from api.routes.auth import router as auth_router
 from db.database import Base, engine, get_db
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -289,6 +289,13 @@ app.include_router(
     prefix="/api/storage",
     tags=["Storage"],
 )
+
+app.include_router(
+    ai.router,
+    prefix="/api/ai",
+    tags=["AI"],
+)
+
 
 
 if __name__ == "__main__":

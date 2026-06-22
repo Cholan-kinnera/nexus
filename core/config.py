@@ -18,6 +18,7 @@ class Settings:
     REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
     COOKIE_SECURE: bool = os.getenv("COOKIE_SECURE", "false").lower() == "true"
     COOKIE_SAMESITE: str = os.getenv("COOKIE_SAMESITE", "lax")
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY")
 
 
 settings = Settings()

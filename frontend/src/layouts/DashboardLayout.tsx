@@ -16,6 +16,7 @@ import {
   formatRelativeTime,
 } from "../services/notificationService";
 import type { NotificationResponse } from "../services/notificationService";
+import NexusAIWidget from "../components/NexusAI/NexusAIWidget";
 
 interface Props {
   children: ReactNode;
@@ -333,6 +334,7 @@ export default function DashboardLayout({ children }: Props) {
           </main>
         </div>
       </div>
+      <NexusAIWidget />
     </>
   );
 }
