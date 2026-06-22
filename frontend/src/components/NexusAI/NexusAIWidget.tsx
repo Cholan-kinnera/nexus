@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Loader2, Plus, Check, X, ChevronDown } from "lucide-react";
+import { Sparkles, Loader2, Plus, Check, X, ChevronDown, Copy } from "lucide-react";
 import { getProjects } from "../../services/projectService";
 import { createTask } from "../../services/taskService";
 import api from "../../api/client";
@@ -12,9 +12,16 @@ interface ProjectItem {
   created_at?: string;
 }
 
+interface TaskItem {
+  id: number;
+  title: string;
+  project_id: number;
+}
+
 interface TaskSuggestion {
   title: string;
   description: string;
+  priority?: string;
   added?: boolean;
   adding?: boolean;
 }
@@ -25,9 +32,33 @@ export default function NexusAIWidget() {
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
   const [isLoadingProjects, setIsLoadingProjects] = useState(false);
 
+  // Tab Navigation State
+  const [activeTab, setActiveTab] = useState<"tasks" | "summary" | "desc" | "meeting">("tasks");
+
+  // Tab 1: Generate Tasks State (Preserved)
   const [suggestions, setSuggestions] = useState<TaskSuggestion[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Tab 2: Project Summary State
+  const [summaryText, setSummaryText] = useState<string | null>(null);
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+  const [summaryError, setSummaryError] = useState<string | null>(null);
+
+  // Tab 3: Task Description State
+  const [tasks, setTasks] = useState<TaskItem[]>([]);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+  const [isLoadingTasks, setIsLoadingTasks] = useState(false);
+  const [generatedDescription, setGeneratedDescription] = useState<string | null>(null);
+  const [isGeneratingDesc, setIsGeneratingDesc] = useState(false);
+  const [descError, setDescError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  // Tab 4: Meeting Notes State
+  const [meetingNotes, setMeetingNotes] = useState("");
+  const [meetingSuggestions, setMeetingSuggestions] = useState<TaskSuggestion[]>([]);
+  const [isExtracting, setIsExtracting] = useState(false);
+  const [meetingError, setMeetingError] = useState<string | null>(null);
 
   // Fetch projects on mount or when widget is opened
   useEffect(() => {
@@ -51,6 +82,32 @@ export default function NexusAIWidget() {
     }
   }, [isOpen]);
 
+  // Fetch project tasks for Task Description tab
+  useEffect(() => {
+    if (selectedProjectId && activeTab === "desc" && isOpen) {
+      const loadTasks = async () => {
+        setIsLoadingTasks(true);
+        setTasks([]);
+        setSelectedTaskId(null);
+        try {
+          const response = await api.get(`/tasks/?project_id=${selectedProjectId}`);
+          const list = (response.data?.items ?? []) as TaskItem[];
+          const filtered = list.filter((t) => t.project_id === selectedProjectId);
+          setTasks(filtered);
+          if (filtered.length > 0) {
+            setSelectedTaskId(filtered[0].id);
+          }
+        } catch (err) {
+          console.error("Failed to load tasks in AI Widget:", err);
+        } finally {
+          setIsLoadingTasks(false);
+        }
+      };
+      loadTasks();
+    }
+  }, [selectedProjectId, activeTab, isOpen]);
+
+  // Tab 1 Handler (Preserved)
   const handleGenerateTasks = async () => {
     if (!selectedProjectId) return;
     setIsGenerating(true);
@@ -69,10 +126,10 @@ export default function NexusAIWidget() {
     }
   };
 
+  // Tab 1 Add Task (Preserved)
   const handleAddTask = async (index: number, suggestion: TaskSuggestion) => {
     if (!selectedProjectId) return;
 
-    // Set adding state
     setSuggestions((prev) =>
       prev.map((item, idx) => (idx === index ? { ...item, adding: true } : item))
     );
@@ -85,7 +142,6 @@ export default function NexusAIWidget() {
         priority: "MEDIUM",
       });
 
-      // Set added state
       setSuggestions((prev) =>
         prev.map((item, idx) => (idx === index ? { ...item, adding: false, added: true } : item))
       );
@@ -93,6 +149,101 @@ export default function NexusAIWidget() {
       console.error("Failed to add task from AI suggestion:", err);
       alert("Failed to create task from suggestion.");
       setSuggestions((prev) =>
+        prev.map((item, idx) => (idx === index ? { ...item, adding: false } : item))
+      );
+    }
+  };
+
+  // Tab 2 Handler: Project Summary
+  const handleSummarizeProject = async () => {
+    if (!selectedProjectId) return;
+    setIsGeneratingSummary(true);
+    setSummaryError(null);
+    setSummaryText(null);
+
+    try {
+      const response = await api.post(`/ai/projects/${selectedProjectId}/summarize`);
+      const data = response.data as { summary: string };
+      setSummaryText(data.summary);
+    } catch (err: unknown) {
+      console.error("AI Project summary error:", err);
+      setSummaryError("Failed to generate project summary. Please check if project description is set.");
+    } finally {
+      setIsGeneratingSummary(false);
+    }
+  };
+
+  // Tab 3 Handler: Task Description Generator
+  const handleGenerateDescription = async () => {
+    if (!selectedTaskId) return;
+    setIsGeneratingDesc(true);
+    setDescError(null);
+    setGeneratedDescription(null);
+
+    try {
+      const response = await api.post(`/ai/tasks/${selectedTaskId}/generate-description`);
+      const data = response.data as { description: string };
+      setGeneratedDescription(data.description);
+    } catch (err: unknown) {
+      console.error("AI Task description error:", err);
+      setDescError("Failed to generate task description. Please try again.");
+    } finally {
+      setIsGeneratingDesc(false);
+    }
+  };
+
+  // Tab 3 copy action
+  const handleCopyDescription = () => {
+    if (!generatedDescription) return;
+    navigator.clipboard.writeText(generatedDescription);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Tab 4 Handler: Meeting Notes -> Tasks
+  const handleExtractTasks = async () => {
+    if (!selectedProjectId || !meetingNotes.trim()) return;
+    setIsExtracting(true);
+    setMeetingError(null);
+    setMeetingSuggestions([]);
+
+    try {
+      const response = await api.post(`/ai/projects/${selectedProjectId}/meeting-to-tasks`, {
+        meeting_notes: meetingNotes,
+      });
+      const data = response.data as TaskSuggestion[];
+      setMeetingSuggestions(data.map((item) => ({ ...item, added: false, adding: false })));
+    } catch (err: unknown) {
+      console.error("AI Meeting tasks extraction error:", err);
+      setMeetingError("AI returned invalid format");
+    } finally {
+      setIsExtracting(false);
+    }
+  };
+
+  // Tab 4 Add Task
+  const handleAddMeetingTask = async (index: number, suggestion: TaskSuggestion) => {
+    if (!selectedProjectId) return;
+
+    setMeetingSuggestions((prev) =>
+      prev.map((item, idx) => (idx === index ? { ...item, adding: true } : item))
+    );
+
+    try {
+      await createTask({
+        title: suggestion.title,
+        description: suggestion.description,
+        project_id: selectedProjectId,
+        priority: suggestion.priority || "MEDIUM",
+      });
+
+      setMeetingSuggestions((prev) =>
+        prev.map((item, idx) => (idx === index ? { ...item, adding: false, added: true } : item))
+      );
+    } catch (err) {
+      console.error("Failed to add task from AI suggestion:", err);
+      alert("Failed to create task from suggestion.");
+      setMeetingSuggestions((prev) =>
         prev.map((item, idx) => (idx === index ? { ...item, adding: false } : item))
       );
     }
@@ -128,9 +279,33 @@ export default function NexusAIWidget() {
               </button>
             </div>
 
+            {/* Tab Bar */}
+            <div className="flex border-b border-zinc-850 bg-zinc-950/20 px-2 font-mono text-[10px] font-bold uppercase tracking-wider overflow-x-auto scrollbar-none">
+              {(
+                [
+                  { id: "tasks", label: "Tasks" },
+                  { id: "summary", label: "Summary" },
+                  { id: "desc", label: "Desc" },
+                  { id: "meeting", label: "Meeting" },
+                ] as const
+              ).map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-1 py-3 text-center cursor-pointer transition-all duration-200 border-b-2 ${
+                    activeTab === tab.id
+                      ? "border-zinc-100 text-zinc-100 font-extrabold"
+                      : "border-transparent text-zinc-500 hover:text-zinc-300"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
             {/* Content Area */}
             <div className="flex-1 p-5 overflow-y-auto space-y-4">
-              {/* Project selector dropdown */}
+              {/* Project selector dropdown (visible for all tabs) */}
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-550 mb-1.5 font-mono">
                   Select Project
@@ -162,79 +337,297 @@ export default function NexusAIWidget() {
                 )}
               </div>
 
-              {/* Action area */}
-              <div className="pt-2">
-                <button
-                  onClick={handleGenerateTasks}
-                  disabled={!selectedProjectId || isGenerating}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
-                >
-                  {isGenerating ? (
-                    <>
-                      <Loader2 size={13} className="animate-spin text-zinc-950" />
-                      <span>Generating suggestions...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles size={13} />
-                      <span>Generate Actionable Tasks</span>
-                    </>
-                  )}
-                </button>
-              </div>
-
-              {/* Error messages */}
-              {errorMessage && (
-                <div className="text-[10px] text-red-400 font-mono bg-red-950/20 border border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
-                  ⚠️ {errorMessage}
-                </div>
-              )}
-
-              {/* Suggestions List */}
-              <div className="space-y-3">
-                {suggestions.length > 0 && (
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-550 font-mono mb-2">
-                    AI Suggestions ({suggestions.length})
-                  </div>
-                )}
-
-                {suggestions.map((sug, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    className="p-3 bg-zinc-950/40 border border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-800"
-                  >
-                    <div className="min-w-0">
-                      <p className="text-xs font-bold text-zinc-200 leading-snug truncate">
-                        {sug.title}
-                      </p>
-                      <p className="text-[10px] text-zinc-400 mt-1 leading-normal">
-                        {sug.description}
-                      </p>
-                    </div>
-
+              {/* Tab 1: Generate Tasks */}
+              {activeTab === "tasks" && (
+                <>
+                  <div className="pt-2">
                     <button
-                      onClick={() => handleAddTask(idx, sug)}
-                      disabled={sug.added || sug.adding}
-                      className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
-                        sug.added
-                          ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
-                          : "bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-zinc-100"
-                      }`}
+                      onClick={handleGenerateTasks}
+                      disabled={!selectedProjectId || isGenerating}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
                     >
-                      {sug.adding ? (
-                        <Loader2 size={12} className="animate-spin text-zinc-400" />
-                      ) : sug.added ? (
-                        <Check size={12} />
+                      {isGenerating ? (
+                        <>
+                          <Loader2 size={13} className="animate-spin text-zinc-950" />
+                          <span>Generating suggestions...</span>
+                        </>
                       ) : (
-                        <Plus size={12} />
+                        <>
+                          <Sparkles size={13} />
+                          <span>Generate Actionable Tasks</span>
+                        </>
                       )}
                     </button>
-                  </motion.div>
-                ))}
-              </div>
+                  </div>
+
+                  {errorMessage && (
+                    <div className="text-[10px] text-red-400 font-mono bg-red-950/20 border border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
+                      ⚠️ {errorMessage}
+                    </div>
+                  )}
+
+                  <div className="space-y-3">
+                    {suggestions.length > 0 && (
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-550 font-mono mb-2">
+                        AI Suggestions ({suggestions.length})
+                      </div>
+                    )}
+
+                    {suggestions.map((sug, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="p-3 bg-zinc-950/40 border border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-800"
+                      >
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-zinc-200 leading-snug truncate">
+                            {sug.title}
+                          </p>
+                          <p className="text-[10px] text-zinc-400 mt-1 leading-normal">
+                            {sug.description}
+                          </p>
+                        </div>
+
+                        <button
+                          onClick={() => handleAddTask(idx, sug)}
+                          disabled={sug.added || sug.adding}
+                          className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
+                            sug.added
+                              ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
+                              : "bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-zinc-100"
+                          }`}
+                        >
+                          {sug.adding ? (
+                            <Loader2 size={12} className="animate-spin text-zinc-440" />
+                          ) : sug.added ? (
+                            <Check size={12} />
+                          ) : (
+                            <Plus size={12} />
+                          )}
+                        </button>
+                      </motion.div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* Tab 2: Project Summary */}
+              {activeTab === "summary" && (
+                <>
+                  <div className="pt-2">
+                    <button
+                      onClick={handleSummarizeProject}
+                      disabled={!selectedProjectId || isGeneratingSummary}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                    >
+                      {isGeneratingSummary ? (
+                        <>
+                          <Loader2 size={13} className="animate-spin text-zinc-950" />
+                          <span>Generating summary…</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={13} />
+                          <span>Summarize Project</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {summaryError && (
+                    <div className="text-[10px] text-red-400 font-mono bg-red-950/20 border border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
+                      ⚠️ {summaryError}
+                    </div>
+                  )}
+
+                  {summaryText && (
+                    <div className="p-4 bg-zinc-950/40 border border-zinc-850 rounded-xl leading-relaxed text-xs text-zinc-350 font-sans shadow-inner text-left">
+                      {summaryText}
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Tab 3: Task Description Generator */}
+              {activeTab === "desc" && (
+                <>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-550 mb-1.5 font-mono">
+                      Select Task
+                    </label>
+                    {isLoadingTasks ? (
+                      <div className="flex items-center gap-2 text-xs text-zinc-500 py-3 font-mono">
+                        <Loader2 size={12} className="animate-spin text-zinc-450" />
+                        Loading tasks...
+                      </div>
+                    ) : tasks.length === 0 ? (
+                      <div className="text-xs text-zinc-500 py-3 italic font-sans text-center border border-zinc-850 rounded-lg bg-zinc-950/20">
+                        No tasks found in this project.
+                      </div>
+                    ) : (
+                      <div className="relative">
+                        <select
+                          value={selectedTaskId || ""}
+                          onChange={(e) => setSelectedTaskId(Number(e.target.value))}
+                          className="w-full appearance-none bg-zinc-950/80 border border-zinc-800 rounded-lg p-2.5 pr-8 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs font-mono"
+                        >
+                          {tasks.map((task) => (
+                            <option key={task.id} value={task.id}>
+                              {task.title}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="pt-2">
+                    <button
+                      onClick={handleGenerateDescription}
+                      disabled={!selectedProjectId || !selectedTaskId || isGeneratingDesc}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                    >
+                      {isGeneratingDesc ? (
+                        <>
+                          <Loader2 size={13} className="animate-spin text-zinc-950" />
+                          <span>Generating description…</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={13} />
+                          <span>Generate Description</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {descError && (
+                    <div className="text-[10px] text-red-400 font-mono bg-red-950/20 border border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
+                      ⚠️ {descError}
+                    </div>
+                  )}
+
+                  {generatedDescription && (
+                    <div className="space-y-3">
+                      <div className="p-4 bg-zinc-950/40 border border-zinc-850 rounded-xl leading-relaxed text-xs text-zinc-350 font-sans shadow-inner text-left">
+                        {generatedDescription}
+                      </div>
+                      <button
+                        onClick={handleCopyDescription}
+                        className="w-full py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-250 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer border border-zinc-750 flex items-center justify-center gap-2"
+                      >
+                        <Copy size={12} />
+                        <span>{copied ? "Copied ✓" : "Copy Description"}</span>
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Tab 4: Meeting Notes -> Tasks */}
+              {activeTab === "meeting" && (
+                <>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-550 mb-1.5 font-mono">
+                      Meeting Notes
+                    </label>
+                    <textarea
+                      value={meetingNotes}
+                      onChange={(e) => setMeetingNotes(e.target.value)}
+                      placeholder="Paste your meeting notes here…"
+                      rows={4}
+                      className="w-full bg-zinc-950/80 border border-zinc-800 rounded-lg p-2.5 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 text-xs font-sans resize-y"
+                    />
+                  </div>
+
+                  <div className="pt-2">
+                    <button
+                      onClick={handleExtractTasks}
+                      disabled={!selectedProjectId || !meetingNotes.trim() || isExtracting}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                    >
+                      {isExtracting ? (
+                        <>
+                          <Loader2 size={13} className="animate-spin text-zinc-950" />
+                          <span>Extracting tasks from notes…</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={13} />
+                          <span>Extract Tasks</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {meetingError && (
+                    <div className="text-[10px] text-red-400 font-mono bg-red-950/20 border border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
+                      ⚠️ {meetingError}
+                    </div>
+                  )}
+
+                  <div className="space-y-3">
+                    {meetingSuggestions.length > 0 && (
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-550 font-mono mb-2">
+                        Extracted Tasks ({meetingSuggestions.length})
+                      </div>
+                    )}
+
+                    {meetingSuggestions.map((sug, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="p-3 bg-zinc-950/40 border border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-800"
+                      >
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="text-xs font-bold text-zinc-200 leading-snug truncate">
+                              {sug.title}
+                            </p>
+                            {sug.priority && (
+                              <span className={`text-[8px] px-1.5 py-0.5 rounded font-mono font-bold leading-none ${
+                                sug.priority === "HIGH"
+                                  ? "bg-red-950/60 text-red-400 border border-red-900/50"
+                                  : sug.priority === "MEDIUM"
+                                  ? "bg-amber-950/60 text-amber-400 border border-amber-900/50"
+                                  : "bg-blue-950/60 text-blue-400 border border-blue-900/50"
+                              }`}>
+                                {sug.priority}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[10px] text-zinc-400 mt-1 leading-normal">
+                            {sug.description}
+                          </p>
+                        </div>
+
+                        <button
+                          onClick={() => handleAddMeetingTask(idx, sug)}
+                          disabled={sug.added || sug.adding}
+                          className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
+                            sug.added
+                              ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
+                              : "bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-zinc-100"
+                          }`}
+                        >
+                          {sug.adding ? (
+                            <Loader2 size={12} className="animate-spin text-zinc-440" />
+                          ) : sug.added ? (
+                            <Check size={12} />
+                          ) : (
+                            <Plus size={12} />
+                          )}
+                        </button>
+                      </motion.div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </motion.div>
         )}
@@ -253,3 +646,4 @@ export default function NexusAIWidget() {
     </div>
   );
 }
+
