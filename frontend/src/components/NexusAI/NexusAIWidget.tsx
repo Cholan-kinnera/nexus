@@ -407,327 +407,328 @@ export default function NexusAIWidget() {
                         {activeScreen === "meeting-tasks" && "Meeting → Tasks"}
                       </span>
                     </div>
-
-                    {/* Project selector dropdown (visible for all tabs) */}
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono text-left">
-                        Select Project
-                      </label>
-                      {isLoadingProjects ? (
-                        <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-500 py-3 font-mono text-left">
-                          <Loader2 size={12} className="animate-spin text-zinc-440" />
-                          Loading projects...
-                        </div>
-                      ) : projects.length === 0 ? (
-                        <div className="text-xs text-zinc-500 dark:text-zinc-500 py-2 italic font-sans text-left">
-                          No projects found. Please create a project first.
-                        </div>
-                      ) : (
-                        <div className="relative">
-                          <select
-                            value={selectedProjectId || ""}
-                            onChange={(e) => setSelectedProjectId(Number(e.target.value))}
-                            className="w-full appearance-none bg-zinc-50 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2.5 pr-8 focus:border-zinc-400 dark:focus:border-zinc-700 text-zinc-700 dark:text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs font-mono"
-                          >
-                            {projects.map((proj) => (
-                              <option key={proj.id} value={proj.id}>
-                                {proj.title}
-                              </option>
-                            ))}
-                          </select>
-                          <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Selected Feature Content */}
-                    {activeScreen === "generate-tasks" && (
-                      <div className="space-y-4">
-                        <div className="pt-2">
-                          <button
-                            onClick={handleGenerateTasks}
-                            disabled={!selectedProjectId || isGenerating}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
-                          >
-                            {isGenerating ? (
-                              <>
-                                <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
-                                <span>Generating suggestions...</span>
-                              </>
-                            ) : (
-                              <>
-                                <Sparkles size={13} />
-                                <span>Generate Actionable Tasks</span>
-                              </>
-                            )}
-                          </button>
-                        </div>
-
-                        {errorMessage && (
-                          <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed text-left">
-                            ⚠️ {errorMessage}
+                    <div className="p-4 rounded-xl bg-zinc-50 dark:bg-transparent space-y-4">
+                      {/* Project selector dropdown (visible for all tabs) */}
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono text-left">
+                          Select Project
+                        </label>
+                        {isLoadingProjects ? (
+                          <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-500 py-3 font-mono text-left">
+                            <Loader2 size={12} className="animate-spin text-zinc-440" />
+                            Loading projects...
                           </div>
-                        )}
-
-                        <div className="space-y-3">
-                          {suggestions.length > 0 && (
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-550 font-mono mb-2 text-left">
-                              AI Suggestions ({suggestions.length})
-                            </div>
-                          )}
-
-                          {suggestions.map((sug, idx) => (
-                            <motion.div
-                              key={idx}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: idx * 0.05 }}
-                              className="p-3 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-350 dark:hover:border-zinc-800"
+                        ) : projects.length === 0 ? (
+                          <div className="text-xs text-zinc-500 dark:text-zinc-500 py-2 italic font-sans text-left">
+                            No projects found. Please create a project first.
+                          </div>
+                        ) : (
+                          <div className="relative">
+                            <select
+                              value={selectedProjectId || ""}
+                              onChange={(e) => setSelectedProjectId(Number(e.target.value))}
+                              className="w-full appearance-none bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-violet-500 rounded-lg p-2.5 pr-8 transition duration-200 cursor-pointer text-xs font-mono"
                             >
-                              <div className="min-w-0">
-                                <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200 leading-snug truncate">
-                                  {sug.title}
-                                </p>
-                                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1 leading-normal">
-                                  {sug.description}
-                                </p>
-                              </div>
-
-                              <button
-                                onClick={() => handleAddTask(idx, sug)}
-                                disabled={sug.added || sug.adding}
-                                className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
-                                  sug.added
-                                    ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
-                                    : "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-650 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100"
-                                }`}
-                              >
-                                {sug.adding ? (
-                                  <Loader2 size={12} className="animate-spin text-zinc-440" />
-                                ) : sug.added ? (
-                                  <Check size={12} />
-                                ) : (
-                                  <Plus size={12} />
-                                )}
-                              </button>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {activeScreen === "project-summary" && (
-                      <div className="space-y-4">
-                        <div className="pt-2">
-                          <button
-                            onClick={handleSummarizeProject}
-                            disabled={!selectedProjectId || isGeneratingSummary}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
-                          >
-                            {isGeneratingSummary ? (
-                              <>
-                                <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
-                                <span>Generating summary…</span>
-                              </>
-                            ) : (
-                              <>
-                                <Sparkles size={13} />
-                                <span>Summarize Project</span>
-                              </>
-                            )}
-                          </button>
-                        </div>
-
-                        {summaryError && (
-                          <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed text-left">
-                            ⚠️ {summaryError}
-                          </div>
-                        )}
-
-                        {summaryText && (
-                          <div className="p-4 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850 rounded-xl leading-relaxed text-xs text-zinc-700 dark:text-zinc-300 font-sans shadow-inner text-left">
-                            {summaryText}
+                              {projects.map((proj) => (
+                                <option key={proj.id} value={proj.id} className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200">
+                                  {proj.title}
+                                </option>
+                              ))}
+                            </select>
+                            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
                           </div>
                         )}
                       </div>
-                    )}
 
-                    {activeScreen === "task-description" && (
-                      <div className="space-y-4 text-left">
-                        <div>
-                          <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono">
-                            Select Task
-                          </label>
-                          {isLoadingTasks ? (
-                            <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-500 py-3 font-mono">
-                              <Loader2 size={12} className="animate-spin text-zinc-440" />
-                              Loading tasks...
-                            </div>
-                          ) : tasks.length === 0 ? (
-                            <div className="text-xs text-zinc-500 dark:text-zinc-500 py-3 italic font-sans text-center border border-zinc-200 dark:border-zinc-850 rounded-lg bg-zinc-50 dark:bg-zinc-950/20">
-                              No tasks found in this project.
-                            </div>
-                          ) : (
-                            <div className="relative">
-                              <select
-                                value={selectedTaskId || ""}
-                                onChange={(e) => setSelectedTaskId(Number(e.target.value))}
-                                className="w-full appearance-none bg-zinc-50 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2.5 pr-8 focus:border-zinc-400 dark:focus:border-zinc-700 text-zinc-700 dark:text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs font-mono"
-                              >
-                                {tasks.map((task) => (
-                                  <option key={task.id} value={task.id}>
-                                    {task.title}
-                                  </option>
-                                ))}
-                              </select>
-                              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="pt-2">
-                          <button
-                            onClick={handleGenerateDescription}
-                            disabled={!selectedProjectId || !selectedTaskId || isGeneratingDesc}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
-                          >
-                            {isGeneratingDesc ? (
-                              <>
-                                <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
-                                <span>Generating description…</span>
-                              </>
-                            ) : (
-                              <>
-                                <Sparkles size={13} />
-                                <span>Generate Description</span>
-                              </>
-                            )}
-                          </button>
-                        </div>
-
-                        {descError && (
-                          <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
-                            ⚠️ {descError}
-                          </div>
-                        )}
-
-                        {generatedDescription && (
-                          <div className="space-y-3">
-                            <div className="p-4 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850 rounded-xl leading-relaxed text-xs text-zinc-700 dark:text-zinc-300 font-sans shadow-inner">
-                              {generatedDescription}
-                            </div>
+                      {/* Selected Feature Content */}
+                      {activeScreen === "generate-tasks" && (
+                        <div className="space-y-4">
+                          <div className="pt-2">
                             <button
-                              onClick={handleCopyDescription}
-                              className="w-full py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-250 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer border border-zinc-200 dark:border-zinc-750 flex items-center justify-center gap-2"
+                              onClick={handleGenerateTasks}
+                              disabled={!selectedProjectId || isGenerating}
+                              className="w-full py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 bg-violet-600 hover:bg-violet-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer shadow-md"
                             >
-                              <Copy size={12} />
-                              <span>{copied ? "Copied ✓" : "Copy Description"}</span>
+                              {isGenerating ? (
+                                <>
+                                  <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
+                                  <span>Generating suggestions...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Sparkles size={13} />
+                                  <span>Generate Actionable Tasks</span>
+                                </>
+                              )}
                             </button>
                           </div>
-                        )}
-                      </div>
-                    )}
 
-                    {activeScreen === "meeting-tasks" && (
-                      <div className="space-y-4 text-left">
-                        <div>
-                          <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono">
-                            Meeting Notes
-                          </label>
-                          <textarea
-                            value={meetingNotes}
-                            onChange={(e) => setMeetingNotes(e.target.value)}
-                            placeholder="Paste your meeting notes here…"
-                            rows={4}
-                            className="w-full bg-zinc-50 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2.5 focus:border-zinc-400 dark:focus:border-zinc-700 text-zinc-700 dark:text-zinc-300 outline-none transition duration-200 text-xs font-sans resize-y"
-                          />
-                        </div>
-
-                        <div className="pt-2">
-                          <button
-                            onClick={handleExtractTasks}
-                            disabled={!selectedProjectId || !meetingNotes.trim() || isExtracting}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
-                          >
-                            {isExtracting ? (
-                              <>
-                                <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
-                                <span>Extracting tasks from notes…</span>
-                              </>
-                            ) : (
-                              <>
-                                <Sparkles size={13} />
-                                <span>Extract Tasks</span>
-                              </>
-                            )}
-                          </button>
-                        </div>
-
-                        {meetingError && (
-                          <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
-                            ⚠️ {meetingError}
-                          </div>
-                        )}
-
-                        <div className="space-y-3">
-                          {meetingSuggestions.length > 0 && (
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 font-mono mb-2">
-                              Extracted Tasks ({meetingSuggestions.length})
+                          {errorMessage && (
+                            <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed text-left">
+                              ⚠️ {errorMessage}
                             </div>
                           )}
 
-                          {meetingSuggestions.map((sug, idx) => (
-                            <motion.div
-                              key={idx}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: idx * 0.05 }}
-                              className="p-3 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-355 dark:hover:border-zinc-800"
-                            >
-                              <div className="min-w-0 flex-1">
-                                <div className="flex items-center gap-2">
+                          <div className="space-y-3">
+                            {suggestions.length > 0 && (
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-550 font-mono mb-2 text-left">
+                                AI Suggestions ({suggestions.length})
+                              </div>
+                            )}
+
+                            {suggestions.map((sug, idx) => (
+                              <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="p-3 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-355 dark:hover:border-zinc-800"
+                              >
+                                <div className="min-w-0">
                                   <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200 leading-snug truncate">
                                     {sug.title}
                                   </p>
-                                  {sug.priority && (
-                                    <span className={`text-[8px] px-1.5 py-0.5 rounded font-mono font-bold leading-none ${
-                                      sug.priority === "HIGH"
-                                        ? "bg-red-950/60 text-red-400 border border-red-900/50"
-                                        : sug.priority === "MEDIUM"
-                                        ? "bg-amber-950/60 text-amber-400 border border-amber-900/50"
-                                        : "bg-blue-950/60 text-blue-400 border border-blue-900/50"
-                                    }`}>
-                                      {sug.priority}
-                                    </span>
-                                  )}
+                                  <p className="text-[10px] text-zinc-550 dark:text-zinc-400 mt-1 leading-normal">
+                                    {sug.description}
+                                  </p>
                                 </div>
-                                <p className="text-[10px] text-zinc-550 dark:text-zinc-400 mt-1 leading-normal">
-                                  {sug.description}
-                                </p>
-                              </div>
 
-                              <button
-                                onClick={() => handleAddMeetingTask(idx, sug)}
-                                disabled={sug.added || sug.adding}
-                                className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
-                                  sug.added
-                                    ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
-                                    : "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-650 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100"
-                                }`}
-                              >
-                                {sug.adding ? (
-                                  <Loader2 size={12} className="animate-spin text-zinc-440" />
-                                ) : sug.added ? (
-                                  <Check size={12} />
-                                ) : (
-                                  <Plus size={12} />
-                                )}
-                              </button>
-                            </motion.div>
-                          ))}
+                                <button
+                                  onClick={() => handleAddTask(idx, sug)}
+                                  disabled={sug.added || sug.adding}
+                                  className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
+                                    sug.added
+                                      ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
+                                      : "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-650 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100"
+                                  }`}
+                                >
+                                  {sug.adding ? (
+                                    <Loader2 size={12} className="animate-spin text-zinc-440" />
+                                  ) : sug.added ? (
+                                    <Check size={12} />
+                                  ) : (
+                                    <Plus size={12} />
+                                  )}
+                                </button>
+                              </motion.div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+
+                      {activeScreen === "project-summary" && (
+                        <div className="space-y-4">
+                          <div className="pt-2">
+                            <button
+                              onClick={handleSummarizeProject}
+                              disabled={!selectedProjectId || isGeneratingSummary}
+                              className="w-full py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 bg-violet-600 hover:bg-violet-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                            >
+                              {isGeneratingSummary ? (
+                                <>
+                                  <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
+                                  <span>Generating summary…</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Sparkles size={13} />
+                                  <span>Summarize Project</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+
+                          {summaryError && (
+                            <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed text-left">
+                              ⚠️ {summaryError}
+                            </div>
+                          )}
+
+                          {summaryText && (
+                            <div className="p-4 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850 rounded-xl leading-relaxed text-xs text-zinc-700 dark:text-zinc-300 font-sans shadow-inner text-left">
+                              {summaryText}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {activeScreen === "task-description" && (
+                        <div className="space-y-4 text-left">
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono">
+                              Select Task
+                            </label>
+                            {isLoadingTasks ? (
+                              <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-500 py-3 font-mono">
+                                <Loader2 size={12} className="animate-spin text-zinc-440" />
+                                Loading tasks...
+                              </div>
+                            ) : tasks.length === 0 ? (
+                              <div className="text-xs text-zinc-500 dark:text-zinc-500 py-3 italic font-sans text-center border border-zinc-200 dark:border-zinc-850 rounded-lg bg-zinc-50 dark:bg-zinc-950/20">
+                                No tasks found in this project.
+                              </div>
+                            ) : (
+                              <div className="relative">
+                                <select
+                                  value={selectedTaskId || ""}
+                                  onChange={(e) => setSelectedTaskId(Number(e.target.value))}
+                                  className="w-full appearance-none bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-violet-500 rounded-lg p-2.5 pr-8 transition duration-200 cursor-pointer text-xs font-mono"
+                                >
+                                  {tasks.map((task) => (
+                                    <option key={task.id} value={task.id} className="bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200">
+                                      {task.title}
+                                    </option>
+                                  ))}
+                                </select>
+                                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="pt-2">
+                            <button
+                              onClick={handleGenerateDescription}
+                              disabled={!selectedProjectId || !selectedTaskId || isGeneratingDesc}
+                              className="w-full py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 bg-violet-600 hover:bg-violet-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                            >
+                              {isGeneratingDesc ? (
+                                <>
+                                  <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
+                                  <span>Generating description…</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Sparkles size={13} />
+                                  <span>Generate Description</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+
+                          {descError && (
+                            <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
+                              ⚠️ {descError}
+                            </div>
+                          )}
+
+                          {generatedDescription && (
+                            <div className="space-y-3">
+                              <div className="p-4 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850 rounded-xl leading-relaxed text-xs text-zinc-700 dark:text-zinc-300 font-sans shadow-inner">
+                                {generatedDescription}
+                              </div>
+                              <button
+                                onClick={handleCopyDescription}
+                                className="w-full py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-250 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer border border-zinc-200 dark:border-zinc-750 flex items-center justify-center gap-2"
+                              >
+                                <Copy size={12} />
+                                <span>{copied ? "Copied ✓" : "Copy Description"}</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {activeScreen === "meeting-tasks" && (
+                        <div className="space-y-4 text-left">
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono">
+                              Meeting Notes
+                            </label>
+                            <textarea
+                              value={meetingNotes}
+                              onChange={(e) => setMeetingNotes(e.target.value)}
+                              placeholder="Paste your meeting notes here…"
+                              rows={4}
+                              className="w-full bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-violet-500 rounded-lg p-2.5 transition duration-200 text-xs font-sans resize-y"
+                            />
+                          </div>
+
+                          <div className="pt-2">
+                            <button
+                              onClick={handleExtractTasks}
+                              disabled={!selectedProjectId || !meetingNotes.trim() || isExtracting}
+                              className="w-full py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 bg-violet-600 hover:bg-violet-700 text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                            >
+                              {isExtracting ? (
+                                <>
+                                  <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
+                                  <span>Extracting tasks from notes…</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Sparkles size={13} />
+                                  <span>Extract Tasks</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+
+                          {meetingError && (
+                            <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
+                              ⚠️ {meetingError}
+                            </div>
+                          )}
+
+                          <div className="space-y-3">
+                            {meetingSuggestions.length > 0 && (
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 font-mono mb-2">
+                                Extracted Tasks ({meetingSuggestions.length})
+                              </div>
+                            )}
+
+                            {meetingSuggestions.map((sug, idx) => (
+                              <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="p-3 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-355 dark:hover:border-zinc-800"
+                              >
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200 leading-snug truncate">
+                                      {sug.title}
+                                    </p>
+                                    {sug.priority && (
+                                      <span className={`text-[8px] px-1.5 py-0.5 rounded font-mono font-bold leading-none ${
+                                        sug.priority === "HIGH"
+                                          ? "bg-red-950/60 text-red-400 border border-red-900/50"
+                                          : sug.priority === "MEDIUM"
+                                          ? "bg-amber-950/60 text-amber-400 border border-amber-900/50"
+                                          : "bg-blue-950/60 text-blue-400 border border-blue-900/50"
+                                      }`}>
+                                        {sug.priority}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-[10px] text-zinc-550 dark:text-zinc-400 mt-1 leading-normal">
+                                    {sug.description}
+                                  </p>
+                                </div>
+
+                                <button
+                                  onClick={() => handleAddMeetingTask(idx, sug)}
+                                  disabled={sug.added || sug.adding}
+                                  className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
+                                    sug.added
+                                      ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
+                                      : "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-650 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100"
+                                  }`}
+                                >
+                                  {sug.adding ? (
+                                    <Loader2 size={12} className="animate-spin text-zinc-440" />
+                                  ) : sug.added ? (
+                                    <Check size={12} />
+                                  ) : (
+                                    <Plus size={12} />
+                                  )}
+                                </button>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
