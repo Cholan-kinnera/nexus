@@ -265,21 +265,21 @@ export default function NexusAIWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="w-[360px] md:w-[400px] min-h-[380px] max-h-[520px] bg-zinc-900/90 dark:bg-zinc-900/95 border border-zinc-800 rounded-2xl shadow-2xl backdrop-blur-md flex flex-col overflow-hidden mb-4 mr-1 text-zinc-150"
+            className="w-[360px] md:w-[400px] min-h-[380px] max-h-[520px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl backdrop-blur-md flex flex-col overflow-hidden mb-4 mr-1 text-zinc-800 dark:text-zinc-150"
           >
             {/* Header */}
-            <div className="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/40">
+            <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-950/40">
               <div className="flex items-center gap-2">
                 <div className="p-1.5 rounded-lg bg-zinc-100 text-zinc-950 flex items-center justify-center">
                   <Sparkles size={14} />
                 </div>
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-100">
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
                   Nexus AI Assistant
                 </span>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-zinc-500 hover:text-zinc-300 transition-colors p-1 rounded-lg hover:bg-zinc-850 cursor-pointer"
+                className="text-zinc-500 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
               >
                 <X size={14} />
               </button>
@@ -297,10 +297,10 @@ export default function NexusAIWidget() {
                     transition={{ duration: 0.2 }}
                     className="flex flex-col text-left"
                   >
-                    <h3 className="text-white font-semibold text-base mt-1">
+                    <h3 className="text-zinc-900 dark:text-white font-semibold text-base mt-1">
                       Hi, {firstName} 👋
                     </h3>
-                    <p className="text-zinc-400 text-sm mb-4">
+                    <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-4">
                       How can I help you today?
                     </p>
 
@@ -308,13 +308,13 @@ export default function NexusAIWidget() {
                       {/* Generate Tasks Card */}
                       <div
                         onClick={() => setActiveScreen("generate-tasks")}
-                        className="p-3 rounded-xl border border-zinc-700 bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
+                        className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
                       >
                         <Sparkles size={16} className="text-violet-400 mb-1" />
-                        <span className="text-white text-xs font-semibold mt-1">
+                        <span className="text-zinc-900 dark:text-white text-xs font-semibold mt-1">
                           Generate Tasks
                         </span>
-                        <span className="text-zinc-500 text-[10px] leading-tight mt-0.5">
+                        <span className="text-zinc-500 dark:text-zinc-500 text-[10px] leading-tight mt-0.5">
                           Turn goals into tasks
                         </span>
                       </div>
@@ -322,13 +322,13 @@ export default function NexusAIWidget() {
                       {/* Project Summary Card */}
                       <div
                         onClick={() => setActiveScreen("project-summary")}
-                        className="p-3 rounded-xl border border-zinc-700 bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
+                        className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
                       >
                         <FileText size={16} className="text-violet-400 mb-1" />
-                        <span className="text-white text-xs font-semibold mt-1">
+                        <span className="text-zinc-900 dark:text-white text-xs font-semibold mt-1">
                           Project Summary
                         </span>
-                        <span className="text-zinc-500 text-[10px] leading-tight mt-0.5">
+                        <span className="text-zinc-500 dark:text-zinc-500 text-[10px] leading-tight mt-0.5">
                           Quick project overview
                         </span>
                       </div>
@@ -336,13 +336,13 @@ export default function NexusAIWidget() {
                       {/* Task Description Card */}
                       <div
                         onClick={() => setActiveScreen("task-description")}
-                        className="p-3 rounded-xl border border-zinc-700 bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
+                        className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
                       >
                         <PenLine size={16} className="text-violet-400 mb-1" />
-                        <span className="text-white text-xs font-semibold mt-1">
+                        <span className="text-zinc-900 dark:text-white text-xs font-semibold mt-1">
                           Task Description
                         </span>
-                        <span className="text-zinc-500 text-[10px] leading-tight mt-0.5">
+                        <span className="text-zinc-500 dark:text-zinc-500 text-[10px] leading-tight mt-0.5">
                           Write from task title
                         </span>
                       </div>
@@ -350,13 +350,13 @@ export default function NexusAIWidget() {
                       {/* Meeting -> Tasks Card */}
                       <div
                         onClick={() => setActiveScreen("meeting-tasks")}
-                        className="p-3 rounded-xl border border-zinc-700 bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
+                        className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-800/60 cursor-pointer hover:border-violet-500/50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-200 flex flex-col items-start text-left"
                       >
                         <ClipboardList size={16} className="text-violet-400 mb-1" />
-                        <span className="text-white text-xs font-semibold mt-1">
+                        <span className="text-zinc-900 dark:text-white text-xs font-semibold mt-1">
                           Meeting → Tasks
                         </span>
-                        <span className="text-zinc-500 text-[10px] leading-tight mt-0.5">
+                        <span className="text-zinc-500 dark:text-zinc-500 text-[10px] leading-tight mt-0.5">
                           Extract tasks from notes
                         </span>
                       </div>
@@ -396,11 +396,11 @@ export default function NexusAIWidget() {
                           }
                           setActiveScreen("home");
                         }}
-                        className="text-zinc-400 hover:text-white cursor-pointer transition-colors p-0.5 flex items-center justify-center"
+                        className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer transition-colors p-0.5 flex items-center justify-center"
                       >
                         <ChevronLeft size={16} />
                       </button>
-                      <span className="text-white text-sm font-semibold">
+                      <span className="text-zinc-900 dark:text-white text-sm font-semibold">
                         {activeScreen === "generate-tasks" && "Generate Tasks"}
                         {activeScreen === "project-summary" && "Project Summary"}
                         {activeScreen === "task-description" && "Task Description"}
@@ -410,16 +410,16 @@ export default function NexusAIWidget() {
 
                     {/* Project selector dropdown (visible for all tabs) */}
                     <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-550 mb-1.5 font-mono text-left">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono text-left">
                         Select Project
                       </label>
                       {isLoadingProjects ? (
-                        <div className="flex items-center gap-2 text-xs text-zinc-500 py-3 font-mono text-left">
-                          <Loader2 size={12} className="animate-spin text-zinc-450" />
+                        <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-500 py-3 font-mono text-left">
+                          <Loader2 size={12} className="animate-spin text-zinc-440" />
                           Loading projects...
                         </div>
                       ) : projects.length === 0 ? (
-                        <div className="text-xs text-zinc-500 py-2 italic font-sans text-left">
+                        <div className="text-xs text-zinc-500 dark:text-zinc-500 py-2 italic font-sans text-left">
                           No projects found. Please create a project first.
                         </div>
                       ) : (
@@ -427,7 +427,7 @@ export default function NexusAIWidget() {
                           <select
                             value={selectedProjectId || ""}
                             onChange={(e) => setSelectedProjectId(Number(e.target.value))}
-                            className="w-full appearance-none bg-zinc-950/80 border border-zinc-800 rounded-lg p-2.5 pr-8 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs font-mono"
+                            className="w-full appearance-none bg-zinc-50 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2.5 pr-8 focus:border-zinc-400 dark:focus:border-zinc-700 text-zinc-700 dark:text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs font-mono"
                           >
                             {projects.map((proj) => (
                               <option key={proj.id} value={proj.id}>
@@ -447,11 +447,11 @@ export default function NexusAIWidget() {
                           <button
                             onClick={handleGenerateTasks}
                             disabled={!selectedProjectId || isGenerating}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
                           >
                             {isGenerating ? (
                               <>
-                                <Loader2 size={13} className="animate-spin text-zinc-950" />
+                                <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
                                 <span>Generating suggestions...</span>
                               </>
                             ) : (
@@ -464,14 +464,14 @@ export default function NexusAIWidget() {
                         </div>
 
                         {errorMessage && (
-                          <div className="text-[10px] text-red-400 font-mono bg-red-950/20 border border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed text-left">
+                          <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed text-left">
                             ⚠️ {errorMessage}
                           </div>
                         )}
 
                         <div className="space-y-3">
                           {suggestions.length > 0 && (
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-550 font-mono mb-2 text-left">
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-550 font-mono mb-2 text-left">
                               AI Suggestions ({suggestions.length})
                             </div>
                           )}
@@ -482,13 +482,13 @@ export default function NexusAIWidget() {
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: idx * 0.05 }}
-                              className="p-3 bg-zinc-950/40 border border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-800"
+                              className="p-3 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-350 dark:hover:border-zinc-800"
                             >
                               <div className="min-w-0">
-                                <p className="text-xs font-bold text-zinc-200 leading-snug truncate">
+                                <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200 leading-snug truncate">
                                   {sug.title}
                                 </p>
-                                <p className="text-[10px] text-zinc-400 mt-1 leading-normal">
+                                <p className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1 leading-normal">
                                   {sug.description}
                                 </p>
                               </div>
@@ -499,7 +499,7 @@ export default function NexusAIWidget() {
                                 className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
                                   sug.added
                                     ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
-                                    : "bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-zinc-100"
+                                    : "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-650 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100"
                                 }`}
                               >
                                 {sug.adding ? (
@@ -522,11 +522,11 @@ export default function NexusAIWidget() {
                           <button
                             onClick={handleSummarizeProject}
                             disabled={!selectedProjectId || isGeneratingSummary}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
                           >
                             {isGeneratingSummary ? (
                               <>
-                                <Loader2 size={13} className="animate-spin text-zinc-950" />
+                                <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
                                 <span>Generating summary…</span>
                               </>
                             ) : (
@@ -539,13 +539,13 @@ export default function NexusAIWidget() {
                         </div>
 
                         {summaryError && (
-                          <div className="text-[10px] text-red-400 font-mono bg-red-950/20 border border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed text-left">
+                          <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed text-left">
                             ⚠️ {summaryError}
                           </div>
                         )}
 
                         {summaryText && (
-                          <div className="p-4 bg-zinc-950/40 border border-zinc-850 rounded-xl leading-relaxed text-xs text-zinc-350 font-sans shadow-inner text-left">
+                          <div className="p-4 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850 rounded-xl leading-relaxed text-xs text-zinc-700 dark:text-zinc-300 font-sans shadow-inner text-left">
                             {summaryText}
                           </div>
                         )}
@@ -555,16 +555,16 @@ export default function NexusAIWidget() {
                     {activeScreen === "task-description" && (
                       <div className="space-y-4 text-left">
                         <div>
-                          <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-550 mb-1.5 font-mono">
+                          <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono">
                             Select Task
                           </label>
                           {isLoadingTasks ? (
-                            <div className="flex items-center gap-2 text-xs text-zinc-500 py-3 font-mono">
-                              <Loader2 size={12} className="animate-spin text-zinc-450" />
+                            <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-500 py-3 font-mono">
+                              <Loader2 size={12} className="animate-spin text-zinc-440" />
                               Loading tasks...
                             </div>
                           ) : tasks.length === 0 ? (
-                            <div className="text-xs text-zinc-500 py-3 italic font-sans text-center border border-zinc-850 rounded-lg bg-zinc-950/20">
+                            <div className="text-xs text-zinc-500 dark:text-zinc-500 py-3 italic font-sans text-center border border-zinc-200 dark:border-zinc-850 rounded-lg bg-zinc-50 dark:bg-zinc-950/20">
                               No tasks found in this project.
                             </div>
                           ) : (
@@ -572,7 +572,7 @@ export default function NexusAIWidget() {
                               <select
                                 value={selectedTaskId || ""}
                                 onChange={(e) => setSelectedTaskId(Number(e.target.value))}
-                                className="w-full appearance-none bg-zinc-950/80 border border-zinc-800 rounded-lg p-2.5 pr-8 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs font-mono"
+                                className="w-full appearance-none bg-zinc-50 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2.5 pr-8 focus:border-zinc-400 dark:focus:border-zinc-700 text-zinc-700 dark:text-zinc-300 outline-none transition duration-200 cursor-pointer text-xs font-mono"
                               >
                                 {tasks.map((task) => (
                                   <option key={task.id} value={task.id}>
@@ -589,11 +589,11 @@ export default function NexusAIWidget() {
                           <button
                             onClick={handleGenerateDescription}
                             disabled={!selectedProjectId || !selectedTaskId || isGeneratingDesc}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
                           >
                             {isGeneratingDesc ? (
                               <>
-                                <Loader2 size={13} className="animate-spin text-zinc-950" />
+                                <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
                                 <span>Generating description…</span>
                               </>
                             ) : (
@@ -606,19 +606,19 @@ export default function NexusAIWidget() {
                         </div>
 
                         {descError && (
-                          <div className="text-[10px] text-red-400 font-mono bg-red-950/20 border border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
+                          <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
                             ⚠️ {descError}
                           </div>
                         )}
 
                         {generatedDescription && (
                           <div className="space-y-3">
-                            <div className="p-4 bg-zinc-950/40 border border-zinc-850 rounded-xl leading-relaxed text-xs text-zinc-350 font-sans shadow-inner">
+                            <div className="p-4 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850 rounded-xl leading-relaxed text-xs text-zinc-700 dark:text-zinc-300 font-sans shadow-inner">
                               {generatedDescription}
                             </div>
                             <button
                               onClick={handleCopyDescription}
-                              className="w-full py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-250 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer border border-zinc-750 flex items-center justify-center gap-2"
+                              className="w-full py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-250 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer border border-zinc-200 dark:border-zinc-750 flex items-center justify-center gap-2"
                             >
                               <Copy size={12} />
                               <span>{copied ? "Copied ✓" : "Copy Description"}</span>
@@ -631,7 +631,7 @@ export default function NexusAIWidget() {
                     {activeScreen === "meeting-tasks" && (
                       <div className="space-y-4 text-left">
                         <div>
-                          <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-550 mb-1.5 font-mono">
+                          <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-1.5 font-mono">
                             Meeting Notes
                           </label>
                           <textarea
@@ -639,7 +639,7 @@ export default function NexusAIWidget() {
                             onChange={(e) => setMeetingNotes(e.target.value)}
                             placeholder="Paste your meeting notes here…"
                             rows={4}
-                            className="w-full bg-zinc-950/80 border border-zinc-800 rounded-lg p-2.5 focus:border-zinc-700 text-zinc-300 outline-none transition duration-200 text-xs font-sans resize-y"
+                            className="w-full bg-zinc-50 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2.5 focus:border-zinc-400 dark:focus:border-zinc-700 text-zinc-700 dark:text-zinc-300 outline-none transition duration-200 text-xs font-sans resize-y"
                           />
                         </div>
 
@@ -647,11 +647,11 @@ export default function NexusAIWidget() {
                           <button
                             onClick={handleExtractTasks}
                             disabled={!selectedProjectId || !meetingNotes.trim() || isExtracting}
-                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                            className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs font-mono rounded-lg transition duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
                           >
                             {isExtracting ? (
                               <>
-                                <Loader2 size={13} className="animate-spin text-zinc-950" />
+                                <Loader2 size={13} className="animate-spin text-white dark:text-zinc-950" />
                                 <span>Extracting tasks from notes…</span>
                               </>
                             ) : (
@@ -664,14 +664,14 @@ export default function NexusAIWidget() {
                         </div>
 
                         {meetingError && (
-                          <div className="text-[10px] text-red-400 font-mono bg-red-950/20 border border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
+                          <div className="text-[10px] text-red-455 dark:text-red-400 font-mono bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 px-3 py-2.5 rounded-lg leading-relaxed">
                             ⚠️ {meetingError}
                           </div>
                         )}
 
                         <div className="space-y-3">
                           {meetingSuggestions.length > 0 && (
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-550 font-mono mb-2">
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 font-mono mb-2">
                               Extracted Tasks ({meetingSuggestions.length})
                             </div>
                           )}
@@ -682,11 +682,11 @@ export default function NexusAIWidget() {
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: idx * 0.05 }}
-                              className="p-3 bg-zinc-950/40 border border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-800"
+                              className="p-3 bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-850/80 rounded-xl flex items-start justify-between gap-3 text-left transition duration-200 hover:border-zinc-355 dark:hover:border-zinc-800"
                             >
                               <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-2">
-                                  <p className="text-xs font-bold text-zinc-200 leading-snug truncate">
+                                  <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200 leading-snug truncate">
                                     {sug.title}
                                   </p>
                                   {sug.priority && (
@@ -701,7 +701,7 @@ export default function NexusAIWidget() {
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-[10px] text-zinc-400 mt-1 leading-normal">
+                                <p className="text-[10px] text-zinc-550 dark:text-zinc-400 mt-1 leading-normal">
                                   {sug.description}
                                 </p>
                               </div>
@@ -712,7 +712,7 @@ export default function NexusAIWidget() {
                                 className={`shrink-0 p-1.5 rounded-lg border transition-all duration-200 flex items-center justify-center cursor-pointer ${
                                   sug.added
                                     ? "bg-emerald-950/40 border-emerald-900/50 text-emerald-400"
-                                    : "bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-zinc-100"
+                                    : "bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-650 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100"
                                 }`}
                               >
                                 {sug.adding ? (
@@ -749,4 +749,3 @@ export default function NexusAIWidget() {
     </div>
   );
 }
-
