@@ -11,4 +11,4 @@ fi
 
 echo "Database migrations applied successfully."
 echo "Starting FastAPI production server..."
-exec gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
+exec gunicorn -w 1 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
