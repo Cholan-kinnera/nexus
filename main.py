@@ -94,13 +94,18 @@ async def lifespan(app: FastAPI):
         await engine.dispose()
 
 
-ALLOWED_ORIGINS = os.getenv(
+raw_origins = os.getenv(
     "ALLOWED_ORIGINS",
     "http://localhost,http://127.0.0.1,http://localhost:80,http://127.0.0.1:80,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174",
-).split(",")
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS", "localhost,127.0.0.1,backend,*.yourdomain.com"
-).split(",")
+)
+raw_origins = raw_origins.strip("'\"")
+ALLOWED_ORIGINS = [origin.strip() for origin in raw_origins.split(",") if origin.strip()]
+
+raw_hosts = os.getenv(
+    "ALLOWED_HOSTS", "localhost,127.0.0.1,nexus-pm-backend-21kc.onrender.com,*.onrender.com"
+)
+raw_hosts = raw_hosts.strip("'\"")
+ALLOWED_HOSTS = [host.strip() for host in raw_hosts.split(",") if host.strip()]
 
 app = FastAPI(
     title="Nexus PM",
@@ -114,7 +119,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in ALLOWED_ORIGINS],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allow_headers=["*"],
@@ -122,7 +127,7 @@ app.add_middleware(
 
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=[host.strip() for host in ALLOWED_HOSTS],
+    allowed_hosts=ALLOWED_HOSTS,
 )
 
 app.add_middleware(RequestIDMiddleware)
