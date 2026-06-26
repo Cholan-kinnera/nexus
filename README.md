@@ -52,9 +52,38 @@
 * **Analytics Dashboard:** Real-time charts measuring task speed, completion rates, and storage volumes.
 * **Containerized CI/CD:** Lightweight multi-stage builds and automated GitHub Actions verification.
 
----
+## 📖 Documentation
 
-> Full documentation available in the `/docs` folder.
+Nexus PM includes a comprehensive enterprise-style Software Architecture Document covering the complete system design, implementation details, deployment architecture, security model, database schema, API specifications, AI integration, testing strategy, and production readiness.
+
+### Available Documents
+
+| Document                              | Description                                                            |
+| ------------------------------------- | ---------------------------------------------------------------------- |
+| 📄 **Software Architecture Document** | Complete technical architecture and design documentation (115+ pages). |
+| 📝 **LaTeX Source**                   | Full source used to generate the architecture document.                |
+
+### Access
+
+* 📄 **Architecture Document (PDF)**
+  [`docs/architecture/Nexus_PM_Software_Architecture_Document_v1.0.pdf`](docs/architecture/Nexus_PM_Software_Architecture_Document_v1.0.pdf)
+
+* 📝 **LaTeX Source**
+  [`docs/architecture/source/`](docs/architecture/source/)
+
+The documentation includes:
+
+* System Architecture
+* High-Level Design
+* Low-Level Design
+* Database Design
+* API Design
+* Security Architecture
+* AI Architecture
+* Deployment Architecture
+* Testing Strategy
+* Production Readiness
+* Future Roadmap
 
 ---
 
