@@ -1,0 +1,125 @@
+\chapter{Testing Strategy}
+\label{chap:testing-strategy}
+
+\section{Introduction}
+A systematic verification and quality assurance strategy is critical to maintaining software quality, operational reliability, and deploy confidence in a cloud-native, multi-tenant SaaS application. For Nexus PM, the testing strategy serves to verify functional correctness, validate security controls (e.g., workspace isolation and role permissions), and prevent regression errors during continuous integration and deployment.
+
+This chapter details the testing objectives, testing levels, backend and frontend validation procedures, post-deployment verifications, security audits, and the automated CI/CD quality gates implemented in the GitHub Actions pipeline.
+
+\section{Testing Objectives}
+The quality assurance strategy of Nexus PM is designed around seven engineering objectives:
+\begin{itemize}
+    \item \textbf{Functional Correctness:} Verify that REST endpoints return expected JSON payloads and data modifications are written to PostgreSQL in accordance with schema rules.
+    \item \textbf{Reliability:} Ensure that the stateless API gateway handles load spikes, rate-limit thresholds, and database connection timeouts gracefully.
+    \item \textbf{Security Validation:} Verify that authentication tokens are parsed statelessly, secure cookie flags are present, and workspace role boundaries prevent unauthorized access.
+    \item \textbf{Performance Validation:} Track endpoint response latencies, database execution times, and external API call runtimes.
+    \item \textbf{Cloud Deployment Validation:} Ensure that container builds compile without error and database schema migrations execute successfully.
+    \item \textbf{Regression Prevention:} Automate test runs in CI pipelines to catch software regressions before code gets merged to active branches.
+    \item \textbf{Code Maintainability:} Encourage modular, clean coding patterns by enforcing strict linting, formatting, and dependency audits.
+\end{itemize}
+
+\section{Testing Levels}
+The verification framework of Nexus PM is split across five distinct testing levels, categorizing implemented vs. future procedures in Table~\ref{tab:testing_levels}.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\textwidth}{l l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}Testing Level} & \textbf{\color{primary}Implementation Status} & \textbf{\color{primary}Verification Methodology} \\
+    \midrule
+    \textbf{Static Analysis} & Active (CI Pipeline) & Formatting verification using Black, code linting via Ruff, and package security audits. \\
+    \textbf{Unit Testing} & Active (Local \& CI) & Database schema validations and attachment logic testing using Python's \texttt{unittest} library. \\
+    \textbf{Integration Testing} & Future Work & Verification of API routes, Redis caching actions, and OAuth flows using Pytest-asyncio. \\
+    \textbf{System Testing} & Manual (Verification) & End-to-end workspace setup and task board interaction tests conducted in staging containers. \\
+    \textbf{E2E Browser Validation} & Future Work & Automated user interactions and view state updates verification using Playwright or Cypress. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Nexus PM Testing Levels and Status Specifications}
+\label{tab:testing_levels}
+\end{table}
+
+\section{Backend Validation}
+Backend validation checks model relationships, service logic, and query executions:
+\begin{itemize}
+    \item \textbf{Schema and Relation Validation:} The backend test suite (managed via Python's standard \texttt{unittest} library) verifies database constraints. For example, \path{tests/test_task_attachments.py} validates that task attachment relationships, cascade deletions, and user-deletion bindings conform to database definitions.
+    \item \textbf{Route Import and Syntax Auditing:} To prevent execution errors on deployment nodes, the test runner compiles the python source files (\texttt{compileall}) and imports the main router class (\texttt{import main}) in a test environment, checking syntax and dependency imports before executing backend tests.
+    \item \textbf{Transaction Verification:} Scoped database session lifecycles are checked to ensure rollback execution on exceptions, preventing data corruptions.
+\end{itemize}
+
+\section{Frontend Validation}
+Because automated user interface tests are not yet implemented, frontend verification combines static builds compilation checks with manual review:
+\begin{itemize}
+    \item \textbf{Compilation Checks:} The frontend pipeline executes static bundle compilation runs (\texttt{npm run build}). This checks that the TypeScript parser catches syntax errors, interface mismatches, or invalid imports before deployment.
+    \item \textbf{Static Code Checks:} Code formatting and style rules are checked using ESLint rules (\texttt{npm run lint}) to ensure clean syntax.
+    \item \textbf{Manual UI Audits:} Key interface elements (e.g., responsive page layouts, Kanban drag-and-drop actions, JWT refresh loops, Google sign-in prompts) are manually verified in development and staging environments.
+\end{itemize}
+
+\section{Deployment Validation}
+Following deployment to Render and Vercel, post-deployment verifications check that production resources are configured correctly:
+\begin{itemize}
+    \item \textbf{Connection Status:} Verification checks confirm that the backend container can communicate with the Supabase database instance and Upstash Redis caches over TLS.
+    \item \textbf{Domain and SSL Audits:} DNS redirects and custom domain bindings (\texttt{nexuspm.online}) are audited to ensure proper routing and SSL/TLS transport encryption.
+    \item \textbf{Config Settings Validation:} Build processes check that environment variables (e.g., API keys, database credentials) are set correctly in production containers, avoiding missing variable errors during runtime.
+\end{itemize}
+
+\section{Security Verification}
+Security audits verify that authorization controls are active and data access is restricted:
+\begin{itemize}
+    \item \textbf{JWT Signature Validation:} API controllers verify access tokens, checking signature keys and expirations, and raising unauthorized errors on invalid tokens.
+    \item \textbf{Cookie Settings Verification:} Browser inspectors verify that session refresh cookies contain the \texttt{HttpOnly}, \texttt{Secure}, and \texttt{SameSite=Strict} flags in production.
+    \item \textbf{Role Permissions Verification:} Request handlers test authorization boundaries, checking that restricted resources (e.g., deleting projects) return 403 Forbidden errors when accessed by unauthorized roles.
+\end{itemize}
+
+\section{Performance Validation}
+Performance audits monitor resource limits and response times under standard loads:
+\begin{itemize}
+    \item \textbf{API Latency Tracking:} Read and write latencies are monitored to ensure requests resolve within performance targets (e.g., under 100ms for read paths).
+    \item \textbf{Database Query Optimizations:} Database queries are checked using PostgreSQL execution plan analysis (\texttt{EXPLAIN ANALYZE}) to ensure indexes are utilized and tables are scanned efficiently.
+    \item \textbf{Cold Start Auditing:} Compute warm-up routines are monitored to check container start times from dormant states on Render's free tier.
+\end{itemize}
+
+\section{CI/CD Quality Gates}
+Nexus PM automates code validation using GitHub Actions. The pipeline defined in \path{.github/workflows/ci.yml} enforces several build quality gates before code changes can be merged:
+\begin{enumerate}
+    \item \textbf{Security Auditing (Black/Ruff/pip-audit):} Python files are checked for formatting compliance (\texttt{black --check .}) and linting errors (\texttt{ruff check .}). Active dependencies are scanned for vulnerability exploits (\path{pip-audit -r requirements.txt}).
+    \item \textbf{Frontend Auditing (npm audit/lint/build):} Packages inside the \texttt{frontend} directory are audited for security risks. Build pipelines verify that the React client compiles without errors.
+    \item \textbf{Migration Run Verification (database-ci):} A local PostgreSQL instance is spun up via Docker service containers. The runner executes Alembic migrations (\texttt{alembic upgrade head}) to verify database changes and migration head status.
+    \item \textbf{Unit Tests Executions (backend-ci):} Python imports are checked, and the unit test suite is executed using the standard test runner (\texttt{python -m unittest discover}).
+    \item \textbf{Docker Compilation Checks (docker-ci):} The pipeline builds Docker containers for both backend and frontend environments, ensuring the images compile correctly before deployment.
+\end{enumerate}
+
+\section{Risks and Testing Limitations}
+The testing strategy has several known limitations, which are managed as part of operational risk planning:
+\begin{itemize}
+    \item \textbf{UI Testing Gaps:} The lack of automated frontend testing (such as component unit tests or end-to-end browser tests) increases the risk of interface regressions during updates. This risk is mitigated through manual testing workflows.
+    \item \textbf{Load and Chaos Testing:} The platform has not undergone automated load, stress, or chaos testing. The lack of load testing makes it difficult to predict database behavior under high concurrent user loads.
+    \item \textbf{AI Reliability Variance:} Generative outputs from Google Gemini can vary between requests. The non-deterministic nature of AI generations makes them difficult to test with simple assert checks, requiring input schema constraints.
+\end{itemize}
+
+\section{Future Testing Roadmap}
+Future iterations of the platform plan to address several verification improvements, as outlined in the testing roadmap in Table~\ref{tab:testing_roadmap}.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\textwidth}{l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}Planned Goal} & \textbf{\color{primary}Verification Objectives} \\
+    \midrule
+    Pytest Migration & Migrate backend test suites from \texttt{unittest} to \texttt{pytest} to support async testing patterns and parameterized test runs. \\
+    Playwright Integration & Implement browser automation tests to verify Kanban drag-and-drop actions, login redirections, and client-side page routing. \\
+    OWASP Security Auditing & Automate security scans (e.g., OWASP ZAP) to check for common vulnerabilities like SQL injection or cross-site scripting. \\
+    Load and Performance Testing & Implement automated performance tests (e.g., k6) to benchmark API endpoints and database connection pools under simulated traffic. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Future Quality Assurance Roadmap}
+\label{tab:testing_roadmap}
+\end{table}
+
+\section{Chapter Summary}
+This chapter detailed the testing strategy and quality assurance procedures for Nexus PM. By combining static code analysis, unit testing suites, and automated CI/CD quality gates in GitHub Actions, the architecture verifies code changes and database migrations before deployment. Managing testing limitations and executing post-deployment checks helps ensure system reliability and security. The next chapter will outline the operational readiness checklists and production configurations.

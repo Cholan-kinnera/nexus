@@ -1,0 +1,197 @@
+% =============================================================================
+% Nexus PM Software Architecture Document - Main Configuration
+% Document ID: NPM-SAD-001
+% =============================================================================
+\documentclass[11pt,a4paper]{report}
+
+% Page Geometry & Margins
+\usepackage[margin=1.2in, headheight=15pt]{geometry}
+
+% Core Packages
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{listings}
+\usepackage[table]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage{helvet}
+\usepackage{titlesec}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{float}
+\usepackage{caption}
+
+% Modern Sans-Serif Typography
+\renewcommand{\familydefault}{\sfdefault}
+
+% Enterprise Color Palette (Slate & Indigo)
+\definecolor{primary}{HTML}{0F172A}   % Dark Slate
+\definecolor{secondary}{HTML}{4F46E5} % Indigo Accent
+\definecolor{muted}{HTML}{64748B}     % Muted Slate
+
+% PDF Metadata & Hyperlinks Configuration
+\hypersetup{
+    pdftitle={Nexus PM - Software Architecture Document},
+    pdfauthor={Cholan Kinnera},
+    colorlinks=true,
+    linkcolor=secondary,
+    urlcolor=secondary,
+    citecolor=secondary,
+}
+
+% Heading Styles (Enterprise/Technical Style)
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\bfseries\color{primary}}
+  {\filleft\color{secondary}\fontsize{12}{14}\selectfont\scshape Chapter \thechapter}
+  {0.5ex}
+  {\filleft\fontsize{26}{32}\selectfont}
+  [\vspace{1ex}\hrule height 0.75pt\vspace{2ex}]
+
+\titleformat{\section}
+  {\normalfont\sffamily\large\bfseries\color{primary}}
+  {\thesection}{1em}{}
+  [\vspace{0.2ex}\hrule height 0.5pt\vspace{1ex}]
+
+% Header and Footer Styling (fancyhdr)
+\pagestyle{fancy}
+\fancyhf{} % Clear header and footer defaults
+\fancyhead[L]{\fontsize{9}{11}\selectfont\color{muted}\sffamily Nexus PM --- Software Architecture Document}
+\fancyhead[R]{\fontsize{9}{11}\selectfont\color{muted}\sffamily Document ID: NPM-SAD-001}
+\fancyfoot[C]{\fontsize{10}{12}\selectfont\color{primary}\sffamily\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Code Listing configuration (listings)
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{muted!30},
+    backgroundcolor=\color{primary!2},
+    keywordstyle=\color{secondary}\bfseries,
+    commentstyle=\color{muted}\itshape,
+    stringstyle=\color{primary!80},
+    showstringspaces=false
+}
+
+\begin{document}
+
+% -----------------------------------------------------------------------------
+% FRONT MATTER
+% -----------------------------------------------------------------------------
+\pagenumbering{roman}
+
+% 01. Cover Page
+\input{chapters/01-cover}
+\clearpage
+
+% 02. Revision History
+\input{chapters/02-revision-history}
+\clearpage
+
+% Table of Contents
+\tableofcontents
+\clearpage
+
+% List of Figures
+\listoffigures
+\clearpage
+
+% List of Tables
+\listoftables
+\clearpage
+
+% 03. Abstract
+\input{chapters/03-abstract}
+\clearpage
+
+% 04. Executive Summary
+\input{chapters/04-executive-summary}
+\clearpage
+
+% -----------------------------------------------------------------------------
+% TECHNICAL BODY
+% -----------------------------------------------------------------------------
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% 00. Architecture at a Glance
+\input{chapters/00-architecture-at-a-glance}
+\clearpage
+
+% 05. Project Overview
+\input{chapters/05-project-overview}
+\clearpage
+
+% 06. System Requirements
+\input{chapters/06-system-requirements}
+\clearpage
+
+% 07. High-Level Design
+\input{chapters/07-high-level-design}
+\clearpage
+
+% 08. Low-Level Design
+\input{chapters/08-low-level-design}
+\clearpage
+
+% 09. Database Design
+\input{chapters/09-database-design}
+\clearpage
+
+% 10. API Design
+\input{chapters/10-api-design}
+\clearpage
+
+% 11. Security Design
+\input{chapters/11-security-design}
+\clearpage
+
+% 12. AI Design
+\input{chapters/12-ai-design}
+\clearpage
+
+% 13. Deployment Design
+\input{chapters/13-deployment-design}
+\clearpage
+
+% 14. Testing
+\input{chapters/14-testing}
+\clearpage
+
+% 15. Production Readiness
+\input{chapters/15-production-readiness}
+\clearpage
+
+% 16. Future Roadmap
+\input{chapters/16-future-roadmap}
+\clearpage
+
+% 17. Conclusion
+\input{chapters/17-conclusion}
+\clearpage
+
+% -----------------------------------------------------------------------------
+% APPENDICES
+% -----------------------------------------------------------------------------
+\appendix
+\input{appendix/acronyms}
+\clearpage
+
+\input{appendix/glossary}
+\clearpage
+
+\input{appendix/technology-selection}
+\clearpage
+
+% -----------------------------------------------------------------------------
+% BIBLIOGRAPHY
+% -----------------------------------------------------------------------------
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{bibliography/references}
+
+\end{document}

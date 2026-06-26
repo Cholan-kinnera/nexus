@@ -1,0 +1,154 @@
+\chapter{API Design}
+\label{chap:api-design}
+
+\section{Introduction}
+The REST API serves as the gateway for the Nexus PM application ecosystem. It abstracts the underlying relational database structure and business logic, providing a unified, secure interface for client applications. The primary goals of the API design are to enforce complete decoupling between presentation layers and backend services, ensure stateless horizontal scaling, and maintain strict access boundaries.
+
+Through standard request processing pipelines, validation schemas, and unified error mapping, the API provides high availability, cost efficiency, and developer velocity. This chapter details the design principles, routing topology, authentication architecture, request lifecycles, and security controls that define the Nexus PM API gateway.
+
+\section{API Design Principles}
+The Nexus PM REST API is built on several core architectural concepts:
+\begin{itemize}
+    \item \textbf{RESTful Resource Orientation:} Every API URL maps directly to a logical resource or collection (e.g., \path{/api/projects}, \path{/api/tasks/{task_id}/comments}). Endpoint paths use plural nouns to identify target entities.
+    \item \textbf{Stateless Communication:} The API server stores no client session context locally. Every incoming HTTP request must contain all credentials and parameters needed to authorize and execute the command.
+    \item \textbf{Standardized JSON Payloads:} The API exchanges data exclusively using standardized UTF-8 JSON payloads, ensuring compatibility with modern web clients and external systems.
+    \item \textbf{Strict HTTP Semantics:} The API aligns database operations with standard HTTP methods to represent create, read, update, and delete actions:
+    \begin{itemize}
+        \item \texttt{GET} for safe, idempotent read queries.
+        \item \texttt{POST} for non-idempotent resource creation.
+        \item \texttt{PUT} for complete resource updates (replacing existing states).
+        \item \texttt{PATCH} for partial resource changes.
+        \item \texttt{DELETE} for resource removal operations.
+    \end{itemize}
+    \item \textbf{Predictable Response Formats:} Responses return standardized HTTP status codes, structured JSON payloads on success, and consistent error schemas on failure.
+\end{itemize}
+
+\section{API Architecture}
+The API is structured around modular FastAPI routers, which partition routes into distinct areas of responsibility. Table~\ref{tab:router_responsibilities} outlines the core routers and their functional boundaries.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\textwidth}{l l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}Router Name} & \textbf{\color{primary}Root Endpoint} & \textbf{\color{primary}Functional Scope} \\
+    \midrule
+    \texttt{auth} & \texttt{\detokenize{/api/auth}} & Handles user registration, login, refresh token rotation, and Google OAuth callbacks. \\
+    \texttt{users} & \texttt{\detokenize{/api/users}} & Manages user profile settings, avatar mappings, and active user queries. \\
+    \texttt{projects} & \texttt{\detokenize{/api/projects}} & Handles project creation, workspace setup, and metadata updates. \\
+    \texttt{\detokenize{project_members}} & \texttt{\detokenize{/api/projects/{id}/members}} & Manages member additions, roles, and project invitations. \\
+    \texttt{tasks} & \texttt{\detokenize{/api/tasks}} & Manages task CRUD operations, Kanban board updates, and due dates. \\
+    \texttt{comments} & \texttt{\detokenize{/api/tasks/{id}/comments}} & Handles task comment threads and updates. \\
+    \texttt{storage} & \texttt{\detokenize{/api/storage}} & Generates pre-signed upload URLs and links file attachments. \\
+    \texttt{notifications} & \texttt{\detokenize{/api/notifications}} & Lists user notifications and updates read indicators. \\
+    \texttt{analytics} & \texttt{\detokenize{/api/analytics}} & Computes aggregated project metrics and workloads. \\
+    \texttt{ai} & \texttt{\detokenize{/api/ai}} & Manages task decomposition and project summaries. \\
+    \texttt{\detokenize{activity_logs}} & \texttt{\detokenize{/api/activity-logs}} & Exposes audit trails for workspace monitoring. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{API Router Subsystem Responsibilities}
+\label{tab:router_responsibilities}
+\end{table}
+
+\section{Authentication Architecture}
+The authentication architecture coordinates user identity checks and role permissions using a dual-token paradigm:
+\begin{itemize}
+    \item \textbf{Stateless Access Tokens:} Upon authentication, the client receives a signed JSON Web Token (JWT) containing the user identity (\texttt{sub}) and expiration timestamp. The API validates the signature statelessly on every request, avoiding database access.
+    \item \textbf{Secure Cookie Containment:} The access token resides in local client state, while the refresh token is stored in a cookie flagged as \texttt{HttpOnly} and \texttt{Secure}, with SameSite configurations defaulting to \texttt{Lax} (or configured dynamically). This prevents unauthorized client-side access (mitigating XSS) and mitigates CSRF.
+    \item \textbf{Refresh Token Rotation:} The client exchanges refresh tokens for new access tokens. Hashed refresh tokens are verified against the database and rotated dynamically to prevent token reuse attacks.
+    \item \textbf{Google OAuth Federated Login:} External authentication is supported. The backend exchanges Google auth codes for identity tokens, matches the email to provision local user records, and issues a standard JWT session.
+    \item \textbf{Role-Based Dependency Checks:} API routers enforce workspace permissions dynamically using dependency injection. Before executing business logic, dependencies fetch roles (e.g., \texttt{owner}, \texttt{manager}) and raise HTTP 403 Forbidden exceptions if access constraints are violated.
+    \item \textbf{OTP Verification and Password Recovery:} Supports signup user activation flows and password-reset workflows using temporary hashed OTP codes stored in the database. Request rates for password-reset endpoints are tracked using the \texttt{forgot\_password\_rate\_limits} table in the database to prevent brute-forcing.
+\end{itemize}
+
+\section{Request Processing Pipeline}
+Every incoming API request is processed through a structured pipeline to ensure validation, authorization, and consistency, as shown in Figure~\ref{fig:request_pipeline}.
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}{0.75\textwidth}
+    \small
+    \begin{enumerate}
+        \item \textbf{Ingress Transaction:} The client submits an HTTP request to the gateway.
+        \item \textbf{Observability Injection:} The \texttt{RequestIDMiddleware} stamps the transaction context with a unique \texttt{X-Request-ID} trace identifier, passing it to the context logger.
+        \item \textbf{Input Validation:} The request body is parsed and validated against the Pydantic schema.
+        \item \textbf{Identity Verification:} The \texttt{get\_current\_user} dependency verifies the JWT signature and extracts user credentials from the database.
+        \item \textbf{Access Authorization:} The controller checks permissions based on project membership and role mapping.
+        \item \textbf{Business Execution:} The service layer runs the business logic inside a scoped PostgreSQL transaction.
+        \item \textbf{External Orchestration:} Asynchronous background tasks are triggered (e.g., AI generation, email dispatch) if needed.
+        \item \textbf{Data Serialization:} Pydantic schemas serialize the output data, removing sensitive credentials before returning a JSON response.
+    \end{enumerate}
+    \end{minipage}
+    \caption{Nexus PM API Request Processing Sequence}
+    \label{fig:request_pipeline}
+\end{figure}
+
+\section{Validation Strategy}
+The API validation strategy uses Pydantic schemas to ensure data integrity:
+\begin{itemize}
+    \item \textbf{Request Schema Validation:} Raw JSON payloads are validated against Pydantic schemas immediately upon receipt. This enforces type compliance, value constraints (e.g., minimum string lengths), and attribute structures before logic execution.
+    \item \textbf{Output Response Models:} Response models serialize output objects, ensuring that sensitive data (e.g., hashed passwords, Google IDs) is excluded from the returned payload.
+    \item \textbf{Pydantic Exception Mapping:} If validation fails, Pydantic raises a validation error. FastAPI intercepts this error and returns a structured JSON list of validation details with an HTTP 422 status code, helping developers debug input issues.
+\end{itemize}
+
+\section{Error Handling}
+The API implements a consistent error handling strategy. Standard HTTP status codes are mapped to specific system outcomes, as outlined in Table~\ref{tab:http_status_codes}.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\textwidth}{l l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}Status Code} & \textbf{\color{primary}System Outcome} & \textbf{\color{primary}Architectural Context} \\
+    \midrule
+    \texttt{200 OK} & Success (Read/Update) & Request completed and returned success payload. \\
+    \texttt{201 Created} & Success (Write) & Resource created and committed successfully. \\
+    \texttt{204 No Content} & Success (Delete) & Resource deleted; no body returned. \\
+    \texttt{400 Bad Request} & Invalid Operations & Logical constraints violated (e.g., email already registered). \\
+    \texttt{401 Unauthorized} & Session Invalidation & Token signature missing, expired, or invalid. \\
+    \texttt{403 Forbidden} & Permission Violation & User lacks the required workspace role. \\
+    \texttt{404 Not Found} & Missing Entity & Target resource (project, task, comment) does not exist. \\
+    \texttt{422 Unprocessable} & Schema Invalidation & Request JSON failed Pydantic type validation checks. \\
+    \texttt{429 Too Many Requests} & Rate Limiting Block & Request count exceeded active limits in Upstash Redis. \\
+    \texttt{500 Internal Error} & Unexpected Exception & Database failure or unexpected error in the backend service. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{REST API HTTP Status Code Mapping}
+\label{tab:http_status_codes}
+\end{table}
+
+Custom exceptions (such as \texttt{AIServiceError} or database connection timeouts) are caught by global exception handlers, preventing internal stack traces from leaking to clients.
+
+\section{API Security}
+The API implements several security controls at the gateway layer:
+\begin{itemize}
+    \item \textbf{CORS Access Whitelists:} Cross-Origin Resource Sharing (CORS) rules restrict access to authenticated frontend origins (e.g., the production Vercel domain), blocking unauthorized browser requests.
+    \item \textbf{Pre-Signed URL Restrictions:} File uploads are restricted by validating file extensions and sizes before generating pre-signed Cloudflare R2 URLs.
+    \item \textbf{Log Anonymization:} Sensitive user credentials and authorization cookies are redacted from server logs. Each request is logged alongside its \texttt{X-Request-ID} to support end-to-end tracing.
+    \item \textbf{Rate Limiting:} To protect API resources, rate-limits are tracked in Upstash Redis and evaluated per IP address and authenticated user ID.
+\end{itemize}
+
+\section{Versioning and Maintainability}
+The API is designed to support future updates and maintain backward compatibility:
+\begin{itemize}
+    \item \textbf{Router Modularity:} Using FastAPI sub-routers organizes endpoints into logical modules, allowing developers to add new features without modifying existing route files.
+    \item \textbf{Dependency Injection Pattern:} Injected dependencies (e.g., database sessions, user authentication, access control checks) simplify testing by allowing mock dependencies in unit tests.
+    \item \textbf{API Versioning Strategy:} Future API changes will use URL path versioning (e.g., \path{/api/v1/...}, \path{/api/v2/...}), letting clients upgrade to new API versions at their own pace.
+\end{itemize}
+
+\section{External Integrations}
+The backend API coordinates transactions with several external managed services:
+\begin{itemize}
+    \item \textbf{Supabase (PostgreSQL):} Acts as the primary database connection target, using PgBouncer for transaction-level connection pooling.
+    \item \textbf{Cloudflare R2:} Provides S3-compatible cloud storage. The API generates short-lived pre-signed URLs, letting clients upload assets directly to R2.
+    \item \textbf{Upstash Redis:} Stores API rate-limiting logs, session blocks, and cached dashboard data.
+    \item \textbf{Resend:} Receives email JSON structures from background tasks and dispatches invitations and update notifications.
+    \item \textbf{Google Gemini AI:} Receives task contexts and returns structured JSON lists for task suggestions.
+\end{itemize}
+
+\section{Chapter Summary}
+This chapter detailed the API design for the Nexus PM gateway. By establishing stateless REST endpoints, utilizing Pydantic for validation, and structuring request pipelines, the API ensures high performance and security. The consistent handling of errors, authentication, and external integrations supports the platform's reliability. The next chapter will build on this design, detailing the deployment architecture and CI/CD pipelines.

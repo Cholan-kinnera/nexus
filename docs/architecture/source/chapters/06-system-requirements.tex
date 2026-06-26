@@ -1,0 +1,252 @@
+\chapter{System Requirements}
+\label{chap:system-requirements}
+
+\section{Introduction}
+In software architecture, documenting requirements establishes the baseline against which all design, implementation, and deployment decisions are evaluated. Unlike a business-oriented Software Requirements Specification (SRS), this chapter approaches system requirements from an engineering perspective, detailing the behavioral boundaries (functional requirements) and operational constraints (non-functional requirements) that dictate the structural layout of the Nexus PM platform.
+
+Defining these parameters enables the architecture to balance developer velocity, cost constraints, security policies, and performance characteristics. By mapping system requirements to architectural nodes, the subsequent High-Level Design (HLD) and Low-Level Design (LLD) can directly justify their patterns and schemas.
+
+\section{Functional Requirements}
+The functional requirements of Nexus PM are categorized by logical modules to align with the backend's modular structure. Every requirement is defined by a unique identifier, description, priority (High, Medium, Low), and strict verification criteria.
+
+\subsection{Authentication Module}
+The authentication module manages user identity, Google OAuth integration, and stateless session lifecycle management.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{l p{2.2cm} l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}ID} & \textbf{\color{primary}Requirement} & \textbf{\color{primary}Priority} & \textbf{\color{primary}Acceptance Criteria} \\
+    \midrule
+    FR-AUTH-001 & Google OAuth Integration & High & Users must be able to authenticate using Google OAuth 2.0. The backend must exchange authorization codes for identity tokens and match or provision accounts. \\
+    FR-AUTH-002 & JWT Session Management & High & Successful authentication must issue a cryptographically signed access token (short-lived) and refresh token (long-lived) stored in secure, HttpOnly, SameSite cookies. \\
+    FR-AUTH-003 & Session Revocation & High & Initiating a logout request must invalidate the session token on the client and purge the corresponding refresh token token block from the cache. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Authentication Functional Requirements}
+\label{tab:fr_auth}
+\end{table}
+
+\subsection{Projects Module}
+The projects module manages the workspaces and project metadata structures that group collaborator activities.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{l p{2.2cm} l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}ID} & \textbf{\color{primary}Requirement} & \textbf{\color{primary}Priority} & \textbf{\color{primary}Acceptance Criteria} \\
+    \midrule
+    FR-PROJ-001 & Workspace Isolation & High & All data (projects, tasks, members) must belong to a parent Workspace. Users cannot query, view, or modify resources belonging to workspaces where they are not active members. \\
+    FR-PROJ-002 & Project Configuration & High & Members with appropriate roles must be able to create, update, and soft-delete projects within a workspace, specifying name, description, and status attributes. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Projects Functional Requirements}
+\label{tab:fr_proj}
+\end{table}
+
+\pagebreak
+\subsection{Tasks Module}
+The tasks module manages the interactive planning canvas, task fields, and Kanban lanes.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{l p{2.2cm} l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}ID} & \textbf{\color{primary}Requirement} & \textbf{\color{primary}Priority} & \textbf{\color{primary}Acceptance Criteria} \\
+    \midrule
+    FR-TASK-001 & Kanban Board State & High & Task entities must map to status lanes (e.g., Todo, In Progress, Review, Done). Drag-and-drop actions on the client must trigger an immediate backend update, returning the updated task sequence. \\
+    FR-TASK-002 & Assignments \& Links & Medium & Tasks must support assignment to valid workspace users and support task-to-task relationships (e.g., blocked by, duplicates, blocks). \\
+    FR-TASK-003 & Collaboration Logs & Medium & Users must be able to add comments to tasks. Any change in task state (status, assignee, priority) must append a record to the workspace activity log. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Tasks Functional Requirements}
+\label{tab:fr_task}
+\end{table}
+
+\subsection{Storage Module}
+The storage module interfaces with object storage to support project attachments without bloating the primary database.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{l p{2.2cm} l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}ID} & \textbf{\color{primary}Requirement} & \textbf{\color{primary}Priority} & \textbf{\color{primary}Acceptance Criteria} \\
+    \midrule
+    FR-STOR-001 & Pre-signed Uploads & High & The client must request a secure pre-signed URL from the backend before uploading file attachments. The actual file upload must bypass the backend API and upload directly to Cloudflare R2. \\
+    FR-STOR-002 & Attachment Linking & High & Upon successful upload, file metadata (key, content-type, file size) must be sent to the API to link the file record to the corresponding task entity. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Storage Functional Requirements}
+\label{tab:fr_stor}
+\end{table}
+
+\subsection{Notifications Module}
+The notifications module dispatches system alerts to ensure team alignment.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{l p{2.2cm} l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}ID} & \textbf{\color{primary}Requirement} & \textbf{\color{primary}Priority} & \textbf{\color{primary}Acceptance Criteria} \\
+    \midrule
+    FR-NOTI-001 & Invitation Emails & High & Inviting users to a workspace must trigger a secure sign-up link dispatched via email containing token signatures. \\
+    FR-NOTI-002 & Event Notifications & Medium & Task assignments and status changes must generate in-app alerts and trigger background email notifications to affected workspace collaborators. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Notifications Functional Requirements}
+\label{tab:fr_noti}
+\end{table}
+
+\pagebreak
+\subsection{Analytics Module}
+The analytics module computes data representations of project state and velocity.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{l p{2.2cm} l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}ID} & \textbf{\color{primary}Requirement} & \textbf{\color{primary}Priority} & \textbf{\color{primary}Acceptance Criteria} \\
+    \midrule
+    FR-ANLY-001 & Workspace Dashboard & Medium & The dashboard must calculate active task counts, completion velocities, and workload distributions across workspace members for a selected time window. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Analytics Functional Requirements}
+\label{tab:fr_anly}
+\end{table}
+
+\subsection{AI Module}
+The AI module coordinates LLM interactions to augment standard task management tasks.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{l p{2.2cm} l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}ID} & \textbf{\color{primary}Requirement} & \textbf{\color{primary}Priority} & \textbf{\color{primary}Acceptance Criteria} \\
+    \midrule
+    FR-AI-001 & Task Decomposition & Medium & Given a high-level task title and description, the AI service must generate structured sub-tasks containing titles, estimated durations, and priority levels. \\
+    FR-AI-002 & Project Summarization & Medium & The backend must aggregate active task descriptions and recent change logs to produce a structured natural-language status report. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{AI Functional Requirements}
+\label{tab:fr_ai}
+\end{table}
+
+\subsection{Administration Module}
+The administration module provides access control overrides and logs verification.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{l p{2.2cm} l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}ID} & \textbf{\color{primary}Requirement} & \textbf{\color{primary}Priority} & \textbf{\color{primary}Acceptance Criteria} \\
+    \midrule
+    FR-ADMIN-001 & Workspace RBAC & High & Workspace administrators must be able to change roles of users within their workspace, verifying access control permissions dynamically. \\
+    FR-ADMIN-002 & Audit Log Inspection & Medium & The system must record write operations (inserts, updates, deletes) in an immutable log table containing timestamps, actor identities, and entity changes. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Administration Functional Requirements}
+\label{tab:fr_admin}
+\end{table}
+
+\section{Non-Functional Requirements}
+Non-functional requirements (NFRs) specify the operational characteristics, constraints, and quality attributes of the system. These parameters shape the architectural patterns selected for the platform.
+
+\begin{itemize}
+    \item \textbf{Performance:} Maximum API response times for read paths must remain below 100ms under standard load conditions. Client-side state transitions (such as switching views on the Kanban board) must resolve within 50ms. High client responsiveness is critical to match desktop application experiences.
+    \item \textbf{Scalability:} The API backend must be stateless to support horizontal scaling across auto-scaling compute groups. Database access must utilize connection pooling to prevent connection exhaust issues during transaction spikes.
+    \item \textbf{Availability:} The core platform target availability is 99.9\% during regular operations, excluding scheduled maintenance. This requires decoupled integrations where the failure of secondary services (such as email delivery or AI summaries) does not prevent users from accessing the task database.
+    \item \textbf{Reliability:} Relational data must maintain strict ACID transactions. Relational integrity must be enforced at the database level, with automated daily backups provided by the managed database host.
+    \item \textbf{Maintainability:} The backend codebase must enforce strict layered boundaries (Repository $\rightarrow$ Service $\rightarrow$ Router) to allow independent database, business logic, and API modifications.
+    \item \textbf{Security:} All endpoints must enforce transport layer security (TLS 1.3). Access tokens must be verified statelessly, and user passwords must be hashed using bcrypt before database storage.
+    \item \textbf{Usability:} The user interface must present desktop-like transitions, keyboard shortcuts, and responsive layouts that scale gracefully from mobile viewports to large workspace displays.
+    \item \textbf{Accessibility:} Frontend templates must utilize semantic HTML tags, support keyboard-only navigation, and satisfy core contrast ratios to comply with accessibility best practices.
+    \item \textbf{Compatibility:} The single-page application client must be verified to operate correctly across all modern web browsers, including Google Chrome, Apple Safari, Mozilla Firefox, and Microsoft Edge.
+    \item \textbf{Disaster Recovery:} The platform must configure automated, geographical-redundant database backups with a target Recovery Point Objective (RPO) under 24 hours and a Recovery Time Objective (RTO) under 4 hours.
+    \item \textbf{Cloud Deployment:} The system must build inside declarative, multi-stage Docker images to guarantee deployment parity between development, testing, staging, and production environments.
+\end{itemize}
+
+\section{External System Requirements}
+To minimize operational overhead and focus core application development on project management workflows, Nexus PM integrates with external cloud-native services. The role and integration specifications of each service are detailed below:
+
+\begin{itemize}
+    \item \textbf{Supabase (PostgreSQL):} Acts as the primary transactional database. The integration requires secure PostgreSQL connections over TLS, connection routing via PgBouncer pooling layers, and row-level security (RLS) configurations.
+    \item \textbf{Cloudflare R2:} Provides S3-compatible, zero-egress object storage. The backend interfaces with R2 using AWS SDK clients to generate temporary pre-signed upload URLs and access-controlled download tokens.
+    \item \textbf{Upstash Redis:} Serves as the serverless in-memory cache and session registry. It handles rate-limiting tracking and transient metadata storage, communicating via secure Redis database connection protocols.
+    \item \textbf{Resend:} Serves as the transactional email dispatch engine. The backend routes notifications to Resend via their HTTPS API, passing structured JSON payloads containing HTML mail templates.
+    \item \textbf{Google OAuth Server:} Acts as the third-party identity validation provider, using standard OAuth 2.0 authorization code exchange endpoints to verify user credentials.
+    \item \textbf{Google Gemini AI (API Gateway):} Provides the LLM generation capabilities. The backend interacts with Google's API gateway asynchronously, using structured schema parameters to enforce rigid JSON response types.
+\end{itemize}
+
+\section{Security Requirements}
+The security model of Nexus PM is designed to protect sensitive workspace data and prevent unauthorized system access:
+\begin{itemize}
+    \item \textbf{Stateless Access Control:} User authentication is validated via JSON Web Tokens (JWT) signed with HMAC-SHA256 using server-side keys. Access tokens are short-lived (e.g., 15 minutes) and must be paired with database-backed refresh tokens for session renewal.
+    \item \textbf{Cookie Containment Security:} All authentication tokens must reside in cookies flagged as \texttt{HttpOnly} (preventing client-side JavaScript access), \texttt{Secure} (enforcing transmission over HTTPS only), and \texttt{SameSite=Strict} (mitigating Cross-Site Request Forgery risks).
+    \item \textbf{Input Validation and Sanitization:} Every incoming request payload must be parsed, validated, and sanitized against strict Pydantic schemas before reaching backend controller functions.
+    \item \textbf{Role-Based Permissions (RBAC):} Endpoints are protected by a declarative permission matrix. The gateway dynamically evaluates active user roles (Admin, Manager, Member) using FastAPI dependency injection structures.
+    \item \textbf{File Security Validation:} Pre-signed URL requests must specify file sizes and MIME types, which are validated against whitelist restrictions to block malicious file executions on client browsers.
+    \item \textbf{API Gateway Rate Limiting:} To protect API resources, rate-limits are tracked in Upstash Redis and evaluated per IP address and authenticated user ID.
+\end{itemize}
+
+\section{Performance Targets}
+The target runtime metrics for Nexus PM are defined as follows:
+\begin{itemize}
+    \item \textbf{API Latency (Standard Operations):} Read-heavy HTTP requests (e.g., fetching task lists or workspace dashboards) must complete within 100ms. Write-heavy operations (e.g., creating tasks, appending comments) must complete within 200ms.
+    \item \textbf{Database Query Execution:} The database engine must execute indexed queries in under 20ms under baseline loads.
+    \item \textbf{File Upload Response:} The API must generate pre-signed upload URLs within 50ms, allowing direct uploads to object storage without backend overhead.
+    \item \textbf{Cold Start Mitigation:} Free-tier container hosting limitations (e.g., Render service sleep modes) must be managed using warm-up ping engines, aiming to resolve initial request times under 30 seconds for dormant instances.
+    \item \textbf{Cache Performance:} The system must maintain a Redis cache hit ratio greater than 85\% for frequently accessed, read-only dashboard calculations.
+\end{itemize}
+
+\section{Constraints}
+The technical design of Nexus PM is bounded by the following real-world constraints:
+\begin{itemize}
+    \item \textbf{Free-Tier Infrastructure Limits:} Web service hosting (Render) restricts container instances to a single CPU core and 512MB of RAM, causing cold start delays. Relational database limits restrict active connections and database size, making efficient resource use critical.
+    \item \textbf{API Limit Restrictions:} External APIs (Google Gemini, Resend) enforce maximum monthly request quotas and rate limits, requiring local request caching and back-off handling.
+    \item \textbf{Development Budget Constraints:} Zero-budget configurations prevent the use of paid database clusters or dedicated egress networks, requiring architectures optimized for zero-cost managed services.
+    \item \textbf{Client Compatibility:} The web application client must support standard HTML5, CSS3, and ES6 Javascript versions, avoiding dependencies on proprietary client extensions.
+\end{itemize}
+
+\section{Assumptions}
+The architectural blueprints for the platform rely on the following assertions:
+\begin{itemize}
+    \item \textbf{Network Integrity:} Network latency between Vercel edge routes, Render compute instances, and Supabase database endpoints remains under 50ms.
+    \item \textbf{Cloud Service Availability:} Managed cloud services maintain at least 99.9\% availability during runtime.
+    \item \textbf{Browser Security:} User clients respect security tags such as \texttt{HttpOnly} cookies, CORS policies, and Content Security Policy directives.
+\end{itemize}
+
+\section{Risks}
+The system architecture identifies several technical risks along with corresponding mitigation strategies:
+\begin{itemize}
+    \item \textbf{Cloud Service Dependencies:} Relying on multiple managed services introduces multiple points of failure. \textit{Mitigation:} Establish decoupled backend service wrappers that fail gracefully (e.g., caching analytics locally if the primary database cache is temporarily offline).
+    \item \textbf{Vendor Lock-In:} Tight integration with proprietary backend platforms can make migrations difficult. \textit{Mitigation:} Use standard database connections, generic S3 interfaces, and standard Docker packaging to allow migration to AWS or self-hosted alternatives.
+    \item \textbf{AI Response Latencies:} AI models can take several seconds to respond, impacting user experience. \textit{Mitigation:} Execute AI generations asynchronously through background task engines, keeping the front-end interface active and responsive.
+    \item \textbf{Token Expirations:} Sudden session losses can disrupt user work. \textit{Mitigation:} Implement silent token refresh flows on the frontend client to update active JWT access tokens seamlessly.
+\end{itemize}
+
+\section{Chapter Summary}
+This chapter outlined the core functional requirements, quality attributes, external integrations, security constraints, and performance targets for Nexus PM. By defining specific validation rules and operational limits, these requirements shape the high-level and low-level designs detailed in the following chapters. Managing these dependencies, constraints, and operational risks is key to delivering a cost-efficient, production-ready project management platform.

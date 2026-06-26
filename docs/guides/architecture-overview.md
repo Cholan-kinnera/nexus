@@ -6,6 +6,7 @@ This guide provides a beginner-friendly overview of how the Nexus PM frontend, b
 
 ## Related Detailed Architecture
 If you need deep technical diagrams or schemas, refer directly to:
+* **[Software Architecture Document (PDF)](../architecture/Nexus_PM_Software_Architecture_Document_v1.0.pdf)**
 * **[System Architecture Diagram](../system_architecture.md)**
 * **[Database ERD (Entity Relationship Mapping)](../database_erd.md)**
 * **[Authentication Sequence Flows](../authentication_flow.md)**

@@ -7,6 +7,7 @@ This index links all files in the Nexus PM architecture documentation suite.
 ## 🗺️ Documentation Directory
 
 ### 🚀 High-Level Overviews
+* **[Software Architecture Document (PDF)](architecture/Nexus_PM_Software_Architecture_Document_v1.0.pdf):** The compiled, publication-quality Software Architecture Document (SAD) v1.0.
 * **[Executive Summary](file:///c:/NEXUS%20PM%201/docs/EXECUTIVE_SUMMARY.md):** Project purpose, cloud stack, security features, AI features, and production readiness scorecard.
 * **[System Architecture](file:///c:/NEXUS%20PM%201/docs/SYSTEM_ARCHITECTURE.md):** Overall logical architecture diagram and mapping of core third-party dependencies (Gemini, Google OAuth, Resend).
 

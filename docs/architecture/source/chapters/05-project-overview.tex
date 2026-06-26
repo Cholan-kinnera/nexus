@@ -1,0 +1,133 @@
+\chapter{Project Overview}
+\label{chap:project-overview}
+
+\section{Introduction}
+As software development workflows grow in complexity, the efficiency of collaboration tools directly impacts engineering velocity and product quality. Nexus PM is designed as a modern, full-stack, AI-powered Software-as-a-Service (SaaS) project management platform that bridges the gap between structured project administration and context-aware productivity assistance. 
+
+Unlike traditional project tracking tools that act as passive registries of task state, Nexus PM integrates artificial intelligence directly into the collaboration lifecycle, enabling automated requirement analysis, task decomposition, and context-aware project reporting. This chapter provides a high-level overview of Nexus PM, detailing its business vision, core objectives, user personas, system boundaries, technology choices, and architectural constraints.
+
+\section{Vision}
+The vision for Nexus PM is to establish a lightweight, highly responsive, and contextually intelligent project management ecosystem. By combining single-page application responsiveness with asynchronous backend services and generative artificial intelligence, Nexus PM aims to reduce the administrative overhead of task management to zero. The platform envisions a collaborative environment where task delegation, technical requirement extraction, and operational updates are automated via secure, cloud-native components.
+
+\section{Problem Statement}
+Project teams today face significant friction due to fragmented toolsets and administrative inefficiencies:
+\begin{itemize}
+    \item \textbf{Administrative Friction:} Writing task descriptions, breaking down large initiatives into tickets, and updating status boards consume valuable engineering and management hours.
+    \item \textbf{Context Fragmentation:} Teams frequently jump between task boards, communication applications, file storage systems, and external generative AI tools, leading to stale task data, mismatched specifications, and security risks.
+    \item \textbf{Laggy User Interfaces:} Heavy monolithic tracking systems suffer from slow page reloads and state synchronization delays, interrupting developer workflows.
+    \item \textbf{High Infrastructure and Licensing Costs:} Licensing multiple platforms for task tracking, file storage, and AI generation quickly becomes cost-prohibitive for startups, small teams, and individual developers.
+\end{itemize}
+
+\section{Objectives}
+The engineering objectives of the Nexus PM architecture are defined as follows:
+\begin{itemize}
+    \item \textbf{Maximize Client Responsiveness:} Deliver a single-page application (SPA) user interface with sub-second page transitions, optimized resource caching, and instantaneous state updates.
+    \item \textbf{Establish Asynchronous Execution Pipelines:} Ensure heavy operations (such as AI task generation, document processing, and email notifications) do not block the primary HTTP request-response cycle.
+    \item \textbf{Implement Multi-Tenant Security:} Protect system resources through robust, stateless authorization schemas, role-based access control, and complete database isolation.
+    \item \textbf{Optimize Storage and Compute Costs:} Architect a cloud-native platform that leverages serverless components, zero-egress object storage, and lightweight backend services to run efficiently within constrained hosting environments.
+\end{itemize}
+
+\section{Project Scope}
+Establishing the system boundaries is critical to defining the operational scope of Nexus PM:
+
+\subsection{In-Scope Capabilities}
+The core platform features implemented within the system boundaries include:
+\begin{itemize}
+    \item \textbf{Identity and Access Management:} Secure user authentication via JSON Web Tokens (JWT) and third-party Google OAuth integration, coupled with granular Role-Based Access Control (RBAC).
+    \item \textbf{Project Planning and Tracking:} Interactive Kanban task boards, workspace creation, project categorization, and task assignments.
+    \item \textbf{Collaboration Engine:} Comment threads on individual tasks and system-wide activity logging to maintain a clear audit trail.
+    \item \textbf{Asset Storage:} Secure file uploads associated with tasks, routed via pre-signed URLs to object storage.
+    \item \textbf{Contextual AI Assistance:} Dynamic task breakdown (sub-task generation) and project status summarization leveraging Large Language Models.
+    \item \textbf{Notification Pipeline:} Automated email dispatching triggered by project events (e.g., project invites, task assignments).
+\end{itemize}
+
+\subsection{Out-of-Scope Capabilities}
+To maintain architectural focus, the following capabilities are explicitly placed outside the system boundaries:
+\begin{itemize}
+    \item \textbf{Real-Time Video/Audio Chat:} Direct communication is limited to comment threads; real-time calling features are delegated to external communication platforms.
+    \item \textbf{Native Git Repository Hosting:} Nexus PM does not host source code. Repository integration is handled via incoming webhooks from platforms like GitHub or GitLab.
+    \item \textbf{Billing and Invoicing Engines:} Payment processing is treated as an external modular extension and is not part of the core architectural design.
+\end{itemize}
+
+\section{Target Users}
+The Nexus PM platform is optimized for a diverse set of user personas, each with distinct interaction patterns:
+\begin{itemize}
+    \item \textbf{Individual Developers:} Require a clean, keyboard-navigable task management board with minimal operational overhead.
+    \item \textbf{Startups and Small Teams:} Benefit from the AI-assisted requirement generation, which accelerates early-stage product planning without requiring dedicated project managers.
+    \item \textbf{Software Engineering Teams:} Rely on robust relational task dependencies, role-based assignments, audit trails, and automated email notifications.
+    \item \textbf{Technical Reviewers and Open-Source Maintainers:} Value clean, containerized scaffolding that supports quick local setups and transparent code patterns.
+    \item \textbf{Students and Researchers:} Access the platform through cost-free tier configurations to manage educational projects and study workloads.
+\end{itemize}
+
+\section{Core Features}
+Architecturally, the features of Nexus PM are grouped into five functional pillars:
+\begin{enumerate}
+    \item \textbf{Access Control Layer:} Enforces user validation, manages active JWT tokens, and handles Google OAuth redirections. It maps users to specific access permissions (Admin, Project Manager, Member) verified dynamically before route execution.
+    \item \textbf{Relational Planning Engine:} Tracks task status transitions, coordinates task assignments, and manages relationship states between workspaces, projects, tasks, and users.
+    \item \textbf{Asset Management System:} Processes file metadata, validates file formats, and generates secure, short-lived, pre-signed upload URLs, offloading file traffic from the backend API.
+    \item \textbf{AI Orchestration Service:} Collects relevant project context, formats prompt templates, validates structured LLM JSON outputs, and manages backend queues for generative tasks.
+    \item \textbf{Notification Dispatcher:} Evaluates event subscription rules, formats templates, and interfaces with the transactional email gateway.
+\end{enumerate}
+
+\pagebreak
+\section{Technology Stack Overview}
+To satisfy performance, scalability, and cost requirements, the technology stack is split into decoupled layers, summarized in Table~\ref{tab:tech_stack}.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\textwidth}{l X X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}Platform Layer} & \textbf{\color{primary}Technology Choice} & \textbf{\color{primary}Architectural Rationale} \\
+    \midrule
+    \textbf{Frontend Client} & React 19, TypeScript, Vite & High-speed SPA rendering, static type safety, and optimized developer tooling. \\
+    \textbf{State \& Caching} & Redux Toolkit, React Query & Efficient global UI state management and aggressive server-state caching. \\
+    \textbf{Styling} & Tailwind CSS & Rapid UI assembly using a utility-first, highly maintainable CSS structure. \\
+    \textbf{Backend Gateway} & FastAPI (Python) & Asynchronous request handling, high throughput, and automatic OpenAPI schema generation. \\
+    \textbf{Database ORM} & SQLAlchemy, Alembic & Abstracted data access, migration tracking, and relational data modeling. \\
+    \textbf{Relational Database} & PostgreSQL (Supabase) & ACID compliance, transactional guarantees, and real-time database listener capabilities. \\
+    \textbf{In-Memory Cache} & Upstash Redis & Serverless key-value storage for API rate limiting, session storage, and rapid page metadata caching. \\
+    \textbf{Object Storage} & Cloudflare R2 & S3-compatible asset storage featuring zero-egress data transfer fees. \\
+    \textbf{AI Engine} & Google Gemini 2.5 Flash & High-speed reasoning, large context window, and support for strict JSON schema outputs. \\
+    \textbf{Email Gateway} & Resend & Simple API-driven transactional email dispatching with high deliverability. \\
+    \textbf{Deployment Stack} & Docker, Render, Vercel & Containerized backend scaling, CDN-based frontend edge distribution, and automated CI/CD. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Nexus PM Technology Stack Specification}
+\label{tab:tech_stack}
+\end{table}
+
+\section{System Context}
+From an architectural boundary perspective, Nexus PM operates within a system context defined by external interfaces and data limits:
+\begin{itemize}
+    \item \textbf{User Agents:} Web browsers execute the React client application, loading assets via Vercel's global CDN and maintaining secure sessions.
+    \item \textbf{API Gateway Boundaries:} All write and read requests go through HTTPS API boundaries managed by FastAPI. The API backend communicates privately with PostgreSQL, Upstash Redis, and third-party REST interfaces.
+    \item \textbf{Identity Boundary:} Google OAuth servers handle primary user identity assertion before returning validation codes to the Nexus PM client.
+    \item \textbf{Third-Party APIs:} The backend orchestrates calls to Google Gemini AI for content synthesis and Resend for transactional email dispatching, separating external API latencies from the core application threads.
+\end{itemize}
+
+\section{Constraints}
+The Nexus PM design is shaped by several critical constraints:
+\subsection{Operational Constraints}
+\begin{itemize}
+    \item \textbf{Free-Tier Cloud Deployment:} The system must run within limited CPU, RAM, and database connection limits provided by Render, Supabase, and Upstash free tiers. This requires strict memory management, database connection pooling, and resource-efficient backend services.
+    \item \textbf{Zero-Egress Asset Budget:} Object storage must bypass egress bandwidth fees to ensure operational cost predictability, making Cloudflare R2 the required storage destination.
+\end{itemize}
+
+\subsection{Architectural Constraints}
+\begin{itemize}
+    \item \textbf{Modular Monolith backend:} To maintain simplicity while planning for future service isolation, the backend is designed as a modular monolith. Modules must communicate via clear interface boundaries, avoiding circular dependencies.
+    \item \textbf{Client-First State Management:} To reduce backend processing overhead, the client application is responsible for computing interface state, tracking local state updates, and managing caching rules.
+\end{itemize}
+
+\section{Assumptions}
+The architectural design of Nexus PM relies on the following assumptions:
+\begin{itemize}
+    \item \textbf{Network Latency:} Users have access to stable internet connections with latencies under 200ms to Vercel and Render edge nodes.
+    \item \textbf{SaaS Provider Availability:} Managed infrastructure providers (Supabase, Upstash, Cloudflare, Vercel, Render) maintain at least 99.9\% system availability.
+    \item \textbf{Security Protocols:} Modern web browsers support HTTPS, secure cookies, and standard JWT parsing mechanisms.
+\end{itemize}
+
+\section{Chapter Summary}
+This chapter established the foundational goals and technical scope of the Nexus PM platform. By outlining the target users, core business problems, and architectural objectives, the project context is defined. A modular, decoupled technology stack has been selected to meet the platform's high performance and low-cost deployment constraints. The following chapters will build on this foundation, detailing the system requirements, high-level and low-level software designs, and deployment models.

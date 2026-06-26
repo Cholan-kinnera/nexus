@@ -1,0 +1,26 @@
+\chapter{Technology Selection Rationale}
+\label{app:technology-selection}
+
+This appendix documents the trade-off evaluations and decisions that guided the technology selections for the Nexus PM platform. It outlines the alternative technologies considered and details the specific reasons why the chosen stack was selected to satisfy performance, budget, and operational objectives.
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{l l X}
+    \toprule[1.5pt]
+    \rowcolor{primary!5}
+    \textbf{\color{primary}Technology} & \textbf{\color{primary}Selected Over} & \textbf{\color{primary}Architectural \& Operational Rationale} \\
+    \midrule
+    FastAPI & Flask / Django & Native asynchronous support, auto-generated OpenAPI documentation, and built-in Pydantic data validation constraints. \\
+    React 19 & Angular / Vue & Flexible component-based rendering model, vast developer ecosystem, and compatibility with Vite and React Query. \\
+    Supabase & Self-hosted PostgreSQL & Fully managed PostgreSQL backend, automatic system backups, and zero maintenance overhead within free-tier limits. \\
+    Cloudflare R2 & AWS S3 & Zero egress data transfer bandwidth billing, S3-compatible API, and predictable hosting costs. \\
+    Upstash Redis & Self-hosted Redis & Serverless pricing structure, automated scale-to-zero capabilities, and low-latency cache queries without node provisioning. \\
+    Resend API & AWS SES & Developer-friendly integration APIs, straightforward domain validation settings, and native HTML template parsing. \\
+    Gemini 2.5 Flash & Other LLMs (GPT-4o) & Generous free-tier API quotas, low request latency, large context window, and native support for strict JSON schema output requirements. \\
+    \bottomrule[1.5pt]
+\end{tabularx}
+\caption{Nexus PM Core Technology Selection Trade-offs}
+\label{tab:technology_selection_matrix}
+\end{table}

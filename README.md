@@ -77,6 +77,7 @@
 ### Logical System Interactions
 Nexus PM enforces segregation between static client assets, backend API routing, and stateful databases.
 * **Detailed Specifications:** See [System Architecture Guide](docs/system_architecture.md).
+* **Compiled PDF Report:** See [Nexus PM Software Architecture Document (v1.0)](docs/architecture/Nexus_PM_Software_Architecture_Document_v1.0.pdf).
 
 <p align="center">
   <img src="docs/assets/system-architecture.png" alt="Nexus PM System Architecture Diagram" width="750" style="border-radius: 6px; border: 1px solid #27272a;" />
